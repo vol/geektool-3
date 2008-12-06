@@ -1,0 +1,40 @@
+{
+    IBClasses = (
+        {CLASS = AJRInstallClipView; LANGUAGE = ObjC; SUPERCLASS = NSClipView; }, 
+        {
+            CLASS = AJRScrollView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {textView = id; }; 
+            SUPERCLASS = NSScrollView; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = GTScrollView; LANGUAGE = ObjC; SUPERCLASS = NSScrollView; }, 
+        {CLASS = LogTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
+        {
+            CLASS = LogWindow; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {logView = id; text = id; }; 
+            SUPERCLASS = NSWindow; 
+        }, 
+        {
+            ACTIONS = {makeKeyAndOrderFront = id; }; 
+            CLASS = LogWindowController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {logView = id; picture = id; scrollView = id; text = id; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {autoScrollLock = id; }; 
+            CLASS = MWOutputTextView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTextView; 
+        }, 
+        {
+            CLASS = NSLogView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {corner = id; logWindowController = id; picture = id; text = id; }; 
+            SUPERCLASS = NSView; 
+        }
+    ); 
+    IBVersion = 1; 
+}

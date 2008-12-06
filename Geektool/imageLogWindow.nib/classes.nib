@@ -1,0 +1,39 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = GTImageView; LANGUAGE = ObjC; SUPERCLASS = NSImageView; }, 
+        {
+            ACTIONS = {changeFont = id; }; 
+            CLASS = GTTextField; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {gtPrefs = id; }; 
+            SUPERCLASS = NSTextField; 
+        }, 
+        {
+            CLASS = ImageLogWindow; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {logView = id; picture = id; }; 
+            SUPERCLASS = NSWindow; 
+        }, 
+        {
+            CLASS = ImageLogWindowController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {logView = id; picture = id; textField = id; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = LogTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
+        {
+            ACTIONS = {autoScrollLock = id; }; 
+            CLASS = MWOutputTextView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTextView; 
+        }, 
+        {
+            CLASS = NSLogView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {corner = id; logWindowController = id; picture = id; }; 
+            SUPERCLASS = NSView; 
+        }
+    ); 
+    IBVersion = 1; 
+}

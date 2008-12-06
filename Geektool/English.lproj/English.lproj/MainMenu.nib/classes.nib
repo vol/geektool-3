@@ -1,0 +1,19 @@
+{
+    IBClasses = (
+        {CLASS = CustomView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = GeekTool; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {GeekToolPrefs = id; }; 
+            SUPERCLASS = NSApplication; 
+        }, 
+        {
+            CLASS = logWindow; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {logView = id; }; 
+            SUPERCLASS = NSWindow; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,505 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 44;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0A94F19B0ED6614700A05583 /* GeekTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F18E0ED6614700A05583 /* GeekTool.m */; };
+		0A94F19E0ED6614700A05583 /* LogTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1940ED6614700A05583 /* LogTextField.m */; };
+		0A94F19F0ED6614700A05583 /* LogWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1960ED6614700A05583 /* LogWindow.m */; };
+		0A94F1A00ED6614700A05583 /* LogWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1980ED6614700A05583 /* LogWindowController.m */; };
+		0A94F1A10ED6614700A05583 /* NSLogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F19A0ED6614700A05583 /* NSLogView.m */; };
+		0A94F1A60ED6615F00A05583 /* GeekTool.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1A20ED6615F00A05583 /* GeekTool.icns */; };
+		0A94F1A70ED6615F00A05583 /* coin.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1A30ED6615F00A05583 /* coin.tif */; };
+		0A94F1A80ED6615F00A05583 /* imageLogWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1A40ED6615F00A05583 /* imageLogWindow.nib */; };
+		0A94F1A90ED6615F00A05583 /* logWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1A50ED6615F00A05583 /* logWindow.nib */; };
+		0A94F1B30ED661AD00A05583 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1AB0ED661AD00A05583 /* InfoPlist.strings */; };
+		0A94F1B40ED661AD00A05583 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1AD0ED661AD00A05583 /* Localizable.strings */; };
+		0A94F1B50ED661AD00A05583 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F1AF0ED661AD00A05583 /* MainMenu.nib */; };
+		0A94F1C00ED6620700A05583 /* GTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1B80ED6620700A05583 /* GTLog.m */; };
+		0A94F1C10ED6620700A05583 /* AJRInstallClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1BA0ED6620700A05583 /* AJRInstallClipView.m */; };
+		0A94F1C20ED6620700A05583 /* AJRInstallScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1BC0ED6620700A05583 /* AJRInstallScrollView.m */; };
+		0A94F1C30ED6620700A05583 /* AJRScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1BE0ED6620700A05583 /* AJRScrollView.m */; };
+		0A94F1C50ED6623700A05583 /* AJRInstallClipView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F1B90ED6620700A05583 /* AJRInstallClipView.h */; };
+		0A94F1C60ED6623800A05583 /* AJRInstallScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F1BB0ED6620700A05583 /* AJRInstallScrollView.h */; };
+		0A94F1C70ED6623B00A05583 /* AJRScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F1BD0ED6620700A05583 /* AJRScrollView.h */; };
+		0A94F1C80ED6624700A05583 /* GeekTool.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F18D0ED6614700A05583 /* GeekTool.h */; };
+		0A94F1C90ED6624B00A05583 /* GTLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F1B70ED6620700A05583 /* GTLog.h */; };
+		0A94F1CA0ED6625900A05583 /* NSLogView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F1990ED6614700A05583 /* NSLogView.h */; };
+		0A94F1CB0ED6627500A05583 /* Geektool_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32CA4F630368D1EE00C91783 /* Geektool_Prefix.pch */; };
+		0A94F1CC0ED6627C00A05583 /* LogTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F1930ED6614700A05583 /* LogTextField.h */; };
+		0A94F1CD0ED6627E00A05583 /* LogWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F1950ED6614700A05583 /* LogWindow.h */; };
+		0A94F1CE0ED6628000A05583 /* LogWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F1970ED6614700A05583 /* LogWindowController.h */; };
+		0A94F1D20ED662A800A05583 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A94F1D10ED662A800A05583 /* Carbon.framework */; };
+		0A94F2930ED6630800A05583 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F2920ED6630800A05583 /* Info.plist */; };
+		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0A7ACF380ED7DAB8009491BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0A7ACF310ED7DAB8009491BF /* GeektoolPreferencePane.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8D202CF80486D31800D8A456;
+			remoteInfo = GeektoolPreferencePane;
+		};
+		0A94F16C0ED660D700A05583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0A94F1680ED660D700A05583 /* GeektoolMenu.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8D1107320486CEB800E47090;
+			remoteInfo = GeektoolMenu;
+		};
+		0A94F1810ED6610400A05583 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0A94F17D0ED6610400A05583 /* GeektoolUninstaller.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8D1107320486CEB800E47090;
+			remoteInfo = GeektoolUninstaller;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0A7ACF310ED7DAB8009491BF /* GeektoolPreferencePane.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeektoolPreferencePane.xcodeproj; path = ../GeektoolPreferencePane/GeektoolPreferencePane.xcodeproj; sourceTree = "<group>"; };
+		0A94F1680ED660D700A05583 /* GeektoolMenu.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeektoolMenu.xcodeproj; path = ../GeektoolMenu/GeektoolMenu.xcodeproj; sourceTree = "<group>"; };
+		0A94F17D0ED6610400A05583 /* GeektoolUninstaller.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeektoolUninstaller.xcodeproj; path = ../GeektoolUninstaller/GeektoolUninstaller.xcodeproj; sourceTree = "<group>"; };
+		0A94F18D0ED6614700A05583 /* GeekTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeekTool.h; sourceTree = "<group>"; };
+		0A94F18E0ED6614700A05583 /* GeekTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeekTool.m; sourceTree = "<group>"; };
+		0A94F18F0ED6614700A05583 /* ImageLogWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLogWindow.h; sourceTree = "<group>"; };
+		0A94F1900ED6614700A05583 /* ImageLogWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageLogWindow.m; sourceTree = "<group>"; };
+		0A94F1910ED6614700A05583 /* ImageLogWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLogWindowController.h; sourceTree = "<group>"; };
+		0A94F1920ED6614700A05583 /* ImageLogWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageLogWindowController.m; sourceTree = "<group>"; };
+		0A94F1930ED6614700A05583 /* LogTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTextField.h; sourceTree = "<group>"; };
+		0A94F1940ED6614700A05583 /* LogTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTextField.m; sourceTree = "<group>"; };
+		0A94F1950ED6614700A05583 /* LogWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogWindow.h; sourceTree = "<group>"; };
+		0A94F1960ED6614700A05583 /* LogWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogWindow.m; sourceTree = "<group>"; };
+		0A94F1970ED6614700A05583 /* LogWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogWindowController.h; sourceTree = "<group>"; };
+		0A94F1980ED6614700A05583 /* LogWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogWindowController.m; sourceTree = "<group>"; };
+		0A94F1990ED6614700A05583 /* NSLogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSLogView.h; sourceTree = "<group>"; };
+		0A94F19A0ED6614700A05583 /* NSLogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSLogView.m; sourceTree = "<group>"; };
+		0A94F1A20ED6615F00A05583 /* GeekTool.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = GeekTool.icns; sourceTree = "<group>"; };
+		0A94F1A30ED6615F00A05583 /* coin.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = coin.tif; sourceTree = "<group>"; };
+		0A94F1A40ED6615F00A05583 /* imageLogWindow.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = imageLogWindow.nib; sourceTree = "<group>"; };
+		0A94F1A50ED6615F00A05583 /* logWindow.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = logWindow.nib; sourceTree = "<group>"; };
+		0A94F1AC0ED661AD00A05583 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0A94F1AE0ED661AD00A05583 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		0A94F1B00ED661AD00A05583 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		0A94F1B70ED6620700A05583 /* GTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLog.h; sourceTree = "<group>"; };
+		0A94F1B80ED6620700A05583 /* GTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLog.m; sourceTree = "<group>"; };
+		0A94F1B90ED6620700A05583 /* AJRInstallClipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJRInstallClipView.h; sourceTree = "<group>"; };
+		0A94F1BA0ED6620700A05583 /* AJRInstallClipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AJRInstallClipView.m; sourceTree = "<group>"; };
+		0A94F1BB0ED6620700A05583 /* AJRInstallScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJRInstallScrollView.h; sourceTree = "<group>"; };
+		0A94F1BC0ED6620700A05583 /* AJRInstallScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AJRInstallScrollView.m; sourceTree = "<group>"; };
+		0A94F1BD0ED6620700A05583 /* AJRScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJRScrollView.h; sourceTree = "<group>"; };
+		0A94F1BE0ED6620700A05583 /* AJRScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AJRScrollView.m; sourceTree = "<group>"; };
+		0A94F1BF0ED6620700A05583 /* CGSPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGSPrivate.h; sourceTree = "<group>"; };
+		0A94F1D10ED662A800A05583 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		0A94F2920ED6630800A05583 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		32CA4F630368D1EE00C91783 /* Geektool_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Geektool_Prefix.pch; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* Geektool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Geektool.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				0A94F1D20ED662A800A05583 /* Carbon.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				0A94F1B70ED6620700A05583 /* GTLog.h */,
+				0A94F1B80ED6620700A05583 /* GTLog.m */,
+				0A94F1B90ED6620700A05583 /* AJRInstallClipView.h */,
+				0A94F1BA0ED6620700A05583 /* AJRInstallClipView.m */,
+				0A94F1BB0ED6620700A05583 /* AJRInstallScrollView.h */,
+				0A94F1BC0ED6620700A05583 /* AJRInstallScrollView.m */,
+				0A94F1BD0ED6620700A05583 /* AJRScrollView.h */,
+				0A94F1BE0ED6620700A05583 /* AJRScrollView.m */,
+				0A94F1BF0ED6620700A05583 /* CGSPrivate.h */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		0A7ACF320ED7DAB8009491BF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0A7ACF390ED7DAB8009491BF /* GeektoolPreferencePane.prefPane */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0A94F1690ED660D700A05583 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0A94F16D0ED660D700A05583 /* GeektoolMenu.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0A94F17E0ED6610400A05583 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0A94F1820ED6610400A05583 /* GeektoolUninstaller.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0A94F18C0ED6613D00A05583 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				0A94F18D0ED6614700A05583 /* GeekTool.h */,
+				0A94F18E0ED6614700A05583 /* GeekTool.m */,
+				0A94F18F0ED6614700A05583 /* ImageLogWindow.h */,
+				0A94F1900ED6614700A05583 /* ImageLogWindow.m */,
+				0A94F1910ED6614700A05583 /* ImageLogWindowController.h */,
+				0A94F1920ED6614700A05583 /* ImageLogWindowController.m */,
+				0A94F1930ED6614700A05583 /* LogTextField.h */,
+				0A94F1940ED6614700A05583 /* LogTextField.m */,
+				0A94F1950ED6614700A05583 /* LogWindow.h */,
+				0A94F1960ED6614700A05583 /* LogWindow.m */,
+				0A94F1970ED6614700A05583 /* LogWindowController.h */,
+				0A94F1980ED6614700A05583 /* LogWindowController.m */,
+				0A94F1990ED6614700A05583 /* NSLogView.h */,
+				0A94F19A0ED6614700A05583 /* NSLogView.m */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0A94F1D10ED662A800A05583 /* Carbon.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* Geektool.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* Geektool */ = {
+			isa = PBXGroup;
+			children = (
+				0A94F18C0ED6613D00A05583 /* Sources */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				0A7ACF310ED7DAB8009491BF /* GeektoolPreferencePane.xcodeproj */,
+				0A94F17D0ED6610400A05583 /* GeektoolUninstaller.xcodeproj */,
+				0A94F1680ED660D700A05583 /* GeektoolMenu.xcodeproj */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = Geektool;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32CA4F630368D1EE00C91783 /* Geektool_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0A94F2920ED6630800A05583 /* Info.plist */,
+				0A94F1AF0ED661AD00A05583 /* MainMenu.nib */,
+				0A94F1AB0ED661AD00A05583 /* InfoPlist.strings */,
+				0A94F1AD0ED661AD00A05583 /* Localizable.strings */,
+				0A94F1A20ED6615F00A05583 /* GeekTool.icns */,
+				0A94F1A30ED6615F00A05583 /* coin.tif */,
+				0A94F1A40ED6615F00A05583 /* imageLogWindow.nib */,
+				0A94F1A50ED6615F00A05583 /* logWindow.nib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		0A94F1D00ED6629500A05583 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A94F1C50ED6623700A05583 /* AJRInstallClipView.h in Headers */,
+				0A94F1C60ED6623800A05583 /* AJRInstallScrollView.h in Headers */,
+				0A94F1C70ED6623B00A05583 /* AJRScrollView.h in Headers */,
+				0A94F1C80ED6624700A05583 /* GeekTool.h in Headers */,
+				0A94F1C90ED6624B00A05583 /* GTLog.h in Headers */,
+				0A94F1CA0ED6625900A05583 /* NSLogView.h in Headers */,
+				0A94F1CB0ED6627500A05583 /* Geektool_Prefix.pch in Headers */,
+				0A94F1CC0ED6627C00A05583 /* LogTextField.h in Headers */,
+				0A94F1CD0ED6627E00A05583 /* LogWindow.h in Headers */,
+				0A94F1CE0ED6628000A05583 /* LogWindowController.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* GeektoolMenu */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Geektool" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+				0A94F1D00ED6629500A05583 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Geektool;
+			productInstallPath = "$(HOME)/Applications";
+			productName = Geektool;
+			productReference = 8D1107320486CEB800E47090 /* Geektool.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Geektool" */;
+			compatibilityVersion = "Xcode 3.0";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* Geektool */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 0A94F1690ED660D700A05583 /* Products */;
+					ProjectRef = 0A94F1680ED660D700A05583 /* GeektoolMenu.xcodeproj */;
+				},
+				{
+					ProductGroup = 0A7ACF320ED7DAB8009491BF /* Products */;
+					ProjectRef = 0A7ACF310ED7DAB8009491BF /* GeektoolPreferencePane.xcodeproj */;
+				},
+				{
+					ProductGroup = 0A94F17E0ED6610400A05583 /* Products */;
+					ProjectRef = 0A94F17D0ED6610400A05583 /* GeektoolUninstaller.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* GeektoolMenu */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		0A7ACF390ED7DAB8009491BF /* GeektoolPreferencePane.prefPane */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GeektoolPreferencePane.prefPane;
+			remoteRef = 0A7ACF380ED7DAB8009491BF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0A94F16D0ED660D700A05583 /* GeektoolMenu.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = GeektoolMenu.app;
+			remoteRef = 0A94F16C0ED660D700A05583 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0A94F1820ED6610400A05583 /* GeektoolUninstaller.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = GeektoolUninstaller.app;
+			remoteRef = 0A94F1810ED6610400A05583 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A94F1A60ED6615F00A05583 /* GeekTool.icns in Resources */,
+				0A94F1A70ED6615F00A05583 /* coin.tif in Resources */,
+				0A94F1A80ED6615F00A05583 /* imageLogWindow.nib in Resources */,
+				0A94F1A90ED6615F00A05583 /* logWindow.nib in Resources */,
+				0A94F1B30ED661AD00A05583 /* InfoPlist.strings in Resources */,
+				0A94F1B40ED661AD00A05583 /* Localizable.strings in Resources */,
+				0A94F1B50ED661AD00A05583 /* MainMenu.nib in Resources */,
+				0A94F2930ED6630800A05583 /* Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				0A94F19B0ED6614700A05583 /* GeekTool.m in Sources */,
+				0A94F19E0ED6614700A05583 /* LogTextField.m in Sources */,
+				0A94F19F0ED6614700A05583 /* LogWindow.m in Sources */,
+				0A94F1A00ED6614700A05583 /* LogWindowController.m in Sources */,
+				0A94F1A10ED6614700A05583 /* NSLogView.m in Sources */,
+				0A94F1C00ED6620700A05583 /* GTLog.m in Sources */,
+				0A94F1C10ED6620700A05583 /* AJRInstallClipView.m in Sources */,
+				0A94F1C20ED6620700A05583 /* AJRInstallScrollView.m in Sources */,
+				0A94F1C30ED6620700A05583 /* AJRScrollView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		0A94F1AB0ED661AD00A05583 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A94F1AC0ED661AD00A05583 /* English */,
+			);
+			name = InfoPlist.strings;
+			path = English.lproj;
+			sourceTree = "<group>";
+		};
+		0A94F1AD0ED661AD00A05583 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A94F1AE0ED661AD00A05583 /* English */,
+			);
+			name = Localizable.strings;
+			path = English.lproj;
+			sourceTree = "<group>";
+		};
+		0A94F1AF0ED661AD00A05583 /* MainMenu.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A94F1B00ED661AD00A05583 /* English */,
+			);
+			name = MainMenu.nib;
+			path = English.lproj;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Geektool_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = Geektool;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Geektool_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = Geektool;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Geektool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Geektool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
