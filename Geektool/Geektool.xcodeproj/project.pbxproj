@@ -40,19 +40,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0A1054940EEB90B5008DD305 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0A1054900EEB90B5008DD305 /* GeektoolMenu.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8D5B49B6048680CD000E48DA /* GeektoolMenu.bundle */;
+			remoteInfo = GeektoolMenu;
+		};
 		0A7ACF380ED7DAB8009491BF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0A7ACF310ED7DAB8009491BF /* GeektoolPreferencePane.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 8D202CF80486D31800D8A456;
 			remoteInfo = GeektoolPreferencePane;
-		};
-		0A94F16C0ED660D700A05583 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0A94F1680ED660D700A05583 /* GeektoolMenu.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8D1107320486CEB800E47090;
-			remoteInfo = GeektoolMenu;
 		};
 		0A94F1810ED6610400A05583 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -64,8 +64,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A1054900EEB90B5008DD305 /* GeektoolMenu.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeektoolMenu.xcodeproj; path = ../GeektoolMenu/GeektoolMenu.xcodeproj; sourceTree = "<group>"; };
 		0A7ACF310ED7DAB8009491BF /* GeektoolPreferencePane.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeektoolPreferencePane.xcodeproj; path = ../GeektoolPreferencePane/GeektoolPreferencePane.xcodeproj; sourceTree = "<group>"; };
-		0A94F1680ED660D700A05583 /* GeektoolMenu.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeektoolMenu.xcodeproj; path = ../GeektoolMenu/GeektoolMenu.xcodeproj; sourceTree = "<group>"; };
 		0A94F17D0ED6610400A05583 /* GeektoolUninstaller.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GeektoolUninstaller.xcodeproj; path = ../GeektoolUninstaller/GeektoolUninstaller.xcodeproj; sourceTree = "<group>"; };
 		0A94F18D0ED6614700A05583 /* GeekTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeekTool.h; sourceTree = "<group>"; };
 		0A94F18E0ED6614700A05583 /* GeekTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeekTool.m; sourceTree = "<group>"; };
@@ -136,18 +136,18 @@
 			name = Classes;
 			sourceTree = "<group>";
 		};
-		0A7ACF320ED7DAB8009491BF /* Products */ = {
+		0A1054910EEB90B5008DD305 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0A7ACF390ED7DAB8009491BF /* GeektoolPreferencePane.prefPane */,
+				0A1054950EEB90B5008DD305 /* GeektoolMenu.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		0A94F1690ED660D700A05583 /* Products */ = {
+		0A7ACF320ED7DAB8009491BF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0A94F16D0ED660D700A05583 /* GeektoolMenu.app */,
+				0A7ACF390ED7DAB8009491BF /* GeektoolPreferencePane.prefPane */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -215,8 +215,8 @@
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				0A7ACF310ED7DAB8009491BF /* GeektoolPreferencePane.xcodeproj */,
+				0A1054900EEB90B5008DD305 /* GeektoolMenu.xcodeproj */,
 				0A94F17D0ED6610400A05583 /* GeektoolUninstaller.xcodeproj */,
-				0A94F1680ED660D700A05583 /* GeektoolMenu.xcodeproj */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -279,7 +279,7 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* GeektoolMenu */ = {
+		8D1107260486CEB800E47090 /* Geektool */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Geektool" */;
 			buildPhases = (
@@ -310,8 +310,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 0A94F1690ED660D700A05583 /* Products */;
-					ProjectRef = 0A94F1680ED660D700A05583 /* GeektoolMenu.xcodeproj */;
+					ProductGroup = 0A1054910EEB90B5008DD305 /* Products */;
+					ProjectRef = 0A1054900EEB90B5008DD305 /* GeektoolMenu.xcodeproj */;
 				},
 				{
 					ProductGroup = 0A7ACF320ED7DAB8009491BF /* Products */;
@@ -324,24 +324,24 @@
 			);
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* GeektoolMenu */,
+				8D1107260486CEB800E47090 /* Geektool */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		0A1054950EEB90B5008DD305 /* GeektoolMenu.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GeektoolMenu.bundle;
+			remoteRef = 0A1054940EEB90B5008DD305 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		0A7ACF390ED7DAB8009491BF /* GeektoolPreferencePane.prefPane */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = GeektoolPreferencePane.prefPane;
 			remoteRef = 0A7ACF380ED7DAB8009491BF /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		0A94F16D0ED660D700A05583 /* GeektoolMenu.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = GeektoolMenu.app;
-			remoteRef = 0A94F16C0ED660D700A05583 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		0A94F1820ED6610400A05583 /* GeektoolUninstaller.app */ = {

@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'GeektoolMenu' target in the 'GeektoolMenu' project
+// Prefix header for all source files of the 'GeektoolMenu' target in the 'GeektoolMenu' project.
 //
 
 #ifdef __OBJC__
