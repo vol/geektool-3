@@ -23,6 +23,7 @@
 	NSUserDefaults* userDefaults;
     CFStringRef appID;
     
+    IBOutlet id logManager;
     NSMutableArray *g_logs;
     BOOL isAddingLog;
     NSString *guiPool;

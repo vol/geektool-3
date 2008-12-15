@@ -60,7 +60,8 @@
                                                             object: @"GeekTool"
                                                 suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately
      ];    
-    
+    NSMutableDictionary *manager = [NSMutableDictionary dictionary];
+    [logManager setContent:manager];
     // TODO: add all GTLogs to g_logs
     
     // Yes, we need transparency

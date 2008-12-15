@@ -44,7 +44,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 0A1054900EEB90B5008DD305 /* GeektoolMenu.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 8D5B49B6048680CD000E48DA /* GeektoolMenu.bundle */;
+			remoteGlobalIDString = 8D5B49B6048680CD000E48DA;
 			remoteInfo = GeektoolMenu;
 		};
 		0A7ACF380ED7DAB8009491BF /* PBXContainerItemProxy */ = {
