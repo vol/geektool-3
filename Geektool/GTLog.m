@@ -40,9 +40,49 @@
 #define TYPE_FILE 2
 
 @implementation GTLog
+
 - (id)init
 {
 	if (!(self = [super init])) return nil;
+    NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
+        @"name", @"New log",
+        @"type", @"0",
+        @"enabled", @"1",
+
+        @"fontName", @"Monaco",
+        @"fontSize", @"12",
+
+        @"file", @"",
+
+        @"command", @"",
+        @"hide", @"0",
+        @"refresh", @"10",
+
+        @"textColor", @"Black",
+        @"backgroundColor", @"Black",
+        @"wrap", @"0",
+        @"shadowText", @"0",
+        @"shadowWindow", @"0",
+        @"alignment", @"0",
+
+        @"force", @"0",
+        @"forceTitle", @"0",
+        @"showIcon", @"0",
+
+        @"pictureAlignment", @"0",
+        @"imageURL", @"0",
+        @"transparency", @"0",
+        @"imageFit", @"0",
+        @"frameType", @"0",
+
+        @"x", @"0",
+        @"y", @"0",
+        @"w", @"100",
+        @"h", @"100",
+
+        @"alwaysOnTop", @"0",
+     nil];
+     [self initWithDictionary:defaults];
     return self;
 }
 
