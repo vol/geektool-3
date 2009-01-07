@@ -7,7 +7,6 @@
 //
 
 #import "GTLog.h"
-#define DEFAULT_REFRESH 10
 #define NSYES [NSNumber numberWithBool: YES]
 #define NSNO [NSNumber numberWithBool: NO]
 
@@ -44,45 +43,60 @@
 - (id)init
 {
 	if (!(self = [super init])) return nil;
+    
+    NSDictionary *textColorDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         [NSNumber numberWithFloat: 0],@"red",
+                                         [NSNumber numberWithFloat: 0],@"green",
+                                         [NSNumber numberWithFloat: 0],@"blue",
+                                         [NSNumber numberWithFloat: 1],@"alpha",
+                                         nil];
+    
+    NSDictionary *backgroundColorDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [NSNumber numberWithFloat: 1],@"red",
+                                               [NSNumber numberWithFloat: 1],@"green",
+                                               [NSNumber numberWithFloat: 1],@"blue",
+                                               [NSNumber numberWithFloat: 0],@"alpha",
+                                               nil];   
+    
     NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
-        @"name", @"New log",
-        @"type", @"0",
-        @"enabled", @"1",
-
-        @"fontName", @"Monaco",
-        @"fontSize", @"12",
-
-        @"file", @"",
-
-        @"command", @"",
-        @"hide", @"0",
-        @"refresh", @"10",
-
-        @"textColor", @"Black",
-        @"backgroundColor", @"Black",
-        @"wrap", @"0",
-        @"shadowText", @"0",
-        @"shadowWindow", @"0",
-        @"alignment", @"0",
-
-        @"force", @"0",
-        @"forceTitle", @"0",
-        @"showIcon", @"0",
-
-        @"pictureAlignment", @"0",
-        @"imageURL", @"0",
-        @"transparency", @"0",
-        @"imageFit", @"0",
-        @"frameType", @"0",
-
-        @"x", @"0",
-        @"y", @"0",
-        @"w", @"100",
-        @"h", @"100",
-
-        @"alwaysOnTop", @"0",
-     nil];
-     [self initWithDictionary:defaults];
+                              @"New log", @"name",
+                              @"0", @"type",
+                              @"1", @"enabled",
+                              
+                              @"Monaco", @"fontName",
+                              @"12", @"fontSize",
+                              
+                              @"", @"file",
+                              
+                              @"", @"command",
+                              @"0", @"hide",
+                              @"10", @"refresh",
+                              
+                              textColorDictionary, @"textColor",
+                              backgroundColorDictionary, @"backgroundColor",
+                              @"0", @"wrap",
+                              @"0", @"shadowText",
+                              @"0", @"shadowWindow",
+                              @"0", @"alignment",
+                              
+                              @"0", @"force",
+                              @"", @"forceTitle",
+                              @"0", @"showIcon",
+                              
+                              @"0", @"pictureAlignment",
+                              @"", @"imageURL",
+                              @"100", @"transparency",
+                              @"0", @"imageFit",
+                              @"0", @"frameType",
+                              
+                              @"0", @"x",
+                              @"0", @"y",
+                              @"150", @"w",
+                              @"100", @"h",
+                              
+                              @"0", @"alwaysOnTop",
+                              nil];
+    [self initWithDictionary:defaults];
     return self;
 }
 
@@ -90,104 +104,118 @@
 {
 	if (!(self = [super init])) return nil;
     
+    //TODO: THESE ARE HARDCODED!! MAKE A PREFERENCE FOR THEM
+    [self setImageFailure:[NSImage imageNamed:@"defaultFailure"]];
+    [self setImageSuccess:[NSImage imageNamed:@"defaultSuccess"]];
+    //END HARDCODE
+    
     [self setName:[dictionary objectForKey:@"name"]];
     [self setType:[[dictionary objectForKey:@"type"]intValue]];
     [self setEnabled:[[dictionary objectForKey:@"enabled"]boolValue]];
-
+    
     [self setFontName:[dictionary objectForKey:@"fontName"]];
     [self setFontSize:[[dictionary objectForKey:@"fontSize"]floatValue]];
-
+    
     [self setFile:[dictionary objectForKey:@"file"]];
-
+    
     [self setCommand:[dictionary objectForKey:@"command"]];
     [self setHide:[[dictionary objectForKey:@"hide"]boolValue]];
     [self setRefresh:[[dictionary objectForKey:@"refresh"]intValue]];
-
+    
     [self setTextColor:[dictionary objectForKey:@"textColor"]];
     [self setBackgroundColor:[dictionary objectForKey:@"backgroundColor"]];
     [self setWrap:[[dictionary objectForKey:@"wrap"]boolValue]];
     [self setShadowText:[[dictionary objectForKey:@"shadowText"]boolValue]];
     [self setShadowWindow:[[dictionary objectForKey:@"shadowWindow"]boolValue]];
     [self setAlignment:[[dictionary objectForKey:@"alignment"]intValue]];
-
+    
     [self setForce:[[dictionary objectForKey:@"force"]boolValue]];
     [self setForceTitle:[dictionary objectForKey:@"forceTitle"]];
     [self setShowIcon:[[dictionary objectForKey:@"showIcon"]boolValue]];
-
+    
     [self setPictureAlignment:[[dictionary objectForKey:@"pictureAlignment"]intValue]];
     [self setImageURL:[dictionary objectForKey:@"imageURL"]];
     [self setTransparency:[[dictionary objectForKey:@"transparency"]floatValue]];
     [self setImageFit:[[dictionary objectForKey:@"imageFit"]intValue]];
     [self setFrameType:[[dictionary objectForKey:@"frameType"]intValue]];
-
+    
     [self setX:[[dictionary objectForKey:@"x"]floatValue]];
     [self setY:[[dictionary objectForKey:@"y"]floatValue]];
     [self setW:[[dictionary objectForKey:@"w"]floatValue]];
     [self setH:[[dictionary objectForKey:@"h"]floatValue]];
-
+    
     [self setAlwaysOnTop:[[dictionary objectForKey:@"alwaysOnTop"]boolValue]];
-
+    
     NSString *appSupp = [[NSString stringWithString: @"~/Library/Application Support/GeekTool Scripts"] stringByExpandingTildeInPath];
     NSMutableDictionary *tempEnv = [NSMutableDictionary dictionaryWithDictionary:
-        [[NSProcessInfo processInfo] environment]
-       ];
+                                    [[NSProcessInfo processInfo] environment]
+                                    ];
     NSString *path = [tempEnv objectForKey: @"PATH"];
     [tempEnv setObject: [NSString stringWithFormat: @"%@:%@",appSupp,path] forKey: @"PATH"];
-
+    
     env =  [tempEnv copy];
     return self;
 }
 
 - (NSDictionary*)dictionary
 {
+    //TODO: Add in imageFailure/success preferences
+    NSDictionary *textColorDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         [NSNumber numberWithFloat: [[self textColor]redComponent]]  ,@"red",
+                                         [NSNumber numberWithFloat: [[self textColor]greenComponent]],@"green",
+                                         [NSNumber numberWithFloat: [[self textColor]blueComponent]] ,@"blue",
+                                         [NSNumber numberWithFloat: [[self textColor]alphaComponent]],@"alpha",
+                                         nil];
+    
+    NSDictionary *backgroundColorDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [NSNumber numberWithFloat: [[self backgroundColor]redComponent]]  ,@"red",
+                                               [NSNumber numberWithFloat: [[self backgroundColor]greenComponent]],@"green",
+                                               [NSNumber numberWithFloat: [[self backgroundColor]blueComponent]] ,@"blue",
+                                               [NSNumber numberWithFloat: [[self backgroundColor]alphaComponent]],@"alpha",
+                                               nil];    
+    
     NSMutableDictionary *resultDictionary=[NSMutableDictionary dictionaryWithObjectsAndKeys:
-        [self name]                                       ,@"name",
-        [NSNumber numberWithInt: [self type]]             ,@"type",
-        [NSNumber numberWithBool: [self enabled]]         ,@"enabled",
-
-        [self fontName]                                   ,@"fontName",
-        [self fontSize]                                   ,@"fontSize",
-
-        [self file]                                       ,@"file",
-
-        [self command]                                    ,@"command",
-        [self hide]                                       ,@"hide",
-        [NSNumber numberWithInt: [self refresh]]          ,@"refresh",
-
-        // put these colors into components
-        [self textColor]                                  ,@"textColor",
-        [self backgroundColor]                            ,@"backgroundColor",
-        [NSNumber numberWithBool: [self wrap]]            ,@"wrap",
-        [NSNumber numberWithBool: [self shadowText]]      ,@"shadowText",
-        [NSNumber numberWithBool: [self shadowWindow]]    ,@"shadowWindow",
-        [NSNumber numberWithInt: [self alignment]]        ,@"alignment",
-
-        [NSNumber numberWithBool: [self force]]           ,@"force",
-        [self forceTitle]                                 ,@"forceTitle",
-        [NSNumber numberWithBool: [self showIcon]]        ,@"showIcon",
-        
-        [NSNumber numberWithInt: [self pictureAlignment]] ,@"pictureAlignment",
-        [self imageURL]                                   ,@"imageURL",
-        [NSNumber numberWithFloat: [self transparency]]   ,@"transparency",
-        [NSNumber numberWithInt: [self imageFit]]         ,@"imageFit",
-        [NSNumber numberWithInt: [self frameType]]        ,@"frameType",
-        
-        [NSNumber numberWithInt: [self x]]                ,@"x",
-        [NSNumber numberWithInt: [self y]]                ,@"y",
-        [NSNumber numberWithInt: [self w]]                ,@"w",
-        [NSNumber numberWithInt: [self h]]                ,@"h",
-        
-        [NSNumber numberWithBool: [self alwaysOnTop]]     ,@"alwaysOnTop",
-        nil
-       ];
-
-    if ([[self imageSuccess] TIFFRepresentation])
-        [resultDictionary setObject: [[self imageSuccess] TIFFRepresentation] forKey: @"imageSuccess"];
-    if ([[self imageFailure] TIFFRepresentation])
-        [resultDictionary setObject: [[self imageFailure] TIFFRepresentation] forKey: @"imageFailure"];
-
+                                           [self name]                                       ,@"name",
+                                           [NSNumber numberWithInt: [self type]]             ,@"type",
+                                           [NSNumber numberWithBool: [self enabled]]         ,@"enabled",
+                                           
+                                           [self fontName]                                   ,@"fontName",
+                                           [self fontSize]                                   ,@"fontSize",
+                                           
+                                           [self file]                                       ,@"file",
+                                           
+                                           [self command]                                    ,@"command",
+                                           [self hide]                                       ,@"hide",
+                                           [NSNumber numberWithInt: [self refresh]]          ,@"refresh",
+                                           
+                                           textColorDictionary                               ,@"textColor",
+                                           backgroundColorDictionary                         ,@"backgroundColor",
+                                           [NSNumber numberWithBool: [self wrap]]            ,@"wrap",
+                                           [NSNumber numberWithBool: [self shadowText]]      ,@"shadowText",
+                                           [NSNumber numberWithBool: [self shadowWindow]]    ,@"shadowWindow",
+                                           [NSNumber numberWithInt: [self alignment]]        ,@"alignment",
+                                           
+                                           [NSNumber numberWithBool: [self force]]           ,@"force",
+                                           [self forceTitle]                                 ,@"forceTitle",
+                                           [NSNumber numberWithBool: [self showIcon]]        ,@"showIcon",
+                                           
+                                           [NSNumber numberWithInt: [self pictureAlignment]] ,@"pictureAlignment",
+                                           [self imageURL]                                   ,@"imageURL",
+                                           [NSNumber numberWithFloat: [self transparency]]   ,@"transparency",
+                                           [NSNumber numberWithInt: [self imageFit]]         ,@"imageFit",
+                                           [NSNumber numberWithInt: [self frameType]]        ,@"frameType",
+                                           
+                                           [NSNumber numberWithInt: [self x]]                ,@"x",
+                                           [NSNumber numberWithInt: [self y]]                ,@"y",
+                                           [NSNumber numberWithInt: [self w]]                ,@"w",
+                                           [NSNumber numberWithInt: [self h]]                ,@"h",
+                                           
+                                           [NSNumber numberWithBool: [self alwaysOnTop]]     ,@"alwaysOnTop",
+                                           nil
+                                           ];
+    
     return [[resultDictionary retain]autorelease];
-     
+    
 }
 
 #pragma mark -
@@ -289,7 +317,6 @@
 #pragma mark -
 #pragma mark KVC Accessors
 // NS* things ^f)lywjoreturn 0 retain] autorelease];^wi[[jddjj
-// TODO: put initial values for all the NS* objects
 
 - (int)alignment
 {
@@ -441,8 +468,8 @@
 #pragma mark KVC Mutators
 /*
  * NS* things ^f)lywjoif(0 != var)
-{
-}kkwwdft~yawjo0release];^i[o0= [var copy];jjddjj
+ {
+ }kkwwdft~yawjo0release];^i[o0= [var copy];jjddjj
  * int things ^f)lyawjo0=var;^dft~jddjj
  */
 
@@ -451,12 +478,16 @@
     alignment=var;
 }
 
-- (void)setBackgroundColor:(NSColor*)var
+- (void)setBackgroundColor:(NSDictionary*)var
 {
-    if(backgroundColor != var)
+    NSColor *colorVar = [NSColor colorWithCalibratedRed:[[var objectForKey:@"red"]floatValue] 
+                                                  green:[[var objectForKey:@"green"]floatValue] 
+                                                   blue:[[var objectForKey:@"blue"]floatValue] 
+                                                  alpha:[[var objectForKey:@"alpha"]floatValue]];
+    if(backgroundColor != colorVar)
     {
         [backgroundColor release];
-        backgroundColor = [var copy];
+        backgroundColor = [colorVar copy];
     }
 }
 
@@ -587,12 +618,16 @@
     showIcon=var;
 }
 
-- (void)setTextColor:(NSColor*)var
+- (void)setTextColor:(NSDictionary*)var
 {
-    if(textColor != var)
+    NSColor *colorVar = [NSColor colorWithCalibratedRed:[[var objectForKey:@"red"]floatValue] 
+                                                  green:[[var objectForKey:@"green"]floatValue] 
+                                                   blue:[[var objectForKey:@"blue"]floatValue] 
+                                                  alpha:[[var objectForKey:@"alpha"]floatValue]];
+    if(textColor != colorVar)
     {
         [textColor release];
-        textColor = [var copy];
+        textColor = [colorVar copy];
     }
 }
 
@@ -600,7 +635,7 @@
 {
     transparency=var;
     //if (windowController)
-     //   [[windowController window] setAlphaValue: aTransparency];
+    //   [[windowController window] setAlphaValue: aTransparency];
 }
 
 - (void)setType:(int)var
@@ -643,7 +678,7 @@
 - (void)setImage:(NSString*)urlStr
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
+    
     NSURL *url;
     NSMutableString *myUrl = [NSMutableString stringWithString: urlStr];
     
@@ -652,7 +687,7 @@
     else
         [myUrl appendString: @"&GTTIME="];
     [myUrl appendString: [[NSNumber numberWithLong:random()] stringValue]];
-
+    
     url = [NSURL URLWithString: myUrl];
     NSImage *myImage = [[NSImage alloc] initWithData: [url resourceDataUsingCache:NO]];
     if ([urlStr isEqual: [self imageURL]])
@@ -664,8 +699,8 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     GTLog *copy = [[[self class] allocWithZone: zone]
-            initWithDictionary:[self dictionary]];
-
+                   initWithDictionary:[self dictionary]];
+    
     return copy;
 }
 
@@ -691,13 +726,13 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSData *newLines;
     NSString *newLinesString;
-
+    
     if ([[aNotification name] isEqual : @"NSFileHandleReadToEndOfFileCompletionNotification"])
     {
         newLines = [[aNotification userInfo] objectForKey: @"NSFileHandleNotificationDataItem"];
         [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                          name: [aNotification name]
-                                                        object: nil];        
+                                                        name: [aNotification name]
+                                                      object: nil];        
     }
     else
         newLines = [[aNotification object] availableData];
@@ -733,47 +768,47 @@
             case 0 :
                 if ([[self file] isEqual: @""])
                     return;
-           // windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
-
-            task = [[NSTask alloc] init];
-
-            [task setLaunchPath: @"/usr/bin/tail"];
-            [task setArguments: [NSArray arrayWithObjects: @"-n",@"50",@"-F", [self file], nil]];
-            [task setEnvironment: env];
-            //if (pipe)
-            //    [pipe release];
-            pipe = [NSPipe pipe];
-            [task setStandardOutput: pipe];
-            [[NSNotificationCenter defaultCenter] addObserver: self
-                                                       selector: @selector(newLines:)
-                                                           name: @"NSFileHandleReadCompletionNotification"
-                                                         object: [pipe fileHandleForReading]];
-            [[NSNotificationCenter defaultCenter] addObserver: self
-                                                       selector: @selector(newLines:)
-                                                           name: @"NSFileHandleDataAvailableNotification"
-                                                         object: [pipe fileHandleForReading]];
-            [[pipe fileHandleForReading] waitForDataInBackgroundAndNotify];
-            [[NSNotificationCenter defaultCenter] addObserver: self
-                                                       selector: @selector(taskEnd:)
-                                                           name: @"NSTaskDidTerminateNotification"
-                                                         object: task];            
-            [task launch];
+                // windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
+                
+                task = [[NSTask alloc] init];
+                
+                [task setLaunchPath: @"/usr/bin/tail"];
+                [task setArguments: [NSArray arrayWithObjects: @"-n",@"50",@"-F", [self file], nil]];
+                [task setEnvironment: env];
+                //if (pipe)
+                //    [pipe release];
+                pipe = [NSPipe pipe];
+                [task setStandardOutput: pipe];
+                [[NSNotificationCenter defaultCenter] addObserver: self
+                                                         selector: @selector(newLines:)
+                                                             name: @"NSFileHandleReadCompletionNotification"
+                                                           object: [pipe fileHandleForReading]];
+                [[NSNotificationCenter defaultCenter] addObserver: self
+                                                         selector: @selector(newLines:)
+                                                             name: @"NSFileHandleDataAvailableNotification"
+                                                           object: [pipe fileHandleForReading]];
+                [[pipe fileHandleForReading] waitForDataInBackgroundAndNotify];
+                [[NSNotificationCenter defaultCenter] addObserver: self
+                                                         selector: @selector(taskEnd:)
+                                                             name: @"NSTaskDidTerminateNotification"
+                                                           object: task];            
+                [task launch];
                 break;
                 /*
-            case 1 :
-                if ([[self command] isEqual: @""])
-                    return;
-                //windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
-                //[windowController setReady: YES];
-                break;
-                
-            case 2 :
-                if ([[self imageURL] isEqual: @""])
-                    return;
-
-                //windowController = [[ImageLogWindowController alloc] initWithWindowNibName: @"imageLogWindow"];
-                break;
-                */
+                 case 1 :
+                 if ([[self command] isEqual: @""])
+                 return;
+                 //windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
+                 //[windowController setReady: YES];
+                 break;
+                 
+                 case 2 :
+                 if ([[self imageURL] isEqual: @""])
+                 return;
+                 
+                 //windowController = [[ImageLogWindowController alloc] initWithWindowNibName: @"imageLogWindow"];
+                 break;
+                 */
         }
         windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
         [windowController setType: [self type]];
@@ -799,8 +834,8 @@
 - (void)taskEnd:(NSNotification*)aNotification
 {
     [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                      name: [aNotification name]
-                                                    object: nil];
+                                                    name: [aNotification name]
+                                                  object: nil];
     if ([self type] == 0)
     {
         [self terminate];
@@ -834,7 +869,7 @@
         [[windowController window] close];
         windowController=nil;
     }
-
+    
     if (timer)
     {
         [timer invalidate];
@@ -868,25 +903,25 @@
                 clear = YES;
                 pipe = [[NSPipe alloc] init];
                 [[NSNotificationCenter defaultCenter] addObserver: self
-                                                           selector: @selector(newLines:)
-                                                               name: @"NSFileHandleReadToEndOfFileCompletionNotification"
-                                                             object: [pipe fileHandleForReading]];
+                                                         selector: @selector(newLines:)
+                                                             name: @"NSFileHandleReadToEndOfFileCompletionNotification"
+                                                           object: [pipe fileHandleForReading]];
                 [[pipe fileHandleForReading] readToEndOfFileInBackgroundAndNotify];
-
+                
                 [task setStandardOutput: pipe];
-
+                
                 [[NSNotificationCenter defaultCenter] addObserver: self
-                                                           selector: @selector(taskEnd:)
-                                                               name: @"NSTaskDidTerminateNotification"
-                                                             object: task];
+                                                         selector: @selector(taskEnd:)
+                                                             name: @"NSTaskDidTerminateNotification"
+                                                           object: task];
                 [task launch];
                 [pipe release];
             }
-                break;
+            break;
         case 2:
             [NSThread detachNewThreadSelector: @selector(setImage:)
-                                      toTarget: self
-                                    withObject: [self imageURL]];
+                                     toTarget: self
+                                   withObject: [self imageURL]];
             //[myImage release];
             break;      
     }
@@ -897,27 +932,27 @@
 - (void)updateWindow
 {
     NSWindow *window = [windowController window];
-
+    
     [window setHasShadow: [self shadowWindow]];
     [window setLevel: [self alwaysOnTop]];
     // change this             VV (this is a bool)
     [self setSticky: [self alwaysOnTop] == kCGDesktopWindowLevel];
-
+    
     [window setFrame: [self realRect] display: NO];
     [(LogWindow*)window setClickThrough: YES];
-
+    
     if ([self type] == 0 || [self type] == 1 )
     {
         [windowController setTextBackgroundColor: [self backgroundColor]];
         //[windowController setTextColor: [self textColor]];
         //[windowController setFont: [self font]];
         [windowController setShadowText: [self shadowText]];
-
+        
         //[windowController setTextAlignment: [self alignment]];
         //[windowController setWrap: [self wrap]];
-
+        
         // Paragraph style
-
+        
         NSMutableParagraphStyle *myParagraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         switch ([self alignment])
         {
@@ -938,14 +973,14 @@
             [myParagraphStyle setLineBreakMode: NSLineBreakByCharWrapping];
         else
             [myParagraphStyle setLineBreakMode: NSLineBreakByClipping];
-
+        
         if (attributes)
             [attributes release];
-
+        
         attributes = [[NSDictionary dictionaryWithObjectsAndKeys:
-            myParagraphStyle,   NSParagraphStyleAttributeName,
-            [self font],      NSFontAttributeName,
-            [self textColor], NSForegroundColorAttributeName,nil] retain];
+                       myParagraphStyle,   NSParagraphStyleAttributeName,
+                       [self font],      NSFontAttributeName,
+                       [self textColor], NSForegroundColorAttributeName,nil] retain];
         [myParagraphStyle release];
         [windowController setAttributes: attributes];
     }
@@ -1012,11 +1047,11 @@
             //[myGC setShouldAntialias:YES];
         }
         timer = [[NSTimer scheduledTimerWithTimeInterval: [self refresh]
-                                                   target: self
-                                                 selector: @selector(updateCommand:)
-                                                 userInfo: nil
-                                                  repeats: YES] retain];
-
+                                                  target: self
+                                                selector: @selector(updateCommand:)
+                                                userInfo: nil
+                                                 repeats: YES] retain];
+        
         [timer fire];
     }
     if ([self type] == 0)
@@ -1028,7 +1063,7 @@
 
 - (NSRect)screenToRect:(NSRect)var
 {
-  //  NSLog(@"%f,%f",rect.origin.y,rect.size.height);
+    //  NSLog(@"%f,%f",rect.origin.y,rect.size.height);
     NSRect screenSize = [[NSScreen mainScreen] frame];
     return NSMakeRect(var.origin.x, (-var.origin.y + screenSize.size.height) - var.size.height, var.size.width,var.size.height);
 }

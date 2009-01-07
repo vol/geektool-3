@@ -112,7 +112,7 @@
 #pragma mark -
 #pragma mark Mutators
 - (void)setAlignment:(int)var;
-- (void)setBackgroundColor:(NSColor*)var;
+- (void)setBackgroundColor:(NSDictionary*)var;
 - (void)setCommand:(NSString*)var;
 - (void)setEnabled:(BOOL)var;
 - (void)setFile:(NSString*)var;
@@ -132,10 +132,10 @@
 - (void)setShadowText:(BOOL)var;
 - (void)setShadowWindow:(BOOL)var;
 - (void)setShowIcon:(BOOL)var;
-- (void)setTextColor:(NSColor*)var;
+- (void)setTextColor:(NSDictionary*)var;
 - (void)setTransparency:(float)var;
 - (void)setType:(int)var;
-- (void)setAlwaysOnTop:(bool)var;
+- (void)setAlwaysOnTop:(BOOL)var;
 - (void)setWrap:(BOOL)var;
 - (void)setX:(float)var;
 - (void)setY:(float)var;
