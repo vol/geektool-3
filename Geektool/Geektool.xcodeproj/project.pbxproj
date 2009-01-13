@@ -35,6 +35,7 @@
 		0A94F1CE0ED6628000A05583 /* LogWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F1970ED6614700A05583 /* LogWindowController.h */; };
 		0A94F1D20ED662A800A05583 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A94F1D10ED662A800A05583 /* Carbon.framework */; };
 		0A94F2930ED6630800A05583 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A94F2920ED6630800A05583 /* Info.plist */; };
+		0AC89A530F1C3E42000A795B /* defines.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AC89A520F1C3E42000A795B /* defines.h */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -99,6 +100,7 @@
 		0A94F1BF0ED6620700A05583 /* CGSPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGSPrivate.h; sourceTree = "<group>"; };
 		0A94F1D10ED662A800A05583 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		0A94F2920ED6630800A05583 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0AC89A520F1C3E42000A795B /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = defines.h; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -226,6 +228,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				0AC89A520F1C3E42000A795B /* defines.h */,
 				32CA4F630368D1EE00C91783 /* Geektool_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
@@ -273,6 +276,7 @@
 				0A94F1CC0ED6627C00A05583 /* LogTextField.h in Headers */,
 				0A94F1CD0ED6627E00A05583 /* LogWindow.h in Headers */,
 				0A94F1CE0ED6628000A05583 /* LogWindowController.h in Headers */,
+				0AC89A530F1C3E42000A795B /* defines.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1532"/>
+			<integer value="1577"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1234,7 +1234,7 @@
 																		</object>
 																		<object class="NSTabViewItem" id="169883028">
 																			<object class="NSView" key="NSView" id="363194620">
-																				<nil key="NSNextResponder"/>
+																				<reference key="NSNextResponder" ref="626049130"/>
 																				<int key="NSvFlags">256</int>
 																				<object class="NSMutableArray" key="NSSubviews">
 																					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1598,7 +1598,7 @@
 																									<object class="NSSegmentedControl" id="714540637">
 																										<reference key="NSNextResponder" ref="185490120"/>
 																										<int key="NSvFlags">268</int>
-																										<string key="NSFrame">{{17, 53}, {241, 24}}</string>
+																										<string key="NSFrame">{{17, 53}, {131, 24}}</string>
 																										<reference key="NSSuperview" ref="185490120"/>
 																										<bool key="NSEnabled">YES</bool>
 																										<object class="NSSegmentedCell" key="NSCell" id="286240257">
@@ -1614,36 +1614,36 @@
 																												<bool key="EncodedWithXMLCoder">YES</bool>
 																												<object class="NSSegmentItem">
 																													<double key="NSSegmentItemWidth">2.700000e+01</double>
-																													<object class="NSCustomResource" key="NSSegmentItemImage" id="347451135">
+																													<object class="NSCustomResource" key="NSSegmentItemImage" id="804568837">
 																														<string key="NSClassName">NSImage</string>
-																														<string key="NSResourceName">gauche</string>
+																														<string key="NSResourceName">left</string>
 																													</object>
 																													<string key="NSSegmentItemLabel"/>
 																													<int key="NSSegmentItemImageScaling">2</int>
 																												</object>
 																												<object class="NSSegmentItem">
 																													<double key="NSSegmentItemWidth">2.700000e+01</double>
-																													<object class="NSCustomResource" key="NSSegmentItemImage" id="458797955">
+																													<object class="NSCustomResource" key="NSSegmentItemImage" id="711709089">
 																														<string key="NSClassName">NSImage</string>
-																														<string key="NSResourceName">centre</string>
+																														<string key="NSResourceName">center</string>
 																													</object>
 																													<string key="NSSegmentItemLabel"/>
 																													<int key="NSSegmentItemTag">1</int>
 																													<int key="NSSegmentItemImageScaling">2</int>
 																												</object>
 																												<object class="NSSegmentItem">
-																													<object class="NSCustomResource" key="NSSegmentItemImage" id="1009789541">
+																													<object class="NSCustomResource" key="NSSegmentItemImage" id="695089803">
 																														<string key="NSClassName">NSImage</string>
-																														<string key="NSResourceName">droite</string>
+																														<string key="NSResourceName">right</string>
 																													</object>
 																													<string key="NSSegmentItemLabel"/>
 																													<bool key="NSSegmentItemSelected">YES</bool>
 																													<int key="NSSegmentItemImageScaling">2</int>
 																												</object>
 																												<object class="NSSegmentItem">
-																													<object class="NSCustomResource" key="NSSegmentItemImage" id="525528300">
+																													<object class="NSCustomResource" key="NSSegmentItemImage" id="791222335">
 																														<string key="NSClassName">NSImage</string>
-																														<string key="NSResourceName">justifie</string>
+																														<string key="NSResourceName">justified</string>
 																													</object>
 																													<int key="NSSegmentItemImageScaling">2</int>
 																												</object>
@@ -1679,6 +1679,7 @@
 																					</object>
 																				</object>
 																				<string key="NSFrame">{{10, 25}, {428, 204}}</string>
+																				<reference key="NSSuperview" ref="626049130"/>
 																			</object>
 																			<string key="NSLabel">Appearance</string>
 																			<reference key="NSColor" ref="578933076"/>
@@ -1686,7 +1687,7 @@
 																		</object>
 																		<object class="NSTabViewItem" id="536208680">
 																			<object class="NSView" key="NSView" id="252532418">
-																				<reference key="NSNextResponder" ref="626049130"/>
+																				<nil key="NSNextResponder"/>
 																				<int key="NSvFlags">256</int>
 																				<object class="NSMutableArray" key="NSSubviews">
 																					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2168,21 +2169,20 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																					</object>
 																				</object>
 																				<string key="NSFrame">{{10, 25}, {428, 204}}</string>
-																				<reference key="NSSuperview" ref="626049130"/>
 																			</object>
 																			<string key="NSLabel">Icon</string>
 																			<reference key="NSColor" ref="578933076"/>
 																			<reference key="NSTabView" ref="626049130"/>
 																		</object>
 																	</object>
-																	<reference key="NSSelectedTabViewItem" ref="536208680"/>
+																	<reference key="NSSelectedTabViewItem" ref="169883028"/>
 																	<reference key="NSFont" ref="26"/>
 																	<int key="NSTvFlags">134217728</int>
 																	<bool key="NSAllowTruncatedLabels">YES</bool>
 																	<bool key="NSDrawsBackground">YES</bool>
 																	<object class="NSMutableArray" key="NSSubviews">
 																		<bool key="EncodedWithXMLCoder">YES</bool>
-																		<reference ref="252532418"/>
+																		<reference ref="363194620"/>
 																	</object>
 																</object>
 															</object>
@@ -2941,7 +2941,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																				<characters key="NS.bytes">1</characters>
 																			</object>
 																			<object class="NSView" key="NSView" id="686196097">
-																				<nil key="NSNextResponder"/>
+																				<reference key="NSNextResponder" ref="995989332"/>
 																				<int key="NSvFlags">256</int>
 																				<object class="NSMutableArray" key="NSSubviews">
 																					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3020,6 +3020,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																					</object>
 																				</object>
 																				<string key="NSFrame">{{10, 25}, {428, 204}}</string>
+																				<reference key="NSSuperview" ref="995989332"/>
 																			</object>
 																			<string key="NSLabel">Path</string>
 																			<reference key="NSColor" ref="578933076"/>
@@ -3027,7 +3028,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																		</object>
 																		<object class="NSTabViewItem" id="932757600">
 																			<object class="NSView" key="NSView" id="306450515">
-																				<reference key="NSNextResponder" ref="995989332"/>
+																				<nil key="NSNextResponder"/>
 																				<int key="NSvFlags">256</int>
 																				<object class="NSMutableArray" key="NSSubviews">
 																					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3403,25 +3404,25 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																												<bool key="EncodedWithXMLCoder">YES</bool>
 																												<object class="NSSegmentItem">
 																													<double key="NSSegmentItemWidth">2.700000e+01</double>
-																													<reference key="NSSegmentItemImage" ref="347451135"/>
+																													<reference key="NSSegmentItemImage" ref="804568837"/>
 																													<string key="NSSegmentItemLabel"/>
 																													<bool key="NSSegmentItemSelected">YES</bool>
 																													<int key="NSSegmentItemImageScaling">2</int>
 																												</object>
 																												<object class="NSSegmentItem">
 																													<double key="NSSegmentItemWidth">2.700000e+01</double>
-																													<reference key="NSSegmentItemImage" ref="458797955"/>
+																													<reference key="NSSegmentItemImage" ref="711709089"/>
 																													<string key="NSSegmentItemLabel"/>
 																													<int key="NSSegmentItemTag">1</int>
 																													<int key="NSSegmentItemImageScaling">2</int>
 																												</object>
 																												<object class="NSSegmentItem">
-																													<reference key="NSSegmentItemImage" ref="1009789541"/>
+																													<reference key="NSSegmentItemImage" ref="695089803"/>
 																													<string key="NSSegmentItemLabel"/>
 																													<int key="NSSegmentItemImageScaling">2</int>
 																												</object>
 																												<object class="NSSegmentItem">
-																													<reference key="NSSegmentItemImage" ref="525528300"/>
+																													<reference key="NSSegmentItemImage" ref="791222335"/>
 																													<int key="NSSegmentItemImageScaling">2</int>
 																												</object>
 																											</object>
@@ -3455,21 +3456,20 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																					</object>
 																				</object>
 																				<string key="NSFrame">{{10, 25}, {428, 204}}</string>
-																				<reference key="NSSuperview" ref="995989332"/>
 																			</object>
 																			<string key="NSLabel">Appearance</string>
 																			<reference key="NSColor" ref="578933076"/>
 																			<reference key="NSTabView" ref="995989332"/>
 																		</object>
 																	</object>
-																	<reference key="NSSelectedTabViewItem" ref="932757600"/>
+																	<reference key="NSSelectedTabViewItem" ref="799870360"/>
 																	<reference key="NSFont" ref="26"/>
 																	<int key="NSTvFlags">134217728</int>
 																	<bool key="NSAllowTruncatedLabels">YES</bool>
 																	<bool key="NSDrawsBackground">YES</bool>
 																	<object class="NSMutableArray" key="NSSubviews">
 																		<bool key="EncodedWithXMLCoder">YES</bool>
-																		<reference ref="306450515"/>
+																		<reference ref="686196097"/>
 																	</object>
 																</object>
 															</object>
@@ -5035,9 +5035,9 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="29664671"/>
 							<reference ref="161555895"/>
-							<reference ref="165882124"/>
 							<reference ref="112488228"/>
 							<reference ref="290241107"/>
+							<reference ref="165882124"/>
 						</object>
 						<reference key="parent" ref="196177033"/>
 					</object>

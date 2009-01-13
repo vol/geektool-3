@@ -7,36 +7,10 @@
 //
 
 #import "GTLog.h"
+#import "defines.h"
+
 #define NSYES [NSNumber numberWithBool: YES]
 #define NSNO [NSNumber numberWithBool: NO]
-
-// PictureAlignment
-#define TOP_LEFT 0
-#define TOP 1
-#define TOP_RIGHT 2
-#define LEFT 3
-#define CENTER 4
-#define RIGHT 5
-#define BOTTOM_LEFT 6
-#define BOTTOM 7
-#define BOTTOM_RIGHT 8
-
-// ImageFit
-#define PROPORTIONALLY 0
-#define TO_FIT 1
-#define NONE 2
-
-// FrameType
-#define FRAME_NONE 0
-#define FRAME_PHOTO 1
-#define FRAME_GRAYBEZEL 2
-#define FRAME_GROOVE 3
-#define FRAME_BUTTON 4
-
-// Type
-#define TYPE_SHELL 0
-#define TYPE_IMAGE 1
-#define TYPE_FILE 2
 
 @implementation GTLog
 
@@ -122,8 +96,8 @@
     [self setHide:[[dictionary objectForKey:@"hide"]boolValue]];
     [self setRefresh:[[dictionary objectForKey:@"refresh"]intValue]];
     
-    [self setTextColor:[dictionary objectForKey:@"textColor"]];
-    [self setBackgroundColor:[dictionary objectForKey:@"backgroundColor"]];
+    [self setTextColorWithDictionary:[dictionary objectForKey:@"textColor"]];
+    [self setBackgroundColorWithDictionary:[dictionary objectForKey:@"backgroundColor"]];
     [self setWrap:[[dictionary objectForKey:@"wrap"]boolValue]];
     [self setShadowText:[[dictionary objectForKey:@"shadowText"]boolValue]];
     [self setShadowWindow:[[dictionary objectForKey:@"shadowWindow"]boolValue]];
@@ -478,7 +452,16 @@
     alignment=var;
 }
 
-- (void)setBackgroundColor:(NSDictionary*)var
+- (void)setBackgroundColor:(NSColor*)var
+{
+    if(backgroundColor != var)
+    {
+        [backgroundColor release];
+        backgroundColor = [var copy];
+    }
+}
+
+- (void)setBackgroundColorWithDictionary:(NSDictionary*)var
 {
     NSColor *colorVar = [NSColor colorWithCalibratedRed:[[var objectForKey:@"red"]floatValue] 
                                                   green:[[var objectForKey:@"green"]floatValue] 
@@ -618,7 +601,7 @@
     showIcon=var;
 }
 
-- (void)setTextColor:(NSDictionary*)var
+- (void)setTextColorWithDictionary:(NSDictionary*)var
 {
     NSColor *colorVar = [NSColor colorWithCalibratedRed:[[var objectForKey:@"red"]floatValue] 
                                                   green:[[var objectForKey:@"green"]floatValue] 
@@ -628,6 +611,15 @@
     {
         [textColor release];
         textColor = [colorVar copy];
+    }
+}
+
+- (void)setTextColor:(NSColor*)var
+{
+    if(textColor != var)
+    {
+        [textColor release];
+        textColor = [var copy];
     }
 }
 
@@ -706,9 +698,8 @@
 
 - (bool)equals:(GTLog*)comp
 {
-    if ( [[self dictionary] isEqualTo: [comp dictionary]])
-        return YES;
-    return NO;
+    if ([[self dictionary] isEqualTo: [comp dictionary]]) return YES;
+    else return NO;
 }
 
 - (void)front
@@ -853,7 +844,7 @@
     return;
 }
 
-- (void)terminate;
+- (void)terminate
 {
     [[NSNotificationCenter defaultCenter] removeObserver: self];
     if (task)
@@ -956,16 +947,16 @@
         NSMutableParagraphStyle *myParagraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         switch ([self alignment])
         {
-            case 0:
+            case ALIGN_LEFT:
                 [myParagraphStyle setAlignment: NSLeftTextAlignment];
                 break;
-            case 1:
+            case ALIGN_CENTER:
                 [myParagraphStyle setAlignment: NSCenterTextAlignment];
                 break;
-            case 2:
+            case ALIGN_RIGHT:
                 [myParagraphStyle setAlignment: NSRightTextAlignment];
                 break;
-            case 3:
+            case ALIGN_JUSTIFIED:
                 [myParagraphStyle setAlignment: NSJustifiedTextAlignment];
                 break;
         }

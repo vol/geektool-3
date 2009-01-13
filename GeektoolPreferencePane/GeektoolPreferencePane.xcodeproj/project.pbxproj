@@ -9,12 +9,13 @@
 /* Begin PBXBuildFile section */
 		0A3CE0D10EDCCDAE006D48DB /* GeekToolPrefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3CE0CF0EDCCDAE006D48DB /* GeekToolPrefs.m */; };
 		0A3CE0D20EDCCDAE006D48DB /* GeekToolPrefs.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3CE0D00EDCCDAE006D48DB /* GeekToolPrefs.h */; };
+		0AC89A550F1C3E53000A795B /* defines.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AC89A540F1C3E53000A795B /* defines.h */; };
 		0AD772220ED86CAE003EB540 /* GeektoolPrefs.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AD772200ED86CAE003EB540 /* GeektoolPrefs.xib */; };
-		0AD7722D0ED86EDC003EB540 /* gauche.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD772250ED86EDC003EB540 /* gauche.png */; };
-		0AD7722E0ED86EDC003EB540 /* centre.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD772260ED86EDC003EB540 /* centre.png */; };
+		0AD7722D0ED86EDC003EB540 /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD772250ED86EDC003EB540 /* left.png */; };
+		0AD7722E0ED86EDC003EB540 /* center.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD772260ED86EDC003EB540 /* center.png */; };
 		0AD7722F0ED86EDC003EB540 /* defaultFailure.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD772270ED86EDC003EB540 /* defaultFailure.png */; };
-		0AD772300ED86EDC003EB540 /* droite.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD772280ED86EDC003EB540 /* droite.png */; };
-		0AD772310ED86EDC003EB540 /* justifie.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD772290ED86EDC003EB540 /* justifie.png */; };
+		0AD772300ED86EDC003EB540 /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD772280ED86EDC003EB540 /* right.png */; };
+		0AD772310ED86EDC003EB540 /* justified.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD772290ED86EDC003EB540 /* justified.png */; };
 		0AD772320ED86EDC003EB540 /* GeekToolPrefs.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0AD7722A0ED86EDC003EB540 /* GeekToolPrefs.tiff */; };
 		0AD772330ED86EDC003EB540 /* delete.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0AD7722B0ED86EDC003EB540 /* delete.tif */; };
 		0AD772340ED86EDC003EB540 /* defaultSuccess.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD7722C0ED86EDC003EB540 /* defaultSuccess.png */; };
@@ -39,12 +40,13 @@
 		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		0A3CE0CF0EDCCDAE006D48DB /* GeekToolPrefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeekToolPrefs.m; sourceTree = "<group>"; };
 		0A3CE0D00EDCCDAE006D48DB /* GeekToolPrefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeekToolPrefs.h; sourceTree = "<group>"; };
+		0AC89A540F1C3E53000A795B /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = defines.h; path = ../Geektool/defines.h; sourceTree = SOURCE_ROOT; };
 		0AD772210ED86CAE003EB540 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/GeektoolPrefs.xib; sourceTree = "<group>"; };
-		0AD772250ED86EDC003EB540 /* gauche.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gauche.png; sourceTree = "<group>"; };
-		0AD772260ED86EDC003EB540 /* centre.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = centre.png; sourceTree = "<group>"; };
+		0AD772250ED86EDC003EB540 /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
+		0AD772260ED86EDC003EB540 /* center.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = center.png; sourceTree = "<group>"; };
 		0AD772270ED86EDC003EB540 /* defaultFailure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultFailure.png; sourceTree = "<group>"; };
-		0AD772280ED86EDC003EB540 /* droite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = droite.png; sourceTree = "<group>"; };
-		0AD772290ED86EDC003EB540 /* justifie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = justifie.png; sourceTree = "<group>"; };
+		0AD772280ED86EDC003EB540 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
+		0AD772290ED86EDC003EB540 /* justified.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = justified.png; sourceTree = "<group>"; };
 		0AD7722A0ED86EDC003EB540 /* GeekToolPrefs.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = GeekToolPrefs.tiff; sourceTree = "<group>"; };
 		0AD7722B0ED86EDC003EB540 /* delete.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = delete.tif; sourceTree = "<group>"; };
 		0AD7722C0ED86EDC003EB540 /* defaultSuccess.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultSuccess.png; sourceTree = "<group>"; };
@@ -103,11 +105,11 @@
 		089C167CFE841241C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				0AD772250ED86EDC003EB540 /* gauche.png */,
-				0AD772260ED86EDC003EB540 /* centre.png */,
+				0AD772250ED86EDC003EB540 /* left.png */,
+				0AD772260ED86EDC003EB540 /* center.png */,
 				0AD772270ED86EDC003EB540 /* defaultFailure.png */,
-				0AD772280ED86EDC003EB540 /* droite.png */,
-				0AD772290ED86EDC003EB540 /* justifie.png */,
+				0AD772280ED86EDC003EB540 /* right.png */,
+				0AD772290ED86EDC003EB540 /* justified.png */,
 				0AD7722A0ED86EDC003EB540 /* GeekToolPrefs.tiff */,
 				0AD7722B0ED86EDC003EB540 /* delete.tif */,
 				0AD7722C0ED86EDC003EB540 /* defaultSuccess.png */,
@@ -131,6 +133,7 @@
 		0AD772610ED87141003EB540 /* Shared Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0AC89A540F1C3E53000A795B /* defines.h */,
 				0AD772670ED871C4003EB540 /* CGSPrivate.h */,
 				0AD772550ED8712C003EB540 /* GTLog.h */,
 				0AD772560ED8712C003EB540 /* GTLog.m */,
@@ -190,6 +193,7 @@
 				0AD7725F0ED8712C003EB540 /* LogWindowController.h in Headers */,
 				0AD772680ED871C4003EB540 /* CGSPrivate.h in Headers */,
 				0A3CE0D20EDCCDAE006D48DB /* GeekToolPrefs.h in Headers */,
+				0AC89A550F1C3E53000A795B /* defines.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,11 +246,11 @@
 				8D202CED0486D31800D8A456 /* InfoPlist.strings in Resources */,
 				8D202CEE0486D31800D8A456 /* GeektoolPreferencePanePref.tiff in Resources */,
 				0AD772220ED86CAE003EB540 /* GeektoolPrefs.xib in Resources */,
-				0AD7722D0ED86EDC003EB540 /* gauche.png in Resources */,
-				0AD7722E0ED86EDC003EB540 /* centre.png in Resources */,
+				0AD7722D0ED86EDC003EB540 /* left.png in Resources */,
+				0AD7722E0ED86EDC003EB540 /* center.png in Resources */,
 				0AD7722F0ED86EDC003EB540 /* defaultFailure.png in Resources */,
-				0AD772300ED86EDC003EB540 /* droite.png in Resources */,
-				0AD772310ED86EDC003EB540 /* justifie.png in Resources */,
+				0AD772300ED86EDC003EB540 /* right.png in Resources */,
+				0AD772310ED86EDC003EB540 /* justified.png in Resources */,
 				0AD772320ED86EDC003EB540 /* GeekToolPrefs.tiff in Resources */,
 				0AD772330ED86EDC003EB540 /* delete.tif in Resources */,
 				0AD772340ED86EDC003EB540 /* defaultSuccess.png in Resources */,
