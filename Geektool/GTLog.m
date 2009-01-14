@@ -671,7 +671,6 @@
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    NSURL *url;
     NSMutableString *myUrl = [NSMutableString stringWithString: urlStr];
     
     if (NSEqualRanges([myUrl rangeOfString: @"?"], NSMakeRange(NSNotFound, 0)))
@@ -680,7 +679,7 @@
         [myUrl appendString: @"&GTTIME="];
     [myUrl appendString: [[NSNumber numberWithLong:random()] stringValue]];
     
-    url = [NSURL URLWithString: myUrl];
+    NSURL *url = [NSURL URLWithString: myUrl];
     NSImage *myImage = [[NSImage alloc] initWithData: [url resourceDataUsingCache:NO]];
     if ([urlStr isEqual: [self imageURL]])
         [windowController setImage: myImage];
@@ -712,6 +711,9 @@
     return [self copyWithZone: zone];
 }
 
+// this grabs lines from an NSTask output, specifically from the openWindow
+// task for a file. Whenever the observed file is modified, this function
+// takes care of reading it.
 - (void)newLines:(NSNotification*)aNotification
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -729,7 +731,7 @@
         newLines = [[aNotification object] availableData];
     
     newLinesString = [[NSString alloc] initWithData: newLines encoding:NSASCIIStringEncoding];
-    if (! [newLinesString isEqualTo: @""] || [self type] == 1)
+    if (! [newLinesString isEqualTo: @""] || [self type] == TYPE_FILE)
     {
         if (! [self hide] && ! [self force])
             [windowController addText: newLinesString clear: [self type]];
@@ -748,58 +750,56 @@
     [pool release];
 }
 
+// This function is specifically for viewing files; no other type is handled here
 - (void)openWindow
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSPipe *pipe;
+    
+    // we will be executing functions to get an output soon
     if ([self enabled] && ! windowController)
     {
-        switch ([self type])
+        if ([self type] == TYPE_FILE)
         {
-            case 0 :
-                if ([[self file] isEqual: @""])
-                    return;
-                // windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
-                
-                task = [[NSTask alloc] init];
-                
-                [task setLaunchPath: @"/usr/bin/tail"];
-                [task setArguments: [NSArray arrayWithObjects: @"-n",@"50",@"-F", [self file], nil]];
-                [task setEnvironment: env];
-                //if (pipe)
-                //    [pipe release];
-                pipe = [NSPipe pipe];
-                [task setStandardOutput: pipe];
-                [[NSNotificationCenter defaultCenter] addObserver: self
-                                                         selector: @selector(newLines:)
-                                                             name: @"NSFileHandleReadCompletionNotification"
-                                                           object: [pipe fileHandleForReading]];
-                [[NSNotificationCenter defaultCenter] addObserver: self
-                                                         selector: @selector(newLines:)
-                                                             name: @"NSFileHandleDataAvailableNotification"
-                                                           object: [pipe fileHandleForReading]];
-                [[pipe fileHandleForReading] waitForDataInBackgroundAndNotify];
-                [[NSNotificationCenter defaultCenter] addObserver: self
-                                                         selector: @selector(taskEnd:)
-                                                             name: @"NSTaskDidTerminateNotification"
-                                                           object: task];            
-                [task launch];
-                break;
-                /*
-                 case 1 :
-                 if ([[self command] isEqual: @""])
-                 return;
-                 //windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
-                 //[windowController setReady: YES];
-                 break;
-                 
-                 case 2 :
-                 if ([[self imageURL] isEqual: @""])
-                 return;
-                 
-                 //windowController = [[ImageLogWindowController alloc] initWithWindowNibName: @"imageLogWindow"];
-                 break;
-                 */
+            // if no file is specified, don't do anything
+            if ([[self file] isEqual: @""])
+                return;
+            // windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
+            
+            // The following NSTask reads the command file (to 50 lines?)
+            // The -F file makes sure the file keeps getting read even if it
+            // hits the EOF or the file name is changed
+            task = [[NSTask alloc] init];
+            
+            [task setLaunchPath: @"/usr/bin/tail"];
+            [task setArguments: [NSArray arrayWithObjects: @"-n",@"50",@"-F", [self file], nil]];
+            [task setEnvironment: env];
+            
+            pipe = [NSPipe pipe];
+            [task setStandardOutput: pipe];
+            
+            // We set up observers here to handle constant reading of the
+            // file, esp. that file is modified in any way
+            [[NSNotificationCenter defaultCenter] addObserver: self
+                                                     selector: @selector(newLines:)
+                                                         name: @"NSFileHandleReadCompletionNotification"
+                                                       object: [pipe fileHandleForReading]];
+            [[NSNotificationCenter defaultCenter] addObserver: self
+                                                     selector: @selector(newLines:)
+                                                         name: @"NSFileHandleDataAvailableNotification"
+                                                       object: [pipe fileHandleForReading]];
+            
+            // I'm guessing this just means we do the notifications above
+            [[pipe fileHandleForReading] waitForDataInBackgroundAndNotify];
+            
+            // Be sure to tell whoever wants to know when we are done with our task
+            [[NSNotificationCenter defaultCenter] addObserver: self
+                                                     selector: @selector(taskEnd:)
+                                                         name: @"NSTaskDidTerminateNotification"
+                                                       object: task];         
+            
+            // Get the ball rolling
+            [task launch];
         }
         windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
         [windowController setType: [self type]];
@@ -827,11 +827,11 @@
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: [aNotification name]
                                                   object: nil];
-    if ([self type] == 0)
+    if ([self type] == TYPE_FILE)
     {
         [self terminate];
     }
-    if ([self type] == 1 && [self showIcon])
+    if ([self type] == TYPE_SHELL && [self showIcon])
     {
         if ([task terminationStatus] == 0)
             [windowController setImage: [self imageSuccess]];
@@ -874,6 +874,7 @@
     }
 }
 
+// This fn is pretty hot as well.
 - (void)updateCommand:(NSTimer*)timer
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -882,10 +883,10 @@
     
     switch ([self type])
     {
-        case 1 :
+        case TYPE_SHELL:
             if ([task isRunning])
                 free=NO;
-            if ( windowController != nil && free)
+            if (windowController != nil && free)
             {
                 task = [[NSTask alloc] init];
                 [task setLaunchPath: @"/bin/sh"];
@@ -909,7 +910,7 @@
                 [pipe release];
             }
             break;
-        case 2:
+        case TYPE_IMAGE:
             [NSThread detachNewThreadSelector: @selector(setImage:)
                                      toTarget: self
                                    withObject: [self imageURL]];
@@ -920,19 +921,21 @@
     [pool release];
 }
 
+// The heart of the app. This will be firing off our updates, meaning this func
+// is going to be called many, many times by almost every log window you have.
+// This fn is HOT! 
 - (void)updateWindow
 {
     NSWindow *window = [windowController window];
     
     [window setHasShadow: [self shadowWindow]];
     [window setLevel: [self alwaysOnTop]];
-    // change this             VV (this is a bool)
-    [self setSticky: [self alwaysOnTop] == kCGDesktopWindowLevel];
+    [self setSticky: [self alwaysOnTop]];
     
     [window setFrame: [self realRect] display: NO];
     [(LogWindow*)window setClickThrough: YES];
     
-    if ([self type] == 0 || [self type] == 1 )
+    if ([self type] == TYPE_FILE || [self type] == TYPE_SHELL )
     {
         [windowController setTextBackgroundColor: [self backgroundColor]];
         //[windowController setTextColor: [self textColor]];
@@ -943,7 +946,6 @@
         //[windowController setWrap: [self wrap]];
         
         // Paragraph style
-        
         NSMutableParagraphStyle *myParagraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         switch ([self alignment])
         {
@@ -975,13 +977,13 @@
         [myParagraphStyle release];
         [windowController setAttributes: attributes];
     }
-    if ([self type] == 0)
+    if ([self type] == TYPE_FILE)
         [windowController scrollEnd];
     [windowController setStyle: [self NSFrameType]];
     
     NSRect rect = [[windowController window] frame];
     int imWidth = 0;
-    if ([self showIcon] && [self type] == 1)
+    if ([self showIcon] && [self type] == TYPE_SHELL)
     {
         if ([[self imageSuccess] size].width > [[self imageFailure] size].width )
             imWidth = [[self imageSuccess] size].width;
@@ -1008,7 +1010,7 @@
                              rect.size.height);
     }
     [windowController setTextRect: newRect];
-    if ([self type] == 1 || [self type] == 2)
+    if ([self type] == TYPE_SHELL || [self type] == TYPE_IMAGE)
     {
         [windowController setPictureAlignment: [self NSPictureAlignment]];
         if (timer)
@@ -1017,7 +1019,7 @@
             [timer release];
             timer = nil;
         }
-        if ([self type] == 1)
+        if ([self type] == TYPE_SHELL)
         {
             arguments = [[NSArray alloc] initWithObjects: @"-c",[self command], nil];
             clear = YES;
@@ -1028,7 +1030,7 @@
                 temp = [self forceTitle];
             [windowController addText: temp clear: YES];
         }
-        else if ([self type] == 2 )
+        else if ([self type] == TYPE_IMAGE)
         {
             [windowController setTextBackgroundColor: [NSColor clearColor]];
             //                [windowController setStyle: [self NSFrameType]];
