@@ -1,0 +1,37 @@
+Original
+Geektool comes in easy to understand parts.
+
+Geektool is simply a headless (sort of) application that reads a preference file and generates the logs on the display.
+
+GeektoolPrefs is a tool that edits preference files and thats all.
+
+=======
+Runtime procedure
+
+Assume the geektool process is run
+Various notifications set
+Preferences are parsed to create logs if needed
+If the log is already present, call 'openWindow' and then 'release'
+
+Possible entry point of movement
+Originial setDictionary:force: calls
+    [ self terminate ];
+    [ self openWindow ];
+or
+    [ self updateWindow ];
+depending on a variable 'close'
+
+=======
+Future (Current progress)
+I am trying to work on this idea a slightly different way. The idea of two processes is inevitable; because the way a system preference pane is setup, it is necessary to have two processes; one for when the preference pane is active, and one for when the pane is not active.
+
+As such, I will also have two processes.
+One processes, called Geektool, will be a no frills, window based app. It is to be run ONLY when GeektoolPrefs is off. It's sole purpose is to run commands and display their output in custom windows. This application will not communicate with anything except its sister process GeektoolPrefs ONLY about its startup/shutdown procedures.
+
+The second processes, GeektoolPrefs, will edit, save, and display geektool logs. The views will be modifiable and resemblant to the output of the sibling process Geektool. The reason for this split is for separation of the two parts. Some duplicate code will probably be established, but it will be for the benefit of a smoother running system.
+
+The project geektool will be split into these 2 distinct parts for a few reasons. 
+
+One, the separation makes both programs independent, cutting down on dependent relationships and modularization. More independent programs means less errors in the long run.
+
+Two, the independence will allow for greater concentration on how the application will look and feel in terms of productivity. Having the programs closely related makes such development difficult.

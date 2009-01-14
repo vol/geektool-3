@@ -664,8 +664,13 @@
 {
     h=var;
 }
+
 #pragma mark -
-#pragma mark Logs operations
+#pragma mark Window operations
+- (void)front
+{
+    [[windowController window] orderFront: self];
+}
 
 - (void)setImage:(NSString*)urlStr
 {
@@ -687,67 +692,14 @@
     [pool release];
 }
 
-- (id)copyWithZone:(NSZone *)zone
+- (void)setHilighted:(BOOL)myHilight
 {
-    GTLog *copy = [[[self class] allocWithZone: zone]
-                   initWithDictionary:[self dictionary]];
-    
-    return copy;
+    [windowController setHilighted: myHilight];
 }
 
-- (bool)equals:(GTLog*)comp
+- (void)setSticky:(BOOL)flag
 {
-    if ([[self dictionary] isEqualTo: [comp dictionary]]) return YES;
-    else return NO;
-}
-
-- (void)front
-{
-    [[windowController window] orderFront: self];
-}
-
-- (id)mutableCopyWithZone:(NSZone *)zone
-{
-    return [self copyWithZone: zone];
-}
-
-// this grabs lines from an NSTask output, specifically from the openWindow
-// task for a file. Whenever the observed file is modified, this function
-// takes care of reading it.
-- (void)newLines:(NSNotification*)aNotification
-{
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSData *newLines;
-    NSString *newLinesString;
-    
-    if ([[aNotification name] isEqual : @"NSFileHandleReadToEndOfFileCompletionNotification"])
-    {
-        newLines = [[aNotification userInfo] objectForKey: @"NSFileHandleNotificationDataItem"];
-        [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                        name: [aNotification name]
-                                                      object: nil];        
-    }
-    else
-        newLines = [[aNotification object] availableData];
-    
-    newLinesString = [[NSString alloc] initWithData: newLines encoding:NSASCIIStringEncoding];
-    if (! [newLinesString isEqualTo: @""] || [self type] == TYPE_FILE)
-    {
-        if (! [self hide] && ! [self force])
-            [windowController addText: newLinesString clear: [self type]];
-        if ([self type] == 0)
-        {
-            [windowController scrollEnd];
-            [[aNotification object] waitForDataInBackgroundAndNotify];
-        }
-        
-        //[windowController setFont: [self font]];
-        [windowController setAttributes: attributes];
-    }
-    clear = NO;
-    [windowController display];
-    [newLinesString release];
-    [pool release];
+    [windowController setSticky: flag];
 }
 
 // This function is specifically for viewing files; no other type is handled here
@@ -764,7 +716,6 @@
             // if no file is specified, don't do anything
             if ([[self file] isEqual: @""])
                 return;
-            // windowController = [[LogWindowController alloc] initWithWindowNibName: @"logWindow"];
             
             // The following NSTask reads the command file (to 50 lines?)
             // The -F file makes sure the file keeps getting read even if it
@@ -810,68 +761,6 @@
         [self terminate];
     [windowController showWindow: self];
     [pool release];
-}
-
-- (void)setHilighted:(BOOL)myHilight
-{
-    [windowController setHilighted: myHilight];
-}
-
-- (void)setSticky:(BOOL)flag
-{
-    [windowController setSticky: flag];
-}
-
-- (void)taskEnd:(NSNotification*)aNotification
-{
-    [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: [aNotification name]
-                                                  object: nil];
-    if ([self type] == TYPE_FILE)
-    {
-        [self terminate];
-    }
-    if ([self type] == TYPE_SHELL && [self showIcon])
-    {
-        if ([task terminationStatus] == 0)
-            [windowController setImage: [self imageSuccess]];
-        else
-            [windowController setImage: [self imageFailure]];        
-    }
-    //[windowController display];
-    [task release];
-    task = nil;
-    return;
-}
-
-- (void)terminate
-{
-    [[NSNotificationCenter defaultCenter] removeObserver: self];
-    if (task)
-    {
-        [task terminate];
-        [task release];
-        //[pipe release];
-        task = nil;
-    }
-    
-    if (windowController)
-    {
-        [[windowController window] close];
-        windowController=nil;
-    }
-    
-    if (timer)
-    {
-        [timer invalidate];
-        [timer release];
-        timer=nil;
-    }
-    if (arguments)
-    {
-        [arguments release];
-        arguments = nil;
-    }
 }
 
 // This fn is pretty hot as well.
@@ -1051,6 +940,71 @@
         [windowController scrollEnd];
     [windowController display];
 }
+
+#pragma mark -
+#pragma mark Window notifications
+
+// this grabs lines from an NSTask output, specifically from the openWindow
+// task for a file. Whenever the observed file is modified, this function
+// takes care of reading it.
+- (void)newLines:(NSNotification*)aNotification
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSData *newLines;
+    NSString *newLinesString;
+    
+    if ([[aNotification name] isEqual : @"NSFileHandleReadToEndOfFileCompletionNotification"])
+    {
+        newLines = [[aNotification userInfo] objectForKey: @"NSFileHandleNotificationDataItem"];
+        [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                        name: [aNotification name]
+                                                      object: nil];        
+    }
+    else
+        newLines = [[aNotification object] availableData];
+    
+    newLinesString = [[NSString alloc] initWithData: newLines encoding:NSASCIIStringEncoding];
+    if (! [newLinesString isEqualTo: @""] || [self type] == TYPE_FILE)
+    {
+        if (! [self hide] && ! [self force])
+            [windowController addText: newLinesString clear: [self type]];
+        if ([self type] == 0)
+        {
+            [windowController scrollEnd];
+            [[aNotification object] waitForDataInBackgroundAndNotify];
+        }
+        
+        //[windowController setFont: [self font]];
+        [windowController setAttributes: attributes];
+    }
+    clear = NO;
+    [windowController display];
+    [newLinesString release];
+    [pool release];
+}
+
+- (void)taskEnd:(NSNotification*)aNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: [aNotification name]
+                                                  object: nil];
+    if ([self type] == TYPE_FILE)
+    {
+        [self terminate];
+    }
+    if ([self type] == TYPE_SHELL && [self showIcon])
+    {
+        if ([task terminationStatus] == 0)
+            [windowController setImage: [self imageSuccess]];
+        else
+            [windowController setImage: [self imageFailure]];        
+    }
+    //[windowController display];
+    [task release];
+    task = nil;
+    return;
+}
+
 #pragma mark -
 #pragma mark Misc
 
@@ -1061,9 +1015,62 @@
     return NSMakeRect(var.origin.x, (-var.origin.y + screenSize.size.height) - var.size.height, var.size.width,var.size.height);
 }
 
+#pragma mark -
+#pragma mark Standard object methods
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    GTLog *copy = [[[self class] allocWithZone: zone]
+                   initWithDictionary:[self dictionary]];
+    
+    return copy;
+}
+
+- (bool)equals:(GTLog*)comp
+{
+    if ([[self dictionary] isEqualTo: [comp dictionary]]) return YES;
+    else return NO;
+}
+
+- (id)mutableCopyWithZone:(NSZone *)zone
+{
+    return [self copyWithZone: zone];
+}
+
 - (NSString*)description
 {
     return [NSString stringWithFormat: @"%@",[self dictionary]];
+}
+
+
+- (void)terminate
+{
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
+    if (task)
+    {
+        [task terminate];
+        [task release];
+        //[pipe release];
+        task = nil;
+    }
+    
+    if (windowController)
+    {
+        [[windowController window] close];
+        windowController=nil;
+    }
+    
+    if (timer)
+    {
+        [timer invalidate];
+        [timer release];
+        timer=nil;
+    }
+    if (arguments)
+    {
+        [arguments release];
+        arguments = nil;
+    }
 }
 
 - (void)dealloc
@@ -1071,4 +1078,5 @@
     [self terminate];
     [super dealloc];
 }
+
 @end

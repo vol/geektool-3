@@ -56,6 +56,7 @@
     
     else if ([[aNotification name] isEqualTo: @"GTPrefsQuit"])
     {
+        // if something is highlighted, that means that it is able to be moved around
         if (hilighted > -1)
         {
             [[g_logs objectAtIndex: hilighted] setHilighted: NO];
@@ -127,14 +128,15 @@
     while (log = [e nextObject])
         [log front];
 }
+
 // This method is responsible of reading preferences and initiliaze the g_logs array
 - (void)updateWindows:(BOOL)force
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [NSUserDefaults resetStandardUserDefaults];
     
-    // This temp array stores preferences dictionary "as is"
-    NSString *currentPool = [[NSUserDefaults standardUserDefaults] objectForKey: @"currentPool"];
+    // This tmp array stores preferences dictionary "as is"
+    NSString *currentGroup = [[NSUserDefaults standardUserDefaults] objectForKey: @"currentGroup"];
     NSArray *logs = [[NSUserDefaults standardUserDefaults] objectForKey: @"logs"];
     
     if ( logs == nil ) logs = [NSArray array];
