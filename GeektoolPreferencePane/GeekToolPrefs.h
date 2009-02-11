@@ -37,7 +37,7 @@
 
 - (id)initWithBundle:(NSBundle *)bundle;
 - (void) mainViewDidLoad;
-
+- (IBAction)save:(id)sender;
 #pragma mark -
 #pragma mark UI management
 - (void)initPoolsMenu;

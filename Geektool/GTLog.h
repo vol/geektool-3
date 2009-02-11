@@ -24,6 +24,7 @@
     bool running;
     int i;
 
+    NSString* group;
     int alignment;
     NSColor* backgroundColor;
     NSString* command;
@@ -88,6 +89,7 @@
 - (float)fontSize;
 - (BOOL)force;
 - (NSString*)forceTitle;
+- (NSString*)group;
 - (int)frameType;
 - (BOOL)hide;
 - (NSImage*)imageFailure;
@@ -121,6 +123,7 @@
 - (void)setFontSize:(float)var;
 - (void)setForce:(BOOL)var;
 - (void)setForceTitle:(NSString*)var;
+- (void)setGroup:(NSString*)var;
 - (void)setFrameType:(int)var;
 - (void)setHide:(BOOL)var;
 - (void)setImageFailure:(NSImage*)var;

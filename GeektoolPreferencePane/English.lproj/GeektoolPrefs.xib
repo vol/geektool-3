@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="998"/>
+			<integer value="1532"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -26,7 +26,7 @@
 		<object class="NSMutableArray" key="IBDocument.RootObjects" id="336879788">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<object class="NSCustomObject" id="267745022">
-				<string key="NSClassName">GeektoolPreferencePanePref</string>
+				<string key="NSClassName">GeekToolPrefs</string>
 			</object>
 			<object class="NSCustomObject" id="407756816">
 				<string key="NSClassName">FirstResponder</string>
@@ -3670,6 +3670,30 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 												<int key="NSTitlePosition">2</int>
 												<bool key="NSTransparent">NO</bool>
 											</object>
+											<object class="NSButton" id="703632526">
+												<reference key="NSNextResponder" ref="122341472"/>
+												<int key="NSvFlags">268</int>
+												<string key="NSFrame">{{194, 105}, {154, 19}}</string>
+												<reference key="NSSuperview" ref="122341472"/>
+												<bool key="NSEnabled">YES</bool>
+												<object class="NSButtonCell" key="NSCell" id="146217558">
+													<int key="NSCellFlags">-2080244224</int>
+													<int key="NSCellFlags2">134217728</int>
+													<string key="NSContents">Save</string>
+													<object class="NSFont" key="NSSupport">
+														<string key="NSName">LucidaGrande</string>
+														<double key="NSSize">1.200000e+01</double>
+														<int key="NSfFlags">16</int>
+													</object>
+													<reference key="NSControlView" ref="703632526"/>
+													<int key="NSButtonFlags">-2038152961</int>
+													<int key="NSButtonFlags2">164</int>
+													<string key="NSAlternateContents"/>
+													<string key="NSKeyEquivalent"/>
+													<int key="NSPeriodicDelay">400</int>
+													<int key="NSPeriodicInterval">75</int>
+												</object>
+											</object>
 										</object>
 										<string key="NSFrame">{{10, 33}, {636, 425}}</string>
 										<reference key="NSSuperview" ref="370380451"/>
@@ -4973,6 +4997,22 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					</object>
 					<int key="connectionID">2209</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">save:</string>
+						<reference key="source" ref="267745022"/>
+						<reference key="destination" ref="703632526"/>
+					</object>
+					<int key="connectionID">2213</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">logManager</string>
+						<reference key="source" ref="267745022"/>
+						<reference key="destination" ref="415529606"/>
+					</object>
+					<int key="connectionID">2215</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -5061,6 +5101,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<reference ref="112488228"/>
 							<reference ref="290241107"/>
 							<reference ref="165882124"/>
+							<reference ref="703632526"/>
 						</object>
 						<reference key="parent" ref="196177033"/>
 					</object>
@@ -5094,12 +5135,12 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="232501330"/>
 							<reference ref="27412833"/>
-							<reference ref="370285014"/>
 							<reference ref="221615979"/>
 							<reference ref="416950601"/>
 							<reference ref="314514610"/>
 							<reference ref="375848620"/>
 							<reference ref="338947082"/>
+							<reference ref="370285014"/>
 						</object>
 						<reference key="parent" ref="122341472"/>
 					</object>
@@ -7319,6 +7360,20 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="object" ref="608986927"/>
 						<reference key="parent" ref="376091573"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2210</int>
+						<reference key="object" ref="703632526"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="146217558"/>
+						</object>
+						<reference key="parent" ref="122341472"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2211</int>
+						<reference key="object" ref="146217558"/>
+						<reference key="parent" ref="703632526"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -7760,6 +7815,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>2197.IBPluginDependency</string>
 					<string>2197.IBShouldRemoveOnLegacySave</string>
 					<string>2203.IBPluginDependency</string>
+					<string>2210.IBPluginDependency</string>
+					<string>2211.IBPluginDependency</string>
 					<string>295.ImportedFromIB2</string>
 					<string>295.windowTemplate.hasMaxSize</string>
 					<string>295.windowTemplate.hasMinSize</string>
@@ -7909,8 +7966,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{313, 346}, {682, 488}}</string>
-					<string>{{313, 346}, {682, 488}}</string>
+					<string>{{358, 346}, {682, 488}}</string>
+					<string>{{358, 346}, {682, 488}}</string>
 					<reference ref="9"/>
 					<string>{{319, 177}, {682, 488}}</string>
 					<reference ref="6"/>
@@ -8296,6 +8353,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<reference ref="6"/>
 					<reference ref="9"/>
@@ -8453,7 +8512,7 @@ Lg</string>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2209</int>
+			<int key="maxID">2215</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -8467,11 +8526,70 @@ Lg</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">GeektoolPreferencePanePref</string>
+					<string key="className">GeekToolPrefs</string>
 					<string key="superclassName">NSPreferencePane</string>
+					<object class="NSMutableDictionary" key="actions">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSMutableArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>activePoolChanged:</string>
+							<string>adjustTransparency:</string>
+							<string>changeAlignment:</string>
+							<string>changeImageAlignment:</string>
+							<string>defaultImages:</string>
+							<string>deleteImageFailure:</string>
+							<string>deleteImageSuccess:</string>
+							<string>deleteLog:</string>
+							<string>duplicateLog:</string>
+							<string>gApply:</string>
+							<string>gChoose:</string>
+							<string>gChooseFont:</string>
+							<string>menuCheckBoxChanged:</string>
+							<string>newLog:</string>
+							<string>pAdd:</string>
+							<string>pClose:</string>
+							<string>pDelete:</string>
+							<string>pDuplicate:</string>
+							<string>poolsMenuChanged:</string>
+							<string>save:</string>
+							<string>showHelp:</string>
+							<string>toggleEnable:</string>
+							<string>typeChanged:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">logManager</string>
+						<string key="NS.object.0">id</string>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBUserSource</string>
-						<string key="minorKey"/>
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">GeekToolPrefs.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

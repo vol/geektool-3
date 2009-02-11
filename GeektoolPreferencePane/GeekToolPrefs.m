@@ -48,7 +48,17 @@
                                                             name: @"GTApply"
                                                           object: @"GeekTool"
                                               suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately];    
-    NSMutableDictionary *manager = [NSMutableDictionary dictionary];
+    NSMutableArray *manager = [NSMutableArray array];
+    NSArray *logsArray = [userDefaults arrayForKey:@"logs"];
+    
+    NSEnumerator *e = [logsArray objectEnumerator];
+    NSDictionary *gtDict;
+    
+    while (gtDict = [e nextObject])
+    {
+        [manager addObject: [[GTLog alloc]initWithDictionary:gtDict]];
+    }
+
     [logManager setContent:manager];
     // TODO: add all GTLogs to g_logs
     
@@ -59,6 +69,11 @@
     [self initCurrentPoolMenu];
     [self initPoolsMenu];
     [self updatePanel];
+}
+
+- (IBAction)save:(id)sender
+{
+    [self savePrefs];
 }
 
 #pragma mark -
@@ -569,18 +584,20 @@
 
 - (void)savePrefs
 {
-    /*
+    // TODO: should be able to rip straight from logManager
      NSMutableArray *logsArray = [NSMutableArray array];
-     NSEnumerator *l = [g_logs objectEnumerator];
+    NSArray *tmp = [logManager content];
+     NSEnumerator *e = [[logManager content] objectEnumerator];
      GTLog *gtl;
-     while (gtl = [l nextObject])
+    
+     while (gtl = [e nextObject])
      {
-     [logsArray addObject: [gtl dictionary]];
+         [logsArray addObject: [gtl dictionary]];
      }
-     [userDefaults setString: pools forKey:"pools"];
-     [userDefaults setString: logsArray forKey:"logs"];
-     [userDefaults setString: [gActivePool titleOfSelectedItem] forKey:"currentPool"];
-     */
+    
+     [userDefaults setObject: logsArray forKey:@"logs"];
+    [userDefaults synchronize];
+    // [userDefaults setString: [gActivePool titleOfSelectedItem] forKey:"activeGroup"];
 }
 - (void)applyChanges
 {

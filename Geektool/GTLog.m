@@ -36,6 +36,8 @@
                               @"New log", @"name",
                               @"0", @"type",
                               @"1", @"enabled",
+                              @"Default", @"group",
+                              
                               
                               @"Monaco", @"fontName",
                               @"12", @"fontSize",
@@ -86,6 +88,7 @@
     [self setName:[dictionary objectForKey:@"name"]];
     [self setType:[[dictionary objectForKey:@"type"]intValue]];
     [self setEnabled:[[dictionary objectForKey:@"enabled"]boolValue]];
+    [self setGroup:[dictionary objectForKey:@"group"]];
     
     [self setFontName:[dictionary objectForKey:@"fontName"]];
     [self setFontSize:[[dictionary objectForKey:@"fontSize"]floatValue]];
@@ -342,6 +345,11 @@
     return frameType;
 }
 
+- (NSString*)group
+{
+    return group;
+}
+
 - (BOOL)hide
 {
     return hide;
@@ -375,6 +383,11 @@
 - (int)pictureAlignment
 {
     return pictureAlignment;
+}
+
+- (int)refresh
+{
+    return refresh;
 }
 
 - (float)x
@@ -522,6 +535,16 @@
     {
         [forceTitle release];
         forceTitle = [var copy];
+    }
+}
+
+
+- (void)setGroup:(NSString*)var
+{
+    if(group != var)
+    {
+        [group release];
+        group = [var copy];
     }
 }
 
