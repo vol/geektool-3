@@ -24,6 +24,8 @@
     CFStringRef appID;
     
     IBOutlet id logManager;
+    IBOutlet id currentGroup;
+    IBOutlet id groupSelection;
     NSMutableArray *g_logs;
     BOOL isAddingLog;
     NSString *guiPool;
@@ -40,14 +42,14 @@
 - (IBAction)save:(id)sender;
 #pragma mark -
 #pragma mark UI management
-- (void)initPoolsMenu;
+- (void)initGroupsMenu;
 - (void)initCurrentPoolMenu;
 - (void)updatePanel;
 - (int)alignment;
 - (void)setAlignment:(int)alignment;
 - (int)pictureAlignment;
 - (void)setPictureAlignment:(int)alignment;
-- (IBAction)gChoose:(id)sender;
+- (IBAction)fileChoose:(id)sender;
 - (IBAction)changeAlignment:(id)sender;
 - (void)setControlsState:(bool)state;
 - (int)logType;
@@ -57,8 +59,8 @@
 - (IBAction)pDuplicate:(id)sender;
 - (IBAction)pClose:(id)sender;
 - (IBAction)gChooseFont:(id)sender;
-- (IBAction)poolsMenuChanged:(id)sender;
-- (IBAction)activePoolChanged:(id)sender;
+- (IBAction)selectedGroupChanged:(id)sender;
+- (IBAction)currentGroupChanged:(id)sender;
 - (IBAction)typeChanged:(id)sender;
 - (IBAction)changeImageAlignment:(id)sender;
 - (IBAction)adjustTransparency:(id)sender;

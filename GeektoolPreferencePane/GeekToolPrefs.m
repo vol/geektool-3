@@ -14,7 +14,7 @@
 - (id)initWithBundle:(NSBundle *)bundle
 {
     if ((self = [super initWithBundle:bundle]) != nil)
-        appID = CFSTR("org.tynsoe.geektool");
+        //appID = CFSTR("org.tynsoe.geektool");
     return self;
 }
 
@@ -47,8 +47,10 @@
                                                         selector: @selector(applyNotification:)
                                                             name: @"GTApply"
                                                           object: @"GeekTool"
-                                              suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately];    
-    NSMutableArray *manager = [NSMutableArray array];
+                                              suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately];
+    
+    // load all our logs
+    g_logs = [NSMutableArray array];
     NSArray *logsArray = [userDefaults arrayForKey:@"logs"];
     
     NSEnumerator *e = [logsArray objectEnumerator];
@@ -56,19 +58,18 @@
     
     while (gtDict = [e nextObject])
     {
-        [manager addObject: [[GTLog alloc]initWithDictionary:gtDict]];
+        [g_logs addObject: [[GTLog alloc]initWithDictionary:gtDict]];
     }
 
-    [logManager setContent:manager];
-    // TODO: add all GTLogs to g_logs
+    // TODO: setContent to currently active group
+    [logManager setContent:g_logs];
     
     // Yes, we need transparency
     [[NSColorPanel sharedColorPanel] setShowsAlpha: YES];
     
     if ([userDefaults boolForKey:@"enableMenu"]) [self loadMenu];
-    [self initCurrentPoolMenu];
-    [self initPoolsMenu];
-    [self updatePanel];
+    [self initGroupsMenu];
+    //[self updatePanel];
 }
 
 - (IBAction)save:(id)sender
@@ -78,26 +79,41 @@
 
 #pragma mark -
 #pragma mark UI management
-- (void)initPoolsMenu
-{
-    // TODO: create a menu of our groups (pools)
-}
-- (void)initCurrentPoolMenu
-{
-    // TODO: put our group selection into our pool (table)
-    // NSString *activePoolPrefs = [userDefaults stringForKey:@"currentPool"];
-}
-- (void)updatePanel
-{
-    [self initPoolsMenu];
-    [self initCurrentPoolMenu];
+- (void)initGroupsMenu
+{    
+    // clear out everything that is there
+    [groupSelection removeAllItems];
+    [currentGroup removeAllItems];
     
-    // set the log type to what was selected last as the tab
+    // make up our special static menu items via a menu (cant do it via NSPopUpButton)
+    NSMenu *standardMenu = [[[NSMenu alloc] initWithTitle:@"StandardMenu"]autorelease];
+    [standardMenu addItem:[NSMenuItem separatorItem]];
+    [standardMenu addItemWithTitle:@"Customize Groups..." action:nil keyEquivalent:@""];
     
-    // TODO: setup our new item
+    [groupSelection setMenu:standardMenu];
+    
+    // put the groups into the popup buttons
+    NSMutableArray *groupsArray = [NSMutableArray array];
+    NSEnumerator *e = [g_logs objectEnumerator];
+    GTLog *tmpLog;
+    
+    while (tmpLog = [e nextObject])
+    {
+        if([tmpLog group] && ![groupsArray containsObject:[tmpLog group]])
+        {
+            [groupSelection insertItemWithTitle:[tmpLog group] atIndex:0];
+            [currentGroup insertItemWithTitle:[tmpLog group] atIndex:0];
+        }
+    }
+    
+    // get everything selected right (really don't want nil selections)
+    [currentGroup selectItemWithTitle:[userDefaults stringForKey:@"currentGroup"]];
+    [groupSelection selectItemAtIndex:0];
+    
+    if ([currentGroup selectedItem] == nil) [currentGroup selectItemAtIndex:0];
 }
 
--(IBAction)gChoose:(id)sender
+-(IBAction)fileChoose:(id)sender
 {
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
     [openPanel setAllowsMultipleSelection: NO];
@@ -129,32 +145,6 @@
         [sheet close];
 }
 
-- (int)logType
-{
-    // TODO: integrate this with the GTLog object
-    // grab this from the GTLog object
-    /*
-     if ([tTypeFile state] == YES)
-     return GTTypeFile;
-     else
-     return GTTypeCommand;
-     */
-}
-
-- (void)setLogType:(int)logType
-{
-    // TODO: bindings should take care of this
-}
-
-- (IBAction)pDelete:(id)sender;
-{
-    // TODO: array controller should handle this
-}
-
-- (IBAction)pAdd:(id)sender;
-{
-    // TODO: array controller should handle this
-}
 - (IBAction)pDuplicate:(id)sender;
 {
     // TODO: there may be an easier way to do this
@@ -209,7 +199,7 @@
      */
 }
 
-- (IBAction)poolsMenuChanged:(id)sender;
+- (IBAction)selectedGroupChanged:(id)sender;
 {
     // TODO: bindings should be able to do this
     [self applyChanges];
@@ -222,7 +212,7 @@
     [self notifHilight];
 }
 
-- (IBAction)activePoolChanged:(id)sender;
+- (IBAction)currentGroupChanged:(id)sender;
 {
     // TODO: bindings
     [self applyChanges];
@@ -231,42 +221,6 @@
     [self notifHilight];
 }
 
-- (IBAction)typeChanged:(id)sender;
-{
-    // TODO: bindings
-    //[tTab selectTabViewItemAtIndex: [sender indexOfSelectedItem]];
-    
-    [self applyChanges];
-    [self savePrefs];
-    [self updateWindows];
-}
-
-- (IBAction)changeImageAlignment:(id)sender;
-{
-    // TODO: bindings
-    [self setPictureAlignment: [sender tag]];
-    
-    [self applyChanges];
-    [self savePrefs];
-    [self updateWindows];
-}
-
-- (IBAction)adjustTransparency:(id)sender
-{
-    /*
-     [[g_logs objectAtIndex: lastSelected] setTransparency: [sender floatValue]];
-     [t3transparencyValue setStringValue: [NSString stringWithFormat: @"%i%%", [sender intValue]]];
-     [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTTransparency"
-     object: @"GeekToolPrefs"
-     userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
-     [NSNumber numberWithFloat: [sender floatValue] / 100],@"transparency",
-     nil]
-     deliverImmediately: YES];
-     [self applyChanges];
-     [self savePrefs];
-     */
-    
-}
 -(IBAction)defaultImages:(id)sender
 {
     /*
@@ -284,11 +238,6 @@
      */
 }
 
-- (IBAction)showHelp:(id)sender;
-{
-    NSString *path = [[self bundle] pathForResource: @"index" ofType:@"html" inDirectory:@"GeekTool Help"];
-    AHGotoPage(NULL,(CFStringRef)[NSString stringWithFormat: @"file://%@", path],NULL);
-}
 - (IBAction)deleteImageSuccess:(id)sender;
 {
     /*
@@ -305,7 +254,7 @@
 }
 
 #pragma mark -
-#pragma mark Pool Management
+#pragma mark Group Management
 - (void)showPoolsCustomization;
 {
     /*
@@ -397,10 +346,7 @@
      [self updateWindows];
      */
 }
-- (NSString*)guiPool
-{
-    return guiPool;
-}
+
 #pragma mark -
 #pragma mark Log management
 
@@ -585,8 +531,7 @@
 - (void)savePrefs
 {
     // TODO: should be able to rip straight from logManager
-     NSMutableArray *logsArray = [NSMutableArray array];
-    NSArray *tmp = [logManager content];
+    NSMutableArray *logsArray = [NSMutableArray array];
      NSEnumerator *e = [[logManager content] objectEnumerator];
      GTLog *gtl;
     
@@ -595,7 +540,8 @@
          [logsArray addObject: [gtl dictionary]];
      }
     
-     [userDefaults setObject: logsArray forKey:@"logs"];
+    [userDefaults setObject:[currentGroup titleOfSelectedItem] forKey:@"currentGroup"];
+    [userDefaults setObject:logsArray forKey:@"logs"];
     [userDefaults synchronize];
     // [userDefaults setString: [gActivePool titleOfSelectedItem] forKey:"activeGroup"];
 }

@@ -132,8 +132,13 @@
 // This method is responsible of reading preferences and initiliaze the g_logs array
 - (void)updateWindows:(BOOL)force
 {
+    // TODO: this is probably horribly inefficient with the memory being dumped and realloced all the time...
+    // it wasn't like this before, but i decided to change it !
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [NSUserDefaults resetStandardUserDefaults];
+    
+    [g_logs makeObjectsPerformSelector:@selector(terminate)];
+    [g_logs removeAllObjects];
     
     // This tmp array stores preferences dictionary "as is"
     NSString *currentGroup = [[NSUserDefaults standardUserDefaults] objectForKey: @"currentGroup"];
@@ -145,44 +150,19 @@
     // We add log entries if there are new, and we delete some that could have been
     // deleted in prefs
     
-    unsigned int i = 0;
-    
     NSEnumerator *e = [logs objectEnumerator];
     NSDictionary *logD;
     while (logD = [e nextObject])
     {
-        if (! [[logD objectForKey: @"groups"] containsObject: currentPool])
+        // make sure to load only windows that are in the active group
+        if (![[logD objectForKey: @"group"] containsObject: currentGroup])
             continue;
         //GTLog * log = [[GTLog alloc] initWithDictionary: logD] ;
         // If this is verified, we are updating existing entries
-        if (i < [g_logs count])
-        {
-            GTLog *currentLog = [g_logs objectAtIndex: i];
-            [currentLog setDictionary: logD force: force];
-            /*
-             if (! [log equals: currentLog])
-             {
-             [currentLog terminate];
-             [g_logs replaceObjectAtIndex: i  withObject: log];
-             }
-             */
-        }
-        else
-        {
-            GTLog * log = [[GTLog alloc] initWithDictionary: logD];
-            [g_logs addObject: log];
-            [log openWindow];
-            [log release];
-        }
-        //[log release];
-        i++;
-    }
-    // Remove all logs upon the count in preferences
-    // (those have been deleted)
-    while ([g_logs count] > i )
-    {
-        [[g_logs lastObject] terminate];
-        [g_logs removeLastObject];
+        GTLog *log = [[GTLog alloc] initWithDictionary: logD];
+        [g_logs addObject: log];
+        [log openWindow];
+        [log release];
     }
     
     logs = nil;

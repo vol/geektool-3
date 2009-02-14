@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A2AC5970F46777D00D7A7CB /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97324FDCFA39411CA2CEA /* AppKit.framework */; };
+		0A2AC59A0F46779400D7A7CB /* ImageLogWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1920ED6614700A05583 /* ImageLogWindowController.m */; };
+		0A2AC59B0F46779600D7A7CB /* ImageLogWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F1910ED6614700A05583 /* ImageLogWindowController.h */; };
+		0A2AC59C0F46779600D7A7CB /* ImageLogWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1900ED6614700A05583 /* ImageLogWindow.m */; };
+		0A2AC59D0F46779600D7A7CB /* ImageLogWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A94F18F0ED6614700A05583 /* ImageLogWindow.h */; };
 		0A94F19B0ED6614700A05583 /* GeekTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F18E0ED6614700A05583 /* GeekTool.m */; };
 		0A94F19E0ED6614700A05583 /* LogTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1940ED6614700A05583 /* LogTextField.m */; };
 		0A94F19F0ED6614700A05583 /* LogWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A94F1960ED6614700A05583 /* LogWindow.m */; };
@@ -106,7 +111,7 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* Geektool_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Geektool_Prefix.pch; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* Geektool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Geektool.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* GeekTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeekTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +121,7 @@
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				0A94F1D20ED662A800A05583 /* Carbon.framework in Frameworks */,
+				0A2AC5970F46777D00D7A7CB /* AppKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,7 +210,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* Geektool.app */,
+				8D1107320486CEB800E47090 /* GeekTool.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -277,6 +283,8 @@
 				0A94F1CD0ED6627E00A05583 /* LogWindow.h in Headers */,
 				0A94F1CE0ED6628000A05583 /* LogWindowController.h in Headers */,
 				0AC89A530F1C3E42000A795B /* defines.h in Headers */,
+				0A2AC59B0F46779600D7A7CB /* ImageLogWindowController.h in Headers */,
+				0A2AC59D0F46779600D7A7CB /* ImageLogWindow.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,7 +307,7 @@
 			name = Geektool;
 			productInstallPath = "$(HOME)/Applications";
 			productName = Geektool;
-			productReference = 8D1107320486CEB800E47090 /* Geektool.app */;
+			productReference = 8D1107320486CEB800E47090 /* GeekTool.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -390,6 +398,8 @@
 				0A94F1C10ED6620700A05583 /* AJRInstallClipView.m in Sources */,
 				0A94F1C20ED6620700A05583 /* AJRInstallScrollView.m in Sources */,
 				0A94F1C30ED6620700A05583 /* AJRScrollView.m in Sources */,
+				0A2AC59A0F46779400D7A7CB /* ImageLogWindowController.m in Sources */,
+				0A2AC59C0F46779600D7A7CB /* ImageLogWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,15 +442,14 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
+				GCC_MODEL_TUNING = "";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Geektool_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = Geektool;
+				PRODUCT_NAME = GeekTool;
 				WRAPPER_EXTENSION = app;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
@@ -464,7 +473,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
 			};
 			name = Debug;
 		};
@@ -478,7 +487,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
 			};
 			name = Release;
 		};

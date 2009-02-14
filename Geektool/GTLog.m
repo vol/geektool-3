@@ -155,6 +155,7 @@
                                            [self name]                                       ,@"name",
                                            [NSNumber numberWithInt: [self type]]             ,@"type",
                                            [NSNumber numberWithBool: [self enabled]]         ,@"enabled",
+                                           [self group]                                      ,@"group",
                                            
                                            [self fontName]                                   ,@"fontName",
                                            [self fontSize]                                   ,@"fontSize",
@@ -725,15 +726,21 @@
     [windowController setSticky: flag];
 }
 
-// This function is specifically for viewing files; no other type is handled here
+// This function is specifically for viewing files
 - (void)openWindow
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSPipe *pipe;
     
     // we will be executing functions to get an output soon
-    if ([self enabled] && ! windowController)
+    // work only if our window controller doesn't exist(?) and enabled
+    if ([self enabled] && !windowController)
     {
+        // if the type is file, we need to do some things to get it set up
+        // specifically, it sets up a pipe to watch the output of a file, meaning
+        // it will be changed INSTANTLY (sort of) given any change (interesting...)
+        // this could probably be cut and not many would miss it. chances are, you
+        // are going to want to pipe the info into other things to format it properly
         if ([self type] == TYPE_FILE)
         {
             // if no file is specified, don't do anything
@@ -847,7 +854,7 @@
     [window setFrame: [self realRect] display: NO];
     [(LogWindow*)window setClickThrough: YES];
     
-    if ([self type] == TYPE_FILE || [self type] == TYPE_SHELL )
+    if ([self type] == TYPE_FILE || [self type] == TYPE_SHELL)
     {
         [windowController setTextBackgroundColor: [self backgroundColor]];
         //[windowController setTextColor: [self textColor]];
