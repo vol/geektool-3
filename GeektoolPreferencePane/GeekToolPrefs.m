@@ -13,15 +13,17 @@
 @implementation GeekToolPrefs
 - (id)initWithBundle:(NSBundle *)bundle
 {
+    // due to shortcomings of NSUserDefaults, we must use CFPreferences
+    // or else we will write to com.apple.systempreferences, which is
+    // not really what we want to be doing
+    // as such, we will probably not be able to use IB bindings for our prefs
     if ((self = [super initWithBundle:bundle]) != nil)
-        //appID = CFSTR("org.tynsoe.geektool");
+        appID = CFSTR("com.allocinit.tynsoe.geektool");
     return self;
 }
 
 - (void) mainViewDidLoad
 {
-    userDefaults = [NSUserDefaults standardUserDefaults];
-    
     // Register for some notifications
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(applyAndNotifyNotification:)
@@ -51,7 +53,7 @@
     
     // load all our logs
     g_logs = [NSMutableArray array];
-    NSArray *logsArray = [userDefaults arrayForKey:@"logs"];
+    NSArray *logsArray = (NSArray*)CFPreferencesCopyAppValue(CFSTR("logs"), appID);
     
     NSEnumerator *e = [logsArray objectEnumerator];
     NSDictionary *gtDict;
@@ -67,9 +69,52 @@
     // Yes, we need transparency
     [[NSColorPanel sharedColorPanel] setShowsAlpha: YES];
     
-    if ([userDefaults boolForKey:@"enableMenu"]) [self loadMenu];
+    NSNumber *en = (NSNumber*)CFPreferencesCopyAppValue(CFSTR("enableMenu"), appID);
+    if ([en boolValue]) [self loadMenu];    
+
     [self initGroupsMenu];
+    [self saveNotifications];
     //[self updatePanel];
+}
+
+- (void)saveNotifications
+{
+    // watch all these variables and run the observeValueForKeyPath function below each time any change
+ 	[logManager addObserver:self forKeyPath:@"arrangedObjects.enabled" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.name" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.type" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.enabled" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.group" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.fontName" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.fontSize" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.file" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.command" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.hide" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.refresh" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.textColor" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.backgroundColor" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.wrap" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.shadowText" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.shadowWindow" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.alignment" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.force" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.forceTitle" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.showIcon" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.pictureAlignment" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.imageURL" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.transparency" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.imageFit" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.frameType" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.x" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.y" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.w" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.h" options:0 context:nil];
+    [logManager addObserver:self forKeyPath:@"arrangedObjects.alwaysOnTop" options:0 context:nil];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    [self savePrefs];
 }
 
 - (IBAction)save:(id)sender
@@ -107,7 +152,8 @@
     }
     
     // get everything selected right (really don't want nil selections)
-    [currentGroup selectItemWithTitle:[userDefaults stringForKey:@"currentGroup"]];
+    NSString *currentGroupString = (NSString*)CFPreferencesCopyAppValue(CFSTR("currentGroup"), appID);
+    [currentGroup selectItemWithTitle:currentGroupString];
     [groupSelection selectItemAtIndex:0];
     
     if ([currentGroup selectedItem] == nil) [currentGroup selectItemAtIndex:0];
@@ -255,7 +301,7 @@
 
 #pragma mark -
 #pragma mark Group Management
-- (void)showPoolsCustomization;
+- (void)showGroupsCustomization;
 {
     /*
      [pList reloadData];
@@ -271,76 +317,76 @@
      */
 }
 
-- (BOOL) poolExists:(NSString*)myPoolName;
+- (BOOL)groupExists:(NSString*)myGroupName;
 {
-    return [pools containsObject: myPoolName];
+    return [groups containsObject:myGroupName];
 }
 
-- (NSString*) addPool:(NSString*)myPoolName;
+- (NSString*)addGroup:(NSString*)myGroupName;
 {
-    NSString *newPoolName = [NSString stringWithString: myPoolName];
-    if ([self poolExists: myPoolName])
+    NSString *newGroupName = [NSString stringWithString: myGroupName];
+    if ([self groupExists: myGroupName])
     {
         int i = 2;
-        while ([self poolExists: [NSString stringWithFormat: @"%@ %i", myPoolName,i]])
+        while ([self groupExists: [NSString stringWithFormat: @"%@ %i", myGroupName,i]])
             i++;
-        [pools addObject: [NSString stringWithFormat: @"%@ %i", myPoolName,i]];
-        newPoolName = [NSString stringWithFormat: @"%@ %i", myPoolName,i];
+        [groups addObject: [NSString stringWithFormat: @"%@ %i", myGroupName,i]];
+        newGroupName = [NSString stringWithFormat: @"%@ %i", myGroupName,i];
     }
-    [pools addObject: newPoolName];
-    return newPoolName;
+    [groups addObject: newGroupName];
+    return newGroupName;
 }
 
-- (void)setSelectedPool:(NSString*)myPoolName;
+- (void)setSelectedGroup:(NSString*)myGroupName;
 {
     /*
-     [guiPool release];
+     [guiGroup release];
      [gLogsList reloadData];
-     guiPool = [[gPoolsMenu titleOfSelectedItem] retain];
+     guiGroup = [[gGroupsMenu titleOfSelectedItem] retain];
      [self updatePanel];
      */
 }
-- (NSString*)currentPoolMenu;
+- (NSString*)currentGroupMenu;
 {
     /*
-     return [gPoolsMenu titleOfSelectedItem];
+     return [gGroupsMenu titleOfSelectedItem];
      */
 }
-- (int)numberOfPools
+- (int)numberOfGroups
 {
-    return [pools count];
+    return [groups count];
 }
-- (void)renamePool:(NSString*)oldName to:(NSString*)newName
+- (void)renameGroup:(NSString*)oldName to:(NSString*)newName
 {
-    NSString *activePoolPrefs = [userDefaults stringForKey:"currentPool"];
+    NSString *activeGroupPrefs = (NSString*)CFPreferencesCopyAppValue(CFSTR("currentGroup"), appID);
     
-    int index = [pools indexOfObject: oldName];
-    [pools removeObjectAtIndex: index];
-    [pools insertObject: newName atIndex: index];
+    int index = [groups indexOfObject: oldName];
+    [groups removeObjectAtIndex: index];
+    [groups insertObject: newName atIndex: index];
     
     NSEnumerator *e = [g_logs objectEnumerator];
     GTLog *currentLog;
     while (currentLog = [e nextObject])
-        [currentLog renameGroup: oldName to:newName];
-    if ([oldName isEqualTo: activePoolPrefs])
-        [userDefaults setString:newName forKey:"currentPool"];
+        [currentLog renameGroup:oldName to:newName];
+    if ([oldName isEqualTo: activeGroupPrefs])
+        CFPreferencesSetAppValue(CFSTR("currentGroup"), newName, appID);
 }
 
-- (void)poolDelete:(int)line
+- (void)groupDelete:(int)line
 {
     /*
-     NSString *poolName = [pools objectAtIndex: line];
-     NSString *activePoolPrefs = [userDefaults stringForKey:"currentPool"];
+     NSString *groupName = [groups objectAtIndex: line];
+     NSString *activeGroupPrefs = [userDefaults stringForKey:"currentGroup"];
      
-     [pools removeObject: poolName];
+     [groups removeObject: groupName];
      NSEnumerator *e = [g_logs objectEnumerator];
      GTLog *currentLog;
      while (currentLog = [e nextObject])
-     [currentLog setEnabled: NO forPool: poolName];
+     [currentLog setEnabled: NO forGroup: groupName];
      
-     if ([poolName isEqualTo: activePoolPrefs])
-     [gActivePool selectItemWithTitle: [pools objectAtIndex: 0]];
-     //     CFPreferencesSetAppValue( CFSTR("currentPool"), [[self orderedPoolNames] objectAtIndex: 0], appID );
+     if ([groupName isEqualTo: activeGroupPrefs])
+     [gActiveGroup selectItemWithTitle: [groups objectAtIndex: 0]];
+     //     CFPreferencesSetAppValue( CFSTR("currentGroup"), [[self orderedGroupNames] objectAtIndex: 0], appID );
      //  CFPreferencesAppSynchronize( appID );
      [self savePrefs];
      [self updateWindows];
@@ -496,15 +542,15 @@
 }
 - (void)applyNotification:(NSNotification*)aNotification
 {
-    [self applyChanges];
-    [self savePrefs];
+    //[self applyChanges];
+    //[self savePrefs];
     //[self updateWindows];
 }
 - (void)applyAndNotifyNotification:(NSNotification*)aNotification
 {
-    [self applyChanges];
-    [self savePrefs];
-    [self updateWindows];
+    //[self applyChanges];
+    //[self savePrefs];
+    //[self updateWindows];
 }
 
 - (void)reorder:(int)from to:(int)to
@@ -540,10 +586,9 @@
          [logsArray addObject: [gtl dictionary]];
      }
     
-    [userDefaults setObject:[currentGroup titleOfSelectedItem] forKey:@"currentGroup"];
-    [userDefaults setObject:logsArray forKey:@"logs"];
-    [userDefaults synchronize];
-    // [userDefaults setString: [gActivePool titleOfSelectedItem] forKey:"activeGroup"];
+    CFPreferencesSetAppValue( CFSTR("currentGroup"), [currentGroup titleOfSelectedItem], appID );
+    CFPreferencesSetAppValue( CFSTR("logs"), logsArray, appID );
+    CFPreferencesAppSynchronize( appID );
 }
 - (void)applyChanges
 {
@@ -623,13 +668,12 @@
 {
     if ([sender state])
     {
-        
-        [userDefaults setString: [NSNumber numberWithBool: YES] forKey:"enableMenu"];
+        CFPreferencesSetAppValue(CFSTR("enableMenu"), [NSNumber numberWithBool: YES], appID);
         [self loadMenu];
     }
     else
     {
-        [userDefaults setString: [NSNumber numberWithBool: NO] forKey:"enableMenu"];
+        CFPreferencesSetAppValue(CFSTR("enableMenu"), [NSNumber numberWithBool: NO], appID);
         [self unloadMenu];
     }
 }
@@ -654,7 +698,7 @@
     typedef struct OpaqueMenuExtraRef *MenuExtraRef;
     unsigned int outExtra;
     
-    [userDefaults setString: [NSNumber numberWithBool: NO] forKey:"enableMenu"];
+    CFPreferencesSetAppValue(CFSTR("enableMenu"), [NSNumber numberWithBool: NO], appID);
     NSString *identifier=@"org.tynsoe.geektool";
     MenuExtraRef *menuExtra = nil;
     CoreMenuExtraGetMenuExtra((CFStringRef)identifier, &menuExtra);

@@ -158,12 +158,12 @@
                                            [self group]                                      ,@"group",
                                            
                                            [self fontName]                                   ,@"fontName",
-                                           [self fontSize]                                   ,@"fontSize",
+                                           [NSNumber numberWithFloat: [self fontSize]]       ,@"fontSize",
                                            
                                            [self file]                                       ,@"file",
                                            
                                            [self command]                                    ,@"command",
-                                           [self hide]                                       ,@"hide",
+                                           [NSNumber numberWithBool: [self hide]]            ,@"hide",
                                            [NSNumber numberWithInt: [self refresh]]          ,@"refresh",
                                            
                                            textColorDictionary                               ,@"textColor",

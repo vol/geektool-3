@@ -20,7 +20,6 @@
 
 @interface GeekToolPrefs : NSPreferencePane 
 {
-	NSUserDefaults* userDefaults;
     CFStringRef appID;
     
     IBOutlet id logManager;
@@ -32,13 +31,14 @@
 
     int numberOfItemsInPoolMenu;
     
-    NSMutableArray *pools;
+    NSMutableArray *groups;
     //NSConnection *theConnection;
     //id RemoteGeekTool;
 }
 
 - (id)initWithBundle:(NSBundle *)bundle;
 - (void) mainViewDidLoad;
+- (void)saveNotifications;
 - (IBAction)save:(id)sender;
 #pragma mark -
 #pragma mark UI management
