@@ -8,7 +8,6 @@
 
 #import "GroupController.h"
 
-
 @implementation GroupController
 #pragma mark Methods
 - (IBAction)duplicateSelectedGroup:(id)sender
@@ -16,6 +15,7 @@
     // just in case this gets called with nothing selected...
     if ([self selectionIndex] != NSNotFound)
     {
+        NSPredicate *origPredicate = [[logController filterPredicate]retain];
         // get our selection (potentially multiple items)
         NSArray *selectedObjects = [self selectedObjects];
         NSEnumerator *e = [selectedObjects objectEnumerator];
@@ -25,6 +25,7 @@
         NSDictionary *currentGroup = nil;
         NSString *currentGroupString = nil;
         NSEnumerator *f = nil;
+        GTLog *origLog = nil;
         GTLog *copyLog = nil;
         
         // loop for however many items in the set
@@ -33,16 +34,19 @@
             currentGroupString = [currentGroup valueForKey:@"group"];
             predicate = [NSPredicate predicateWithFormat:@"group = %@", currentGroupString];
             filteredArray = [[logController content] filteredArrayUsingPredicate:predicate];
-            
-            [filteredArray makeObjectsPerformSelector:@selector(setGroup:) withObject:[self duplicateCheck:currentGroupString]];
-            
+                    
             f = [filteredArray objectEnumerator];
-            while (copyLog = [f nextObject])
+            while (origLog = [f nextObject])
             {
-                [logController add:copyLog];
+                copyLog = [origLog copy];
+                [copyLog setGroup:[[self duplicateCheck:currentGroupString]valueForKey:@"group"]];
+                [logController addObject:copyLog];
             }
+            
             [self addObject:[self duplicateCheck:currentGroupString]];
         }
+        [logController setFilterPredicate:origPredicate];
+        [origPredicate release];
     }
 }
 
@@ -81,7 +85,7 @@
 
 // TODO: make more sophisticated like how finder does it
 // folder -> folder copy -> folder copy 2 -> folder copy 3 -> ...
-- (NSString*)duplicateCheck:(NSString*)myGroupName
+- (NSMutableDictionary*)duplicateCheck:(NSString*)myGroupName
 {
     // add a new group, but don't allow duplicates
     NSString *newGroupName = [NSString stringWithString: myGroupName];
@@ -93,13 +97,14 @@
         newGroupName = [NSString stringWithFormat: @"%@ %i", myGroupName,i];
     }
     //[[self content] addObject: [NSDictionary dictionaryWithObject:newGroupName forKey:@"group"]];
-    return newGroupName;
+    return [NSMutableDictionary dictionaryWithObject:newGroupName forKey:@"group"];
 }
 
 #pragma mark Table Delegate Methods
-- (BOOL)textShouldEndEditing:(NSText *)textObject
+// textShouldEndEditing: wasn't working for some reason...
+- (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)textObject
 {
-    NSString *groupName = [NSString stringWithString: [textObject string]];
+    NSString *groupName = [textObject string];
     if ([self groupExists: groupName])
         return FALSE;
     else
@@ -108,9 +113,9 @@
         int selectionIndex = [self selectionIndex];       
         if (selectionIndex != NSNotFound)
         {
-            NSDictionary *currentGroup = [self selectedObject];
-            NSString *currentGroupString = [currentGroup valueForKey:@"group"];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"group = %@", currentGroupString];
+            NSDictionary *selectedGroup = [self selectedObject];
+            NSString *selectedGroupString = [selectedGroup valueForKey:@"group"];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"group = %@", selectedGroupString];
             NSArray *filteredArray = [[logController content] filteredArrayUsingPredicate:predicate];
             
             [filteredArray makeObjectsPerformSelector:@selector(setGroup:) withObject:[textObject string]];

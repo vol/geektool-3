@@ -52,7 +52,9 @@
                                               suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately];
     
     // so we don't jump out of groups when we add items
-    [logManager setClearsFilterPredicateOnInsertion:FALSE];
+    // Unfortunately, this option screws things up, so we have to leave it on
+    // and work around it. sigh...
+    //[logManager setClearsFilterPredicateOnInsertion:FALSE];
     [self refreshLogsArray];
     [self refreshGroupsArray];
     
@@ -101,9 +103,10 @@
     NSString *tmpString = nil;
     
     // every item in the user preferences, make it a dictionary and pop it in the array
+    // make sure it's mutable so we can rename it later on if we have to
     while (tmpString = [e nextObject])
     {
-        [groups addObject:[NSDictionary dictionaryWithObject:tmpString forKey:@"group"]];
+        [groups addObject:[NSMutableDictionary dictionaryWithObject:tmpString forKey:@"group"]];
     }
     
     // now we have the user's groups, time to put in necessary groups (ie groups
@@ -111,17 +114,17 @@
     // some reason)
     e = [g_logs objectEnumerator];
     GTLog *log = nil;
-    NSDictionary *tmpDict = nil;
+    NSMutableDictionary *tmpDict = nil;
     
     while (log = [e nextObject])
     {
-        tmpDict = [NSDictionary dictionaryWithObject:[log group] forKey:@"group"];
+        tmpDict = [NSMutableDictionary dictionaryWithObject:[log group] forKey:@"group"];
         if(![groups containsObject:tmpDict]) [groups addObject:tmpDict];
     }
     
     // if we have no groups at all, put in a default one for our lonely user
     // localize
-    if ([groups count] <= 0) [groups addObject:[NSDictionary dictionaryWithObject:@"Default" forKey:@"group"]];
+    if ([groups count] <= 0) [groups addObject:[NSMutableDictionary dictionaryWithObject:@"Default" forKey:@"group"]];
     
     // let the binding magic begin
     [groupManager setContent:groups];    
@@ -228,6 +231,7 @@
 - (IBAction)selectedGroupChanged:(id)sender
 {
     [logManager setFilterPredicate:[NSPredicate predicateWithFormat:@"group = %@",[groupSelection titleOfSelectedItem]]];
+    [logManager rearrangeObjects];
 }
 
 - (IBAction)currentGroupChanged:(id)sender;
@@ -306,13 +310,14 @@
     [groupSelection setMenu:standardMenu];
     
     // put the groups into the popup buttons
-    NSEnumerator *e = [groups objectEnumerator];
+    NSEnumerator *e = [groups reverseObjectEnumerator];
     NSDictionary *nextDict = nil;
     NSString *groupString = nil;
     
     // notice that we are inserting at index 0, giving stack-like (FILO) input
     // not really important, but remember if you want this sorted, you would have
-    // to put it in reverse sorted
+    // to put it in reverse sorted (notice reverseObjectEnumerator was used
+    // to give things a consistant feel of menus)
     while (nextDict = [e nextObject])
     {
         groupString = [nextDict valueForKey:@"group"];
