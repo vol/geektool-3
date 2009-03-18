@@ -23,15 +23,18 @@
     CFStringRef appID;
     
     IBOutlet id logManager;
+    IBOutlet id groupManager;
     IBOutlet id currentGroup;
     IBOutlet id groupSelection;
+    IBOutlet id groupsSheet;
+    
     NSMutableArray *g_logs;
+    NSMutableArray *groups;
     BOOL isAddingLog;
     NSString *guiPool;
 
     int numberOfItemsInPoolMenu;
     
-    NSMutableArray *groups;
     //NSConnection *theConnection;
     //id RemoteGeekTool;
 }
@@ -40,6 +43,7 @@
 - (void) mainViewDidLoad;
 - (void)saveNotifications;
 - (IBAction)save:(id)sender;
+- (IBAction)groupsSheetClose:(id)sender;
 #pragma mark -
 #pragma mark UI management
 - (void)initGroupsMenu;
@@ -71,7 +75,7 @@
 
 #pragma mark -
 #pragma mark Pool Management
-- (void) showPoolsCustomization;
+- (void)showGroupsCustomization;
 - (BOOL) poolExists:(NSString*)myPoolName;
 - (NSString*) addPool:(NSString*)myPoolName;
 - (void)setSelectedPool:(NSString*)myPoolName;

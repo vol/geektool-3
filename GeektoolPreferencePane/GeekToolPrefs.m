@@ -16,7 +16,7 @@
     // due to shortcomings of NSUserDefaults, we must use CFPreferences
     // or else we will write to com.apple.systempreferences, which is
     // not really what we want to be doing
-    // as such, we will probably not be able to use IB bindings for our prefs
+    // we are probably going to loose some binding stuff as a result
     if ((self = [super initWithBundle:bundle]) != nil)
         appID = CFSTR("com.allocinit.tynsoe.geektool");
     return self;
@@ -51,20 +51,8 @@
                                                           object: @"GeekTool"
                                               suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately];
     
-    // load all our logs
-    g_logs = [NSMutableArray array];
-    NSArray *logsArray = (NSArray*)CFPreferencesCopyAppValue(CFSTR("logs"), appID);
-    
-    NSEnumerator *e = [logsArray objectEnumerator];
-    NSDictionary *gtDict;
-    
-    while (gtDict = [e nextObject])
-    {
-        [g_logs addObject: [[GTLog alloc]initWithDictionary:gtDict]];
-    }
-
-    // TODO: setContent to currently active group
-    [logManager setContent:g_logs];
+    [self refreshLogsArray];
+    [self refreshGroupsArray];
     
     // Yes, we need transparency
     [[NSColorPanel sharedColorPanel] setShowsAlpha: YES];
@@ -75,6 +63,66 @@
     [self initGroupsMenu];
     [self saveNotifications];
     //[self updatePanel];
+}
+
+- (void)refreshLogsArray
+{
+    // load all log dictionaries into logsArray (dicts come from preferences
+    // using these dictionaries, create the actual GTLog objects into g_logs
+    g_logs = [NSMutableArray array];
+    NSArray *logsArray = (NSArray*)CFPreferencesCopyAppValue(CFSTR("logs"), appID);
+    
+    NSEnumerator *e = [logsArray objectEnumerator];
+    NSDictionary *gtDict = nil;
+    
+    while (gtDict = [e nextObject])
+    {
+        [g_logs addObject: [[GTLog alloc]initWithDictionary:gtDict]];
+    }
+    
+    // have bindings do the heavy lifting for us
+    // TODO: do some NSPredicate filtering here to reflect currently selected group
+    [logManager setContent:g_logs];
+}    
+
+- (void)refreshGroupsArray
+{
+    // load groups from our preferences
+    NSArray *savedGroups = (NSArray*)CFPreferencesCopyAppValue(CFSTR("groups"), appID);
+    
+    // because we want to be able to do some fancy bindings for our table, we
+    // need to store our groups as a dictionary of one value.
+    // crude, i know, but working with NSStrings and NSArrays was simply not
+    // working
+    groups = [NSMutableArray array];
+    NSEnumerator *e = [savedGroups objectEnumerator];
+    NSString *tmpString = nil;
+    
+    // every item in the user preferences, make it a dictionary and pop it in the array
+    while (tmpString = [e nextObject])
+    {
+        [groups addObject:[NSDictionary dictionaryWithObject:tmpString forKey:@"group"]];
+    }
+    
+    // now we have the user's groups, time to put in necessary groups (ie groups
+    // that the logs use, but may not have been saved in the preferences for
+    // some reason)
+    e = [g_logs objectEnumerator];
+    GTLog *log = nil;
+    NSDictionary *tmpDict = nil;
+    
+    while (log = [e nextObject])
+    {
+        tmpDict = [NSDictionary dictionaryWithObject:[log group] forKey:@"group"];
+        if(![groups containsObject:tmpDict]) [groups addObject:tmpDict];
+    }
+    
+    // if we have no groups at all, put in a default one for our lonely user
+    // localize
+    if ([groups count] <= 0) [groups addObject:[NSDictionary dictionaryWithObject:@"Default" forKey:@"group"]];
+    
+    // let the binding magic begin
+    [groupManager setContent:groups];    
 }
 
 - (void)saveNotifications
@@ -117,49 +165,10 @@
     [self savePrefs];
 }
 
-- (IBAction)save:(id)sender
-{
-    [self savePrefs];
-}
-
 #pragma mark -
 #pragma mark UI management
-- (void)initGroupsMenu
-{    
-    // clear out everything that is there
-    [groupSelection removeAllItems];
-    [currentGroup removeAllItems];
-    
-    // make up our special static menu items via a menu (cant do it via NSPopUpButton)
-    NSMenu *standardMenu = [[[NSMenu alloc] initWithTitle:@"StandardMenu"]autorelease];
-    [standardMenu addItem:[NSMenuItem separatorItem]];
-    [standardMenu addItemWithTitle:@"Customize Groups..." action:nil keyEquivalent:@""];
-    
-    [groupSelection setMenu:standardMenu];
-    
-    // put the groups into the popup buttons
-    NSMutableArray *groupsArray = [NSMutableArray array];
-    NSEnumerator *e = [g_logs objectEnumerator];
-    GTLog *tmpLog;
-    
-    while (tmpLog = [e nextObject])
-    {
-        if([tmpLog group] && ![groupsArray containsObject:[tmpLog group]])
-        {
-            [groupSelection insertItemWithTitle:[tmpLog group] atIndex:0];
-            [currentGroup insertItemWithTitle:[tmpLog group] atIndex:0];
-        }
-    }
-    
-    // get everything selected right (really don't want nil selections)
-    NSString *currentGroupString = (NSString*)CFPreferencesCopyAppValue(CFSTR("currentGroup"), appID);
-    [currentGroup selectItemWithTitle:currentGroupString];
-    [groupSelection selectItemAtIndex:0];
-    
-    if ([currentGroup selectedItem] == nil) [currentGroup selectItemAtIndex:0];
-}
 
--(IBAction)fileChoose:(id)sender
+- (IBAction)fileChoose:(id)sender
 {
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
     [openPanel setAllowsMultipleSelection: NO];
@@ -183,11 +192,9 @@
     }
 }
 
--(void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 {
-    // TODO: bindings should facilitate this nicely
     if (returnCode == NSAlertDefaultReturn)
-        //[self poolDelete: [pList selectedRow]];
         [sheet close];
 }
 
@@ -216,16 +223,10 @@
      */
 }
 
-- (IBAction)pClose:(id)sender
+- (IBAction)groupsSheetClose:(id)sender
 {
-    // TODO: no clue
-    /*[pList deselectAll: self];
-     [NSApp stopModal];
-     [self initPoolsMenu];
-     [self initCurrentPoolMenu];
-     guiPool = [[gPoolsMenu titleOfSelectedItem] retain];
-     [gLogsList reloadData];
-     */
+    [NSApp stopModal];
+    [self initGroupsMenu];
 }
 
 -(IBAction)gChooseFont:(id)sender
@@ -301,43 +302,77 @@
 
 #pragma mark -
 #pragma mark Group Management
-- (void)showGroupsCustomization;
-{
+- (void)initGroupsMenu
+{    
     /*
-     [pList reloadData];
-     [NSApp beginSheet: pSheet
-     modalForWindow: [[self mainView] window]
-     modalDelegate: nil
-     didEndSelector: nil
-     contextInfo: nil];
-     [NSApp runModalForWindow: [[self mainView] window]];
-     // Sheet is up here.
-     [NSApp endSheet: pSheet];
-     [pSheet orderOut: self];
+     Empty menu will look like this
+     ____________________________
+     |--------------------------| 0 Separator
+     | Customize Groups...      | 1 Customize Groups item
+     ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
      */
-}
-
-- (BOOL)groupExists:(NSString*)myGroupName;
-{
-    return [groups containsObject:myGroupName];
-}
-
-- (NSString*)addGroup:(NSString*)myGroupName;
-{
-    NSString *newGroupName = [NSString stringWithString: myGroupName];
-    if ([self groupExists: myGroupName])
+    
+    // groupSelection and currentGroup are IB outlets to their respective elements
+    // clear out everything that is there
+    [groupSelection removeAllItems];
+    [currentGroup removeAllItems];
+    
+    // make up our special static menu items via a menu (cant do it via NSPopUpButton)
+    NSMenu *standardMenu = [[[NSMenu alloc] initWithTitle:@"StandardMenu"]autorelease];
+    [standardMenu addItem:[NSMenuItem separatorItem]];
+    // localize
+    [standardMenu addItemWithTitle:@"Customize Groups..." action:nil keyEquivalent:@""];
+    
+    // refer to diagram above to see why this is at index 1
+    // make the button do stuff. we couldn't combine it with the call above for
+    // some reason (had to set target i think)
+    NSMenuItem *customizeGroupsItem = [standardMenu itemAtIndex:1];
+    [customizeGroupsItem setEnabled:TRUE];
+    [customizeGroupsItem setAction:@selector(showGroupsCustomization)];
+    [customizeGroupsItem setTarget:self]; 
+    
+    // commit our menu to the button
+    [groupSelection setMenu:standardMenu];
+    
+    // put the groups into the popup buttons
+    NSEnumerator *e = [groups objectEnumerator];
+    NSDictionary *nextDict = nil;
+    NSString *groupString = nil;
+    
+    // notice that we are inserting at index 0, giving stack-like (FILO) input
+    // not really important, but remember if you want this sorted, you would have
+    // to put it in reverse sorted
+    while (nextDict = [e nextObject])
     {
-        int i = 2;
-        while ([self groupExists: [NSString stringWithFormat: @"%@ %i", myGroupName,i]])
-            i++;
-        [groups addObject: [NSString stringWithFormat: @"%@ %i", myGroupName,i]];
-        newGroupName = [NSString stringWithFormat: @"%@ %i", myGroupName,i];
+        groupString = [nextDict valueForKey:@"group"];
+        [groupSelection insertItemWithTitle:groupString atIndex:0];
+        [currentGroup insertItemWithTitle:groupString atIndex:0];
     }
-    [groups addObject: newGroupName];
-    return newGroupName;
+    
+    // get everything selected right (don't want nil selections)
+    NSString *currentGroupString = (NSString*)CFPreferencesCopyAppValue(CFSTR("currentGroup"), appID);
+    [currentGroup selectItemWithTitle:currentGroupString];
+    [groupSelection selectItemAtIndex:0];
+    
+    // select something, you fool!
+    if ([currentGroup selectedItem] == nil) [currentGroup selectItemAtIndex:0];
 }
 
-- (void)setSelectedGroup:(NSString*)myGroupName;
+- (void)showGroupsCustomization
+{
+    [NSApp beginSheet: groupsSheet
+       modalForWindow: [[self mainView] window]
+        modalDelegate: nil
+       didEndSelector: nil
+          contextInfo: nil];
+    [NSApp runModalForWindow: [[self mainView] window]];
+    // Sheet is up here.
+    [NSApp endSheet: groupsSheet];
+    [groupsSheet orderOut: self];
+}
+
+
+- (void)setSelectedGroup:(NSString*)myGroupName
 {
     /*
      [guiGroup release];
@@ -355,42 +390,6 @@
 - (int)numberOfGroups
 {
     return [groups count];
-}
-- (void)renameGroup:(NSString*)oldName to:(NSString*)newName
-{
-    NSString *activeGroupPrefs = (NSString*)CFPreferencesCopyAppValue(CFSTR("currentGroup"), appID);
-    
-    int index = [groups indexOfObject: oldName];
-    [groups removeObjectAtIndex: index];
-    [groups insertObject: newName atIndex: index];
-    
-    NSEnumerator *e = [g_logs objectEnumerator];
-    GTLog *currentLog;
-    while (currentLog = [e nextObject])
-        [currentLog renameGroup:oldName to:newName];
-    if ([oldName isEqualTo: activeGroupPrefs])
-        CFPreferencesSetAppValue(CFSTR("currentGroup"), newName, appID);
-}
-
-- (void)groupDelete:(int)line
-{
-    /*
-     NSString *groupName = [groups objectAtIndex: line];
-     NSString *activeGroupPrefs = [userDefaults stringForKey:"currentGroup"];
-     
-     [groups removeObject: groupName];
-     NSEnumerator *e = [g_logs objectEnumerator];
-     GTLog *currentLog;
-     while (currentLog = [e nextObject])
-     [currentLog setEnabled: NO forGroup: groupName];
-     
-     if ([groupName isEqualTo: activeGroupPrefs])
-     [gActiveGroup selectItemWithTitle: [groups objectAtIndex: 0]];
-     //     CFPreferencesSetAppValue( CFSTR("currentGroup"), [[self orderedGroupNames] objectAtIndex: 0], appID );
-     //  CFPreferencesAppSynchronize( appID );
-     [self savePrefs];
-     [self updateWindows];
-     */
 }
 
 #pragma mark -
@@ -445,7 +444,7 @@
      */
 }
 
-- (void)geekToolLaunched:(NSNotification*)aNotification;
+- (void)geekToolLaunched:(NSNotification*)aNotification
 {
     /*
      [gEnable setState: YES];
@@ -453,7 +452,7 @@
      */
 }
 
-- (void)geekToolQuit:(NSNotification*)aNotification;
+- (void)geekToolQuit:(NSNotification*)aNotification
 {
     /*
      [gEnable setState: NO];
@@ -576,19 +575,28 @@
 
 - (void)savePrefs
 {
-    // TODO: should be able to rip straight from logManager
     NSMutableArray *logsArray = [NSMutableArray array];
-     NSEnumerator *e = [[logManager content] objectEnumerator];
-     GTLog *gtl;
+    NSEnumerator *e = [g_logs objectEnumerator];
+    GTLog *gtl = nil;
     
-     while (gtl = [e nextObject])
-     {
-         [logsArray addObject: [gtl dictionary]];
-     }
+    while (gtl = [e nextObject])
+    {
+        [logsArray addObject: [gtl dictionary]];
+    }
     
-    CFPreferencesSetAppValue( CFSTR("currentGroup"), [currentGroup titleOfSelectedItem], appID );
-    CFPreferencesSetAppValue( CFSTR("logs"), logsArray, appID );
-    CFPreferencesAppSynchronize( appID );
+    NSMutableArray *groupsArray = [NSMutableArray array];
+    e = [groups objectEnumerator];
+    NSDictionary *tmpDict = nil;
+    
+    while (tmpDict = [e nextObject])
+    {
+        [groupsArray addObject: [tmpDict valueForKey:@"group"]];
+    }
+    
+    CFPreferencesSetAppValue(CFSTR("currentGroup"), [currentGroup titleOfSelectedItem], appID);
+    CFPreferencesSetAppValue(CFSTR("logs"), logsArray, appID);
+    CFPreferencesSetAppValue(CFSTR("groups"), groupsArray, appID);
+    CFPreferencesAppSynchronize(appID);
 }
 - (void)applyChanges
 {
