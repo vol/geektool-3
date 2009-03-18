@@ -8,7 +8,8 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="296"/>
+			<integer value="2254"/>
+			<integer value="588"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -47,7 +48,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{213.663, 10}</string>
 				<object class="NSView" key="NSWindowView" id="978680386">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3637,6 +3638,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<string key="NSFrameSize">{682, 488}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{213.663, 32}</string>
@@ -3730,7 +3732,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 											<reference key="NSBackgroundColor" ref="822804351"/>
 											<reference key="NSGridColor" ref="18019983"/>
 											<double key="NSRowHeight">1.700000e+01</double>
-											<int key="NSTvFlags">-700448768</int>
+											<int key="NSTvFlags">-566231040</int>
 											<int key="NSColumnAutoresizingStyle">4</int>
 											<int key="NSDraggingSourceMaskForLocal">15</int>
 											<int key="NSDraggingSourceMaskForNonLocal">0</int>
@@ -4644,14 +4646,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">add:</string>
-						<reference key="source" ref="415529606"/>
-						<reference key="destination" ref="416950601"/>
-					</object>
-					<int key="connectionID">2198</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">remove:</string>
 						<reference key="source" ref="415529606"/>
 						<reference key="destination" ref="375848620"/>
@@ -4962,6 +4956,46 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					</object>
 					<int key="connectionID">2290</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">addLog:</string>
+						<reference key="source" ref="415529606"/>
+						<reference key="destination" ref="416950601"/>
+					</object>
+					<int key="connectionID">2292</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">duplicateLog:</string>
+						<reference key="source" ref="415529606"/>
+						<reference key="destination" ref="314514610"/>
+					</object>
+					<int key="connectionID">2293</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">currentActiveGroup</string>
+						<reference key="source" ref="415529606"/>
+						<reference key="destination" ref="232501330"/>
+					</object>
+					<int key="connectionID">2294</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">gApply:</string>
+						<reference key="source" ref="267745022"/>
+						<reference key="destination" ref="240958057"/>
+					</object>
+					<int key="connectionID">2295</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">selectedGroupChanged:</string>
+						<reference key="source" ref="267745022"/>
+						<reference key="destination" ref="232501330"/>
+					</object>
+					<int key="connectionID">2296</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -5046,11 +5080,11 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="29664671"/>
-							<reference ref="161555895"/>
 							<reference ref="112488228"/>
 							<reference ref="290241107"/>
 							<reference ref="165882124"/>
 							<reference ref="703632526"/>
+							<reference ref="161555895"/>
 						</object>
 						<reference key="parent" ref="196177033"/>
 					</object>
@@ -5082,13 +5116,13 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="object" ref="161555895"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="232501330"/>
 							<reference ref="27412833"/>
-							<reference ref="240958057"/>
 							<reference ref="370285014"/>
 							<reference ref="416950601"/>
 							<reference ref="375848620"/>
 							<reference ref="314514610"/>
+							<reference ref="240958057"/>
+							<reference ref="232501330"/>
 						</object>
 						<reference key="parent" ref="122341472"/>
 					</object>
@@ -7600,6 +7634,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>1813.ImportedFromIB2</string>
 					<string>1814.IBPluginDependency</string>
 					<string>1814.ImportedFromIB2</string>
+					<string>1955.CustomClassName</string>
 					<string>1955.IBPluginDependency</string>
 					<string>1955.ImportedFromIB2</string>
 					<string>2010.IBPluginDependency</string>
@@ -7908,8 +7943,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{459, 191}, {682, 488}}</string>
-					<string>{{459, 191}, {682, 488}}</string>
+					<string>{{665, 318}, {682, 488}}</string>
+					<string>{{665, 318}, {682, 488}}</string>
 					<reference ref="9"/>
 					<string>{{319, 177}, {682, 488}}</string>
 					<reference ref="6"/>
@@ -8134,6 +8169,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
+					<string>LogController</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -8443,7 +8479,7 @@ Lg</string>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2290</int>
+			<int key="maxID">2296</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -8463,45 +8499,21 @@ Lg</string>
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>adjustTransparency:</string>
-							<string>changeAlignment:</string>
-							<string>changeImageAlignment:</string>
 							<string>currentGroupChanged:</string>
 							<string>defaultImages:</string>
 							<string>deleteImageFailure:</string>
 							<string>deleteImageSuccess:</string>
-							<string>deleteLog:</string>
 							<string>duplicateLog:</string>
 							<string>fileChoose:</string>
 							<string>gApply:</string>
 							<string>gChooseFont:</string>
 							<string>groupsSheetClose:</string>
 							<string>menuCheckBoxChanged:</string>
-							<string>newLog:</string>
-							<string>pAdd:</string>
-							<string>pClose:</string>
-							<string>pDelete:</string>
-							<string>pDuplicate:</string>
-							<string>save:</string>
 							<string>selectedGroupChanged:</string>
-							<string>showHelp:</string>
 							<string>toggleEnable:</string>
-							<string>typeChanged:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -8579,6 +8591,31 @@ Lg</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">LogController</string>
+					<string key="superclassName">NSArrayController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSMutableArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>addLog:</string>
+							<string>duplicateLog:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">currentActiveGroup</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">LogController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

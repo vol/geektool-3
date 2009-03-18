@@ -38,71 +38,47 @@
     //NSConnection *theConnection;
     //id RemoteGeekTool;
 }
-
 - (id)initWithBundle:(NSBundle *)bundle;
-- (void) mainViewDidLoad;
+- (void)mainViewDidLoad;
+- (void)refreshLogsArray;
+- (void)refreshGroupsArray;
 - (void)saveNotifications;
-- (IBAction)save:(id)sender;
-- (IBAction)groupsSheetClose:(id)sender;
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context;
 #pragma mark -
 #pragma mark UI management
-- (void)initGroupsMenu;
-- (void)initCurrentPoolMenu;
-- (void)updatePanel;
-- (int)alignment;
-- (void)setAlignment:(int)alignment;
-- (int)pictureAlignment;
-- (void)setPictureAlignment:(int)alignment;
 - (IBAction)fileChoose:(id)sender;
-- (IBAction)changeAlignment:(id)sender;
-- (void)setControlsState:(bool)state;
-- (int)logType;
-- (void)setLogType:(int)logType;
-- (IBAction)pDelete:(id)sender;
-- (IBAction)pAdd:(id)sender;
-- (IBAction)pDuplicate:(id)sender;
-- (IBAction)pClose:(id)sender;
+- (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo;
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (IBAction)groupsSheetClose:(id)sender;
 - (IBAction)gChooseFont:(id)sender;
 - (IBAction)selectedGroupChanged:(id)sender;
 - (IBAction)currentGroupChanged:(id)sender;
-- (IBAction)typeChanged:(id)sender;
-- (IBAction)changeImageAlignment:(id)sender;
-- (IBAction)adjustTransparency:(id)sender;
 - (IBAction)defaultImages:(id)sender;
-- (IBAction)showHelp:(id)sender;
 - (IBAction)deleteImageSuccess:(id)sender;
 - (IBAction)deleteImageFailure:(id)sender;
-
 #pragma mark -
-#pragma mark Pool Management
+#pragma mark Group Management
+- (void)initGroupsMenu;
 - (void)showGroupsCustomization;
-- (BOOL) poolExists:(NSString*)myPoolName;
-- (NSString*) addPool:(NSString*)myPoolName;
-- (void)setSelectedPool:(NSString*)myPoolName;
-- (NSString*)currentPoolMenu;
-- (int)numberOfPools;
-- (void)renamePool:(NSString*)oldName to:(NSString*)newName;
-- (void)poolDelete:(int)line;
-- (NSString*)guiPool;
-
+- (void)setSelectedGroup:(NSString*)myGroupName;
+- (NSString*)currentGroupMenu;
+- (int)numberOfGroups;
 #pragma mark -
 #pragma mark Log management
-
 - (GTLog*)currentLog;
-- (IBAction)newLog:(id)sender;
-- (IBAction) deleteLog:(id)sender;
-- (IBAction) duplicateLog:(id)sender;
-
+- (IBAction)duplicateLog:(id)sender;
 #pragma mark -
 #pragma mark Daemon interaction
 - (void)didSelect;
 - (void)geekToolWindowChanged:(NSNotification*)aNotification;
 - (void)geekToolLaunched:(NSNotification*)aNotification;
+- (void)geekToolQuit:(NSNotification*)aNotification;
 - (IBAction)toggleEnable:(id)sender;
 - (void)updateWindows;
 - (void)notifHilight;
+- (void)applyNotification:(NSNotification*)aNotification;
+- (void)applyAndNotifyNotification:(NSNotification*)aNotification;
 - (void)reorder:(int)from to:(int)to;
-
 #pragma mark -
 #pragma mark Preferences handling
 - (IBAction)gApply:(id)sender;
@@ -111,9 +87,8 @@
 - (IBAction)menuCheckBoxChanged:(id)sender;
 - (void)loadMenu;
 - (void)unloadMenu;
-
 #pragma mark -
 #pragma mark Misc
-
 - (NSRect)screenRect:(NSRect)oldRect;
+- (void)didUnselect;
 @end

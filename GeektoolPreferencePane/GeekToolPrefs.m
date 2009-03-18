@@ -51,6 +51,8 @@
                                                           object: @"GeekTool"
                                               suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately];
     
+    // so we don't jump out of groups when we add items
+    [logManager setClearsFilterPredicateOnInsertion:FALSE];
     [self refreshLogsArray];
     [self refreshGroupsArray];
     
@@ -198,33 +200,10 @@
         [sheet close];
 }
 
-- (IBAction)pDuplicate:(id)sender;
-{
-    // TODO: there may be an easier way to do this
-    /* NSString *sourcePool = [pools objectAtIndex: [pList selectedRow]];
-     NSString *dstPool = [NSString stringWithFormat: @"%@ %@", sourcePool, COPY];
-     
-     [pools addObject: dstPool];
-     
-     NSEnumerator *e = [g_logs objectEnumerator];
-     GTLog *tempLog;
-     while (tempLog = [e nextObject])
-     {
-     if ([tempLog isInPool: sourcePool])
-     [tempLog setEnabled: YES forPool: dstPool];
-     }
-     [pList reloadData];
-     int myRow = [pools indexOfObject: dstPool];
-     [pList selectRow: myRow byExtendingSelection:NO];
-     [pList editColumn:0
-     row: myRow
-     withEvent: nil select: YES];
-     [self savePrefs];
-     */
-}
-
 - (IBAction)groupsSheetClose:(id)sender
 {
+    // close the sheet and refresh our menu
+    // note that -initGroupsMenu takes care of the "customize groups..." selection
     [NSApp stopModal];
     [self initGroupsMenu];
 }
@@ -246,17 +225,9 @@
      */
 }
 
-- (IBAction)selectedGroupChanged:(id)sender;
+- (IBAction)selectedGroupChanged:(id)sender
 {
-    // TODO: bindings should be able to do this
-    [self applyChanges];
-    if ([sender selectedItem] == [sender lastItem])
-        [self showPoolsCustomization];
-    else
-    {
-        [self setSelectedPool: [sender titleOfSelectedItem]];
-    }
-    [self notifHilight];
+    [logManager setFilterPredicate:[NSPredicate predicateWithFormat:@"group = %@",[groupSelection titleOfSelectedItem]]];
 }
 
 - (IBAction)currentGroupChanged:(id)sender;
@@ -356,6 +327,9 @@
     
     // select something, you fool!
     if ([currentGroup selectedItem] == nil) [currentGroup selectItemAtIndex:0];
+    
+    // display items only in this group
+    [logManager setFilterPredicate:[NSPredicate predicateWithFormat:@"group = %@",[groupSelection titleOfSelectedItem]]];
 }
 
 - (void)showGroupsCustomization

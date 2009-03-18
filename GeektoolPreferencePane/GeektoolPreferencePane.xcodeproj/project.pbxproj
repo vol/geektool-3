@@ -10,6 +10,8 @@
 		0A14C5440F471445005E195E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D202CF70486D31800D8A456 /* Info.plist */; };
 		0A3C32B70F709D1E00DBED55 /* GroupController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3C32B50F709D1E00DBED55 /* GroupController.h */; };
 		0A3C32B80F709D1E00DBED55 /* GroupController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3C32B60F709D1E00DBED55 /* GroupController.m */; };
+		0A3C33200F71481F00DBED55 /* LogController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3C331E0F71481F00DBED55 /* LogController.h */; };
+		0A3C33210F71481F00DBED55 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3C331F0F71481F00DBED55 /* LogController.m */; };
 		0A3CE0D10EDCCDAE006D48DB /* GeekToolPrefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A3CE0CF0EDCCDAE006D48DB /* GeekToolPrefs.m */; };
 		0A3CE0D20EDCCDAE006D48DB /* GeekToolPrefs.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A3CE0D00EDCCDAE006D48DB /* GeekToolPrefs.h */; };
 		0AC89A550F1C3E53000A795B /* defines.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AC89A540F1C3E53000A795B /* defines.h */; };
@@ -43,6 +45,8 @@
 		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		0A3C32B50F709D1E00DBED55 /* GroupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupController.h; sourceTree = "<group>"; };
 		0A3C32B60F709D1E00DBED55 /* GroupController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupController.m; sourceTree = "<group>"; };
+		0A3C331E0F71481F00DBED55 /* LogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogController.h; sourceTree = "<group>"; };
+		0A3C331F0F71481F00DBED55 /* LogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogController.m; sourceTree = "<group>"; };
 		0A3CE0CF0EDCCDAE006D48DB /* GeekToolPrefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeekToolPrefs.m; sourceTree = "<group>"; };
 		0A3CE0D00EDCCDAE006D48DB /* GeekToolPrefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeekToolPrefs.h; sourceTree = "<group>"; };
 		0AC89A540F1C3E53000A795B /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = defines.h; path = ../Geektool/defines.h; sourceTree = SOURCE_ROOT; };
@@ -133,6 +137,8 @@
 				0A3CE0CF0EDCCDAE006D48DB /* GeekToolPrefs.m */,
 				0A3C32B50F709D1E00DBED55 /* GroupController.h */,
 				0A3C32B60F709D1E00DBED55 /* GroupController.m */,
+				0A3C331E0F71481F00DBED55 /* LogController.h */,
+				0A3C331F0F71481F00DBED55 /* LogController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -202,6 +208,7 @@
 				0A3CE0D20EDCCDAE006D48DB /* GeekToolPrefs.h in Headers */,
 				0AC89A550F1C3E53000A795B /* defines.h in Headers */,
 				0A3C32B70F709D1E00DBED55 /* GroupController.h in Headers */,
+				0A3C33200F71481F00DBED55 /* LogController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,6 +311,7 @@
 				0AD772600ED8712C003EB540 /* LogWindowController.m in Sources */,
 				0A3CE0D10EDCCDAE006D48DB /* GeekToolPrefs.m in Sources */,
 				0A3C32B80F709D1E00DBED55 /* GroupController.m in Sources */,
+				0A3C33210F71481F00DBED55 /* LogController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
