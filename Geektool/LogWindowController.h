@@ -38,5 +38,5 @@
 - (void)setType:(int)anInt;
 - (int)type;
 - (void)setAttributes:(NSDictionary*)attributes;
--(void)setSticky:(BOOL)flag;
+- (void)setSticky:(BOOL)flag;
 @end

@@ -8,6 +8,8 @@
 @implementation GeekTool
 - (void)awakeFromNib
 {
+    appID = CFSTR("com.allocinit.tynsoe.geektool");
+    
     // This array will store the tunnels descriptions and windows/tasks references
     g_logs = [[NSMutableArray alloc] init];
     
@@ -141,10 +143,10 @@
     [g_logs removeAllObjects];
     
     // This tmp array stores preferences dictionary "as is"
-    NSString *currentGroup = [[NSUserDefaults standardUserDefaults] objectForKey: @"currentGroup"];
-    NSArray *logs = [[NSUserDefaults standardUserDefaults] objectForKey: @"logs"];
+    NSString *currentGroup = (NSString*)CFPreferencesCopyAppValue(CFSTR("currentGroup"), appID);
+    NSArray *logs = (NSArray*)CFPreferencesCopyAppValue(CFSTR("logs"), appID);
     
-    if ( logs == nil ) logs = [NSArray array];
+    if (logs == nil ) logs = [NSArray array];
     
     // We parse all logs to see if something changed.
     // We add log entries if there are new, and we delete some that could have been
@@ -155,7 +157,7 @@
     while (logD = [e nextObject])
     {
         // make sure to load only windows that are in the active group
-        if (![[logD objectForKey: @"group"] containsObject: currentGroup])
+        if (![[logD valueForKey: @"group"] isEqual: currentGroup])
             continue;
         //GTLog * log = [[GTLog alloc] initWithDictionary: logD] ;
         // If this is verified, we are updating existing entries

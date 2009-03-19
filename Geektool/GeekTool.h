@@ -5,6 +5,8 @@
 
 @interface GeekTool : NSApplication
 {
+    CFStringRef appID;
+    
     id GeekToolPrefs;
     NSUserDefaults *defaults;
     NSMutableArray *g_logs;

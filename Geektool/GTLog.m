@@ -734,6 +734,7 @@
     
     // we will be executing functions to get an output soon
     // work only if our window controller doesn't exist(?) and enabled
+    // looks like one window per window controller
     if ([self enabled] && !windowController)
     {
         // if the type is file, we need to do some things to get it set up
@@ -787,8 +788,9 @@
         [[windowController window] setAutodisplay: YES];
         [self updateWindow];
     }
-    else if (! [self enabled] && windowController)
+    else if (![self enabled] && windowController)
         [self terminate];
+    
     [windowController showWindow: self];
     [pool release];
 }
@@ -847,11 +849,11 @@
 {
     NSWindow *window = [windowController window];
     
-    [window setHasShadow: [self shadowWindow]];
-    [window setLevel: [self alwaysOnTop]];
-    [self setSticky: [self alwaysOnTop]];
+    [windowController setHasShadow: [self shadowWindow]];
+    [windowController setLevel: [self alwaysOnTop]?NSPopUpMenuWindowLevel:kCGDesktopWindowLevel];
+    [self setSticky: ![self alwaysOnTop]];
     
-    [window setFrame: [self realRect] display: NO];
+    [windowController setFrame: [self realRect] display: NO];
     [(LogWindow*)window setClickThrough: YES];
     
     if ([self type] == TYPE_FILE || [self type] == TYPE_SHELL)
@@ -898,6 +900,7 @@
     }
     if ([self type] == TYPE_FILE)
         [windowController scrollEnd];
+    
     [windowController setStyle: [self NSFrameType]];
     
     NSRect rect = [[windowController window] frame];
@@ -914,7 +917,7 @@
         [windowController setImage: nil];
     }
     NSRect newRect;
-    if ( [self NSFrameType] == NSImageFrameGrayBezel )
+    if ( [self NSFrameType] == FRAME_GRAYBEZEL )
     {
         newRect = NSMakeRect(imWidth + 8,
                              8,
@@ -966,7 +969,7 @@
         
         [timer fire];
     }
-    if ([self type] == 0)
+    if ([self type] == TYPE_SHELL)
         [windowController scrollEnd];
     [windowController display];
 }

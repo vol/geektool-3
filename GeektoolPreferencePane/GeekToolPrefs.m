@@ -234,15 +234,6 @@
     [logManager rearrangeObjects];
 }
 
-- (IBAction)currentGroupChanged:(id)sender;
-{
-    // TODO: bindings
-    [self applyChanges];
-    [self savePrefs];
-    [self updateWindows];
-    [self notifHilight];
-}
-
 -(IBAction)defaultImages:(id)sender
 {
     /*
@@ -348,53 +339,6 @@
     // Sheet is up here.
     [NSApp endSheet: groupsSheet];
     [groupsSheet orderOut: self];
-}
-
-
-- (void)setSelectedGroup:(NSString*)myGroupName
-{
-    /*
-     [guiGroup release];
-     [gLogsList reloadData];
-     guiGroup = [[gGroupsMenu titleOfSelectedItem] retain];
-     [self updatePanel];
-     */
-}
-- (NSString*)currentGroupMenu;
-{
-    /*
-     return [gGroupsMenu titleOfSelectedItem];
-     */
-}
-- (int)numberOfGroups
-{
-    return [groups count];
-}
-
-#pragma mark -
-#pragma mark Log management
-
-- (GTLog*)currentLog
-{
-    /*
-     if ([gLogsList selectedRow] == -1)
-     return nil;
-     return [g_logs objectAtIndex: [gLogsList selectedRow]];
-     */
-}
-- (IBAction) duplicateLog:(id)sender
-{
-    /*
-     // TODO: look for built in functions for this
-     GTLog *newLog = [[g_logs objectAtIndex: [gLogsList selectedRow]] copy];
-     [newLog setName: [NSString stringWithFormat: @"%@ copie", [newLog name]]];
-     [g_logs addObject: newLog];
-     [newLog release];
-     [gLogsList reloadData];
-     [self applyChanges];
-     [self savePrefs];
-     [self updateWindows];
-     */
 }
 
 #pragma mark -
