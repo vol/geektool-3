@@ -11,9 +11,26 @@
 
 @interface LogController : NSArrayController {
     IBOutlet id currentActiveGroup;
+    IBOutlet id tableView;
+    id newObject;
 
 }
 #pragma mark Methods
 - (IBAction)duplicateLog:(id)sender;
 - (IBAction)addLog:(id)sender;
+// table view drag and drop support
+- (BOOL)tableView:(NSTableView *)aTableView
+writeRowsWithIndexes:(NSIndexSet *)rowIndexes
+toPasteboard:(NSPasteboard *)pboard;
+- (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op;
+- (BOOL)tableView:(NSTableView*)tv acceptDrop:(id <NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)op;
+// utility methods
+-(NSIndexSet *) moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet
+toIndex:(unsigned int)insertIndex;
+@end
+
+#pragma mark -
+#pragma mark Quick helper method
+@interface NSIndexSet (CountOfIndexesInRange)
+-(unsigned int)countOfIndexesInRange:(NSRange)range;
 @end

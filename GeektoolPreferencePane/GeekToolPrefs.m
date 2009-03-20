@@ -54,7 +54,7 @@
     // so we don't jump out of groups when we add items
     // Unfortunately, this option screws things up, so we have to leave it on
     // and work around it. sigh...
-    //[logManager setClearsFilterPredicateOnInsertion:FALSE];
+    [logManager setClearsFilterPredicateOnInsertion:FALSE];
     [self refreshLogsArray];
     [self refreshGroupsArray];
     
