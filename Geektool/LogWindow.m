@@ -22,14 +22,14 @@
     return YES;
 }
 
-- (void)setHilighted:(BOOL)flag;
+- (void)setHighlighted:(BOOL)flag;
 {
     if (flag)
         [self setClickThrough: NO];
     else
         [self setClickThrough: YES];
     
-    [logView setHilighted: flag];
+    [logView setHighlighted: flag];
 }
 
 - (void)setClickThrough:(BOOL)clickThrough

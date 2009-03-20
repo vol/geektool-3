@@ -5,9 +5,9 @@
 {
     [ picture setImage: anImage ];
 }
-- (void)setHilighted:(BOOL)flag;
+- (void)setHighlighted:(BOOL)flag;
 {
-    [(ImageLogWindow*)[ self window ] setHilighted: flag ];
+    [(ImageLogWindow*)[ self window ] setHighlighted: flag ];
     [ self display ];
 }
 - (void)setStyle:(int)style

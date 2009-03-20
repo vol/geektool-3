@@ -716,9 +716,9 @@
     [pool release];
 }
 
-- (void)setHilighted:(BOOL)myHilight
+- (void)setHighlighted:(BOOL)myHigtlight
 {
-    [windowController setHilighted: myHilight];
+    [windowController setHighlighted: myHigtlight];
 }
 
 - (void)setSticky:(BOOL)flag
@@ -795,7 +795,7 @@
     [pool release];
 }
 
-// This fn is pretty hot as well.
+// every timer hits this fn every X seconds. make it lean
 - (void)updateCommand:(NSTimer*)timer
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -805,16 +805,23 @@
     switch ([self type])
     {
         case TYPE_SHELL:
-            if ([task isRunning])
-                free=NO;
+            // if the task is still running, don't try to read from it
+            // (ie the output is indeterminable)
+            if ([task isRunning]) free = NO;
+            
+            // if we have a controller and the command is done launching...
             if (windowController != nil && free)
             {
+                // make another task! hah! you thought you were done?!
                 task = [[NSTask alloc] init];
                 [task setLaunchPath: @"/bin/sh"];
                 [task setArguments: arguments];
                 [task setEnvironment: env];
                 clear = YES;
+                
                 pipe = [[NSPipe alloc] init];
+                
+                // read stuff until its all gone
                 [[NSNotificationCenter defaultCenter] addObserver: self
                                                          selector: @selector(newLines:)
                                                              name: @"NSFileHandleReadToEndOfFileCompletionNotification"
@@ -827,18 +834,22 @@
                                                          selector: @selector(taskEnd:)
                                                              name: @"NSTaskDidTerminateNotification"
                                                            object: task];
+                
+                // punch it chewie
                 [task launch];
+                
+                // grrrrrwwwahhhhhhh
                 [pipe release];
             }
             break;
+            
+        // if its an image, concern yourself only with looking at the itemage
         case TYPE_IMAGE:
             [NSThread detachNewThreadSelector: @selector(setImage:)
                                      toTarget: self
-                                   withObject: [self imageURL]];
-            //[myImage release];
+                                   withObject: [self imageURL]];            
             break;      
     }
-    //[windowController display];
     [pool release];
 }
 
@@ -849,22 +860,24 @@
 {
     NSWindow *window = [windowController window];
     
+    // set a few attributes pertaining to how the window appears
     [windowController setHasShadow: [self shadowWindow]];
     [windowController setLevel: [self alwaysOnTop]?NSPopUpMenuWindowLevel:kCGDesktopWindowLevel];
     [self setSticky: ![self alwaysOnTop]];
+    [windowController setStyle: [self NSFrameType]];
+    [windowController setPictureAlignment: [self NSPictureAlignment]];
+    NSRect rect = [[windowController window] frame];
     
+    // make it unclickable and make it's size
     [windowController setFrame: [self realRect] display: NO];
     [(LogWindow*)window setClickThrough: YES];
     
+    // continue only for file and shell
     if ([self type] == TYPE_FILE || [self type] == TYPE_SHELL)
     {
+        // get the colors right
         [windowController setTextBackgroundColor: [self backgroundColor]];
-        //[windowController setTextColor: [self textColor]];
-        //[windowController setFont: [self font]];
         [windowController setShadowText: [self shadowText]];
-        
-        //[windowController setTextAlignment: [self alignment]];
-        //[windowController setWrap: [self wrap]];
         
         // Paragraph style
         NSMutableParagraphStyle *myParagraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -891,19 +904,24 @@
         if (attributes)
             [attributes release];
         
+        // here is where we override the scheme of the text. if you wanted
+        // to keep colors through the shell, here is where you would check for it
         attributes = [[NSDictionary dictionaryWithObjectsAndKeys:
-                       myParagraphStyle,   NSParagraphStyleAttributeName,
+                       myParagraphStyle, NSParagraphStyleAttributeName,
                        [self font],      NSFontAttributeName,
                        [self textColor], NSForegroundColorAttributeName,nil] retain];
         [myParagraphStyle release];
         [windowController setAttributes: attributes];
     }
+    // keep scrollin, scrollin, scrollin
+    // those pipes are overflowin
+    // keep them text fields scrollin
+    // rawhide!
     if ([self type] == TYPE_FILE)
         [windowController scrollEnd];
     
-    [windowController setStyle: [self NSFrameType]];
-    
-    NSRect rect = [[windowController window] frame];
+    // im = imaginary? anyway, modify the width to accomidate the largest image
+    // possible (if needed)
     int imWidth = 0;
     if ([self showIcon] && [self type] == TYPE_SHELL)
     {
@@ -916,6 +934,9 @@
     {
         [windowController setImage: nil];
     }
+    
+    // i guess there is something about the graybezel frame that screws something
+    // up.
     NSRect newRect;
     if ( [self NSFrameType] == FRAME_GRAYBEZEL )
     {
@@ -931,35 +952,39 @@
                              rect.size.width - imWidth,
                              rect.size.height);
     }
+    
+    // commit our rect. rememeber, this is with respect to the log window, hence
+    // why our x,y are going to be like 0,0
     [windowController setTextRect: newRect];
+    
+    // setup some timer stuff
     if ([self type] == TYPE_SHELL || [self type] == TYPE_IMAGE)
     {
-        [windowController setPictureAlignment: [self NSPictureAlignment]];
+        // if we have a timer, kill it
         if (timer)
         {
             [timer invalidate];
             [timer release];
             timer = nil;
         }
+        
+        // if we have a shell command
         if ([self type] == TYPE_SHELL)
         {
             arguments = [[NSArray alloc] initWithObjects: @"-c",[self command], nil];
             clear = YES;
-            NSString *temp = @"";
-            if ([self hide])
-                temp = @"";
-            if ([self force])
-                temp = [self forceTitle];
-            [windowController addText: temp clear: YES];
+            NSString *tmp = @"";
+            if ([self hide]) tmp = @"";
+            if ([self force]) tmp = [self forceTitle];
+            [windowController addText: tmp clear: YES];
         }
+        // if we have an image command instead
         else if ([self type] == TYPE_IMAGE)
         {
+            // make a nice environment for the image
             [windowController setTextBackgroundColor: [NSColor clearColor]];
-            //                [windowController setStyle: [self NSFrameType]];
             [[windowController window] setAlphaValue: ([self transparency]*100)];
             [windowController setFit: [self imageFit]];
-            //NSGraphicsContext *myGC = [NSGraphicsContext graphicsContextWithWindow:[windowController window]];
-            //[myGC setShouldAntialias:YES];
         }
         timer = [[NSTimer scheduledTimerWithTimeInterval: [self refresh]
                                                   target: self
@@ -969,8 +994,10 @@
         
         [timer fire];
     }
-    if ([self type] == TYPE_SHELL)
-        [windowController scrollEnd];
+    // if ye be of the shell type, thou must scrolleth down
+    if ([self type] == TYPE_SHELL) [windowController scrollEnd];
+    
+    // display our badass window
     [windowController display];
 }
 

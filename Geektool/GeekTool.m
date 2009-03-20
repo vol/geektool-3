@@ -8,7 +8,8 @@
 @implementation GeekTool
 - (void)awakeFromNib
 {
-    appID = CFSTR("com.allocinit.tynsoe.geektool");
+    // notice here, we are going to use NSUserDefaults instead of the carbon crap
+    // this is because this module is not a prefpane, and hence, easy to work with
     
     // This array will store the tunnels descriptions and windows/tasks references
     g_logs = [[NSMutableArray alloc] init];
@@ -59,10 +60,10 @@
     else if ([[aNotification name] isEqualTo: @"GTPrefsQuit"])
     {
         // if something is highlighted, that means that it is able to be moved around
-        if (hilighted > -1)
+        if (highlighted > -1)
         {
-            [[g_logs objectAtIndex: hilighted] setHilighted: NO];
-            hilighted = -1;
+            [[g_logs objectAtIndex: highlighted] setHighlighted: NO];
+            highlighted = -1;
         }
     }
     
@@ -77,26 +78,27 @@
         [[NSApplication sharedApplication] terminate: self];
     }
     
-    else if ([[aNotification name] isEqualTo: @"GTHilightWindow"])
+    else if ([[aNotification name] isEqualTo: @"GTHighlightWindow"])
     {
-        if ([[[aNotification userInfo] objectForKey: @"poolName"] isEqualTo:
-             [[NSUserDefaults standardUserDefaults] objectForKey: @"currentPool"]])
+        // if the 
+        if ([[[aNotification userInfo] objectForKey: @"groupName"] isEqualTo:
+             [[NSUserDefaults standardUserDefaults] objectForKey: @"currentGroup"]])
         {
             int index = [[[aNotification userInfo] objectForKey: @"index"] intValue];
             unsigned int i;
             for (i=0;i<[g_logs count];i++)
-                [[g_logs objectAtIndex: i] setHilighted: NO];
+                [[g_logs objectAtIndex: i] setHighlighted: NO];
             if (index > -1)
-                [[g_logs objectAtIndex: index] setHilighted: YES];
+                [[g_logs objectAtIndex: index] setHighlighted: YES];
             
-            hilighted = index;
+            highlighted = index;
         }
         else
         {
-            if (hilighted > -1)
+            if (highlighted > -1)
             {
-                [[g_logs objectAtIndex: hilighted] setHilighted: NO];
-                hilighted = -1;
+                [[g_logs objectAtIndex: highlighted] setHighlighted: NO];
+                highlighted = -1;
             }
         }
         [self reorder];
@@ -115,10 +117,10 @@
     }
     else if ([[aNotification name] isEqualTo: @"GTTransparency"])
     {
-        if (hilighted != -1)
+        if (highlighted != -1)
         {
             float tr = [[[aNotification userInfo] objectForKey: @"transparency"] floatValue];
-            [[g_logs objectAtIndex: hilighted] setTransparency: tr];
+            [[g_logs objectAtIndex: highlighted] setTransparency: tr];
         }
     }
 }
@@ -143,8 +145,8 @@
     [g_logs removeAllObjects];
     
     // This tmp array stores preferences dictionary "as is"
-    NSString *currentGroup = (NSString*)CFPreferencesCopyAppValue(CFSTR("currentGroup"), appID);
-    NSArray *logs = (NSArray*)CFPreferencesCopyAppValue(CFSTR("logs"), appID);
+    NSString *currentGroup = [[NSUserDefaults standardUserDefaults] objectForKey:"currentGroup"];
+    NSArray *logs = [[NSUserDefaults standardUserDefaults] objectForKey:"logs"];
     
     if (logs == nil ) logs = [NSArray array];
     

@@ -23,7 +23,7 @@
     [ super drawRect: rect ];
     NSBezierPath *bp = [ NSBezierPath bezierPathWithRect: [ self bounds ]];
     NSColor *color;
-    if (hilighted)
+    if (highlighted)
     {
 	//color = [[NSColor blackColor] colorWithAlphaComponent:0.1];
         color = [[ NSColor alternateSelectedControlColor ] colorWithAlphaComponent:0.3];
@@ -43,7 +43,7 @@
 }
 - (void)mouseDragged:(NSEvent *)theEvent;
 {
-    if (! hilighted)
+    if (! highlighted)
 	return;
 
     int newX, newY,newW,newH;
@@ -133,7 +133,7 @@
     //NSAutoreleasePool *pool = [[ NSAutoreleasePool alloc ] init ];
     mouseLoc = [[ self window ] convertBaseToScreen:[theEvent locationInWindow]];
     //mouseLoc = [ NSEvent mouseLocation ];
-    if (! hilighted)
+    if (! highlighted)
 	return;
     
     windowFrame = [[ self window ] frame ];
@@ -169,10 +169,10 @@
                                                                    userInfo: nil
                                                          deliverImmediately: YES ];
 }
-- (void)setHilighted:(BOOL)flag;
+- (void)setHighlighted:(BOOL)flag;
 {
-    hilighted = flag;
-    if (hilighted)
+    highlighted = flag;
+    if (highlighted)
         [[ self window ] makeKeyWindow ];
     [ self display ];
 
@@ -211,17 +211,17 @@
         ];
 }
 - (BOOL)acceptsFirstResponder {
-    if (hilighted)
+    if (highlighted)
         return YES;
     return NO;
 }
 - (BOOL)resignFirstResponder {
-    if (hilighted)
+    if (highlighted)
         return YES;
      return NO;
 }
 - (BOOL)becomeFirstResponder {
-    if (hilighted)
+    if (highlighted)
         return YES;
      return NO;
 }

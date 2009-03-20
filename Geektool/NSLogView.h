@@ -11,7 +11,7 @@
     int dragType;
     NSTimer *timer;
     IBOutlet id picture;
-    int hilighted;
+    int highlighted;
     BOOL crop;
     NSRect cropRect;
     IBOutlet id text;
@@ -24,7 +24,7 @@
 - (void)mouseDown:(NSEvent *)theEvent;
 - (void)mouseUp:(NSEvent *)theEvent;
 - (void)mouseDragged:(NSEvent *)theEvent;
-- (void)setHilighted:(BOOL)flag;
+- (void)setHighlighted:(BOOL)flag;
 - (void)setCrop: (BOOL)aBool;
 - (void)timerSendPosition:(NSTimer*)aTimer;
 - (void)sendPosition;

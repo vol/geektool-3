@@ -119,9 +119,9 @@
     [text scrollRangeToVisible: range];
 }
 
-- (void)setHilighted:(BOOL)flag;
+- (void)setHighlighted:(BOOL)flag;
 {
-    [(LogWindow*)[self window] setHilighted: flag];
+    [(LogWindow*)[self window] setHighlighted: flag];
     [self display];
 }
 

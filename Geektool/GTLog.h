@@ -154,7 +154,7 @@
 - (id)mutableCopyWithZone:(NSZone *)zone;
 - (void)newLines:(NSNotification*)aNotification;
 - (void)openWindow;
-- (void)setHilighted:(BOOL)myHilight;
+- (void)setHighlighted:(BOOL)myHighlight;
 - (void)setSticky:(BOOL)flag;
 - (void)taskEnd:(NSNotification*)aNotification;
 - (void)terminate;

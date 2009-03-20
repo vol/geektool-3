@@ -4,9 +4,7 @@
 #import "GTLog.h"
 
 @interface GeekTool : NSApplication
-{
-    CFStringRef appID;
-    
+{    
     id GeekToolPrefs;
     NSUserDefaults *defaults;
     NSMutableArray *g_logs;
@@ -14,7 +12,7 @@
     NSConnection *theConnectionPrefs;
     BOOL isAddingLog;
 
-    int hilighted;
+    int highlighted;
 
     BOOL magn;
     NSMutableArray *xGuides;

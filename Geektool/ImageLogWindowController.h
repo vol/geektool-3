@@ -10,7 +10,7 @@
     IBOutlet id textField;
 }
 - (void)setImage:(NSImage*)anImage;
-- (void)setHilighted:(BOOL)flag;
+- (void)setHighlighted:(BOOL)flag;
 - (void)setStyle:(int)style;
 - (void)display;
 -(void)setFit:(int)fit;

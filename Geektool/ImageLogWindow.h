@@ -7,6 +7,6 @@
     IBOutlet id image;
     IBOutlet id logView;
 }
-- (void)setHilighted:(BOOL)flag;
+- (void)setHighlighted:(BOOL)flag;
 - (void)setClickThrough:(BOOL)clickThrough;
 @end

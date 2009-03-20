@@ -75,7 +75,7 @@
 - (void)geekToolQuit:(NSNotification*)aNotification;
 - (IBAction)toggleEnable:(id)sender;
 - (void)updateWindows;
-- (void)notifHilight;
+- (void)notifyHighlight;
 - (void)applyNotification:(NSNotification*)aNotification;
 - (void)applyAndNotifyNotification:(NSNotification*)aNotification;
 - (void)reorder:(int)from to:(int)to;

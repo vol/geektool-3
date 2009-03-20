@@ -27,7 +27,7 @@
 - (void)windowWillClose:(NSNotification *)aNotification;
 - (void)addText:(NSString*)newText clear:(BOOL)clear;
 - (void)scrollEnd;
-- (void)setHilighted:(BOOL)flag;
+- (void)setHighlighted:(BOOL)flag;
 - (void)setWrap:(BOOL)wrap;
 - (void)setStyle:(int)style;
 - (void)setFit:(int)fit;

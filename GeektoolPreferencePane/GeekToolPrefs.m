@@ -371,8 +371,9 @@
 {
     /*
      [gEnable setState: YES];
-     [self notifHilight];
      */
+     [self notifyHighlight];
+
 }
 
 - (void)geekToolQuit:(NSNotification*)aNotification
@@ -433,35 +434,44 @@
                                                        deliverImmediately: YES];
     //    [self notifHilight];    
 }
-- (void)notifHilight
+
+- (void)notifyHighlight
 {
-    /*
-     int j=0;
-     int i=0;
-     if (! [[gActivePool titleOfSelectedItem] isEqual: [gPoolsMenu titleOfSelectedItem]])
-     j=-1;
-     if ([gLogsList selectedRow] == -1)
-     j=-1;
-     else if (! [[g_logs objectAtIndex: [gLogsList selectedRow]] isInPool: [gActivePool titleOfSelectedItem]])
-     j=-1;
-     else
-     {
-     for (i=0;i<[gLogsList selectedRow];i++)
-     {
-     if ([[g_logs objectAtIndex: i] isInPool: [gActivePool titleOfSelectedItem]])
-     j++;
-     }
-     }
-     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-     [gActivePool titleOfSelectedItem], @"poolName",
-     [NSNumber numberWithInt: j], @"index",
-     nil];
-     [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTHilightWindow"
-     object: @"GeekToolPrefs"
-     userInfo: userInfo
-     deliverImmediately: YES];    
-     */
+    int j = 0;
+    int i = 0;
+    
+    // if the active and selected groups are not the same, we would not be able to highlight
+    // any of the logs because they wouldn't be active
+    if (![[currentGroup titleOfSelectedItem] isEqual: [groupSelection titleOfSelectedItem]])
+        j = -1;
+    
+    // if nothing is selected, be sure to reflect that
+    if ([logManager selectionIndex] == NSNotFound) 
+        j = -1;
+    
+    // else, if something is selected, but it's group is not that of the active group
+    else if (![[[[logManager selectedObjects]objectAtIndex:0]group] isEqual: [currentGroup titleOfSelectedItem]])
+        j = -1;
+    
+    // finally, loop through and get the index of something? not quite sure
+    else
+    {
+        for (i = 0; i < [logManager selectionIndex]; i++)
+        {
+            if ([[[g_logs objectAtIndex: i]group] isEqual: [currentGroup titleOfSelectedItem]])
+                j++;
+        }
+    }
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                              [currentGroup titleOfSelectedItem], @"groupName",
+                              [NSNumber numberWithInt: j], @"index",
+                              nil];
+    [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTHighlightWindow"
+                                                                   object: @"GeekToolPrefs"
+                                                                 userInfo: userInfo
+                                                       deliverImmediately: YES];    
 }
+
 - (void)applyNotification:(NSNotification*)aNotification
 {
     //[self applyChanges];
@@ -520,6 +530,8 @@
     CFPreferencesSetAppValue(CFSTR("logs"), logsArray, appID);
     CFPreferencesSetAppValue(CFSTR("groups"), groupsArray, appID);
     CFPreferencesAppSynchronize(appID);
+    
+    [self updateWindows];
 }
 - (void)applyChanges
 {
