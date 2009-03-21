@@ -15,7 +15,6 @@
     // just in case this gets called with nothing selected...
     if ([self selectionIndex] != NSNotFound)
     {
-        NSPredicate *origPredicate = [[logController filterPredicate]retain];
         // get our selection (potentially multiple items)
         NSArray *selectedObjects = [self selectedObjects];
         NSEnumerator *e = [selectedObjects objectEnumerator];
@@ -45,8 +44,6 @@
             
             [self addObject:[self duplicateCheck:currentGroupString]];
         }
-        [logController setFilterPredicate:origPredicate];
-        [origPredicate release];
     }
 }
 

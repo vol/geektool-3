@@ -9,6 +9,8 @@
 #import "LogController.h"
 
 NSString *MovedRowsType = @"GTLog_Moved_Item";
+NSString *CopiedRowsType = @"GTLog_Copied_Item";
+
 
 @implementation LogController
 
@@ -20,12 +22,13 @@ NSString *MovedRowsType = @"GTLog_Moved_Item";
 	[tableView setDraggingSourceOperationMask:(NSDragOperationCopy | NSDragOperationMove) forLocal:YES];
 	
 	[tableView registerForDraggedTypes:
-     [NSArray arrayWithObjects: MovedRowsType, nil]];
+     [NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
     [tableView setAllowsMultipleSelection:YES];
 	
 	[super awakeFromNib];
 }
 
+// thank you mr mmalc, you fixed my setClearsFilterPredicateOnInsertion: problem
 - (NSArray *)arrangeObjects:(NSArray *)objects
 {
 	/*
@@ -51,8 +54,8 @@ NSString *MovedRowsType = @"GTLog_Moved_Item";
 		{
 			//  Use of local autorelease pool here is probably overkill, but may be useful in a larger-scale application.
 			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-			NSString *lowerName = [item valueForKeyPath:@"group"];
-			if ([[currentActiveGroup titleOfSelectedItem] isEqualToString:lowerName])
+			NSString *groupName = [item valueForKeyPath:@"group"];
+			if ([[currentActiveGroup titleOfSelectedItem] isEqualToString:groupName])
 			{
 				[matchedObjects addObject:item];
 			}
@@ -62,13 +65,18 @@ NSString *MovedRowsType = @"GTLog_Moved_Item";
     return [super arrangeObjects:matchedObjects];
 }
 
+- (id)newObject
+{
+    newObject = [super newObject];
+    return newObject;
+}
+
 #pragma mark Methods
 - (IBAction)duplicateLog:(id)sender
 {
     // just in case this gets called with nothing selected...
     if ([self selectionIndex] != NSNotFound)
     {
-        NSPredicate *origPredicate = [[self filterPredicate]retain];
         // get our selection (potentially multiple items)
         NSArray *selectedObjects = [self selectedObjects];
         NSEnumerator *e = [selectedObjects objectEnumerator];
@@ -85,22 +93,18 @@ NSString *MovedRowsType = @"GTLog_Moved_Item";
             [self addObject:copyLog];
             [copyLog release];
         }
-        [self setFilterPredicate:origPredicate];
-        [origPredicate release];
     }
 }
 
 - (IBAction)addLog:(id)sender
 {
-    NSPredicate *origPredicate = [[self filterPredicate]retain];
     NSString *currentGroupString = [currentActiveGroup titleOfSelectedItem];
     GTLog *toAdd = [[GTLog alloc]init];
     [toAdd setGroup:currentGroupString];
     [self addObject:toAdd];
     [toAdd release];
-    [self setFilterPredicate:origPredicate];
-    [origPredicate release];
 }
+
 #pragma mark Drag n' Drop Stuff
 // thanks to mmalc for figuring most of this stuff out for me (and just being amazing)
 - (BOOL)tableView:(NSTableView *)aTableView
@@ -129,7 +133,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 	
 	// setPropertyList works here because we're using dictionaries, strings,
 	// and dates; otherwise, archive collection to NSData...
-	//[pboard setPropertyList:rowCopies forType:CopiedRowsType];
+	[pboard setPropertyList:rowCopies forType:CopiedRowsType];
 	
     return YES;
 }
@@ -145,12 +149,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
     
     // if drag source is self, it's a move unless the Option key is pressed
     if ([info draggingSource] == tableView) {
-		
-		NSEvent *currentEvent = [NSApp currentEvent];
-		int optionKeyPressed = [currentEvent modifierFlags] & NSAlternateKeyMask;
-		if (optionKeyPressed == 0) {
 			dragOp =  NSDragOperationMove;
-		}
     }
     // we want to put the object at, not over,
     // the current row (contrast NSTableViewDropOn) 
@@ -158,8 +157,6 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 	
     return dragOp;
 }
-
-
 
 - (BOOL)tableView:(NSTableView*)tv
 	   acceptDrop:(id <NSDraggingInfo>)info
@@ -171,11 +168,6 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 	}
 	// if drag source is self, it's a move unless the Option key is pressed
     if ([info draggingSource] == tableView) {
-		
-		NSEvent *currentEvent = [NSApp currentEvent];
-		int optionKeyPressed = [currentEvent modifierFlags] & NSAlternateKeyMask;
-		
-		if (optionKeyPressed == 0) {
 			
 			NSData *rowsData = [[info draggingPasteboard] dataForType:MovedRowsType];
 			NSIndexSet *indexSet = [NSKeyedUnarchiver unarchiveObjectWithData:rowsData];
@@ -185,8 +177,8 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 			[self setSelectionIndexes:destinationIndexes];
 			
 			return YES;
-		}
     }
+    return NO;
 }
 
 
@@ -207,6 +199,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 	
 	return destinationIndexes;
 }
+
 @end
 
 #pragma mark -
