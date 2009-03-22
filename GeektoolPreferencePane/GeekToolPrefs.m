@@ -22,7 +22,7 @@
     return self;
 }
 
-- (void) mainViewDidLoad
+- (void)mainViewDidLoad
 {
     // Register for some notifications
     [[NSNotificationCenter defaultCenter] addObserver: self
@@ -51,10 +51,7 @@
                                                           object: @"GeekTool"
                                               suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately];
     
-    // so we don't jump out of groups when we add items
-    // Unfortunately, this option screws things up, so we have to leave it on
-    // and work around it. sigh...
-    [logManager setClearsFilterPredicateOnInsertion:FALSE];
+    g_logs = nil;
     [self refreshLogsArray];
     [self refreshGroupsArray];
     
@@ -68,29 +65,82 @@
     [self saveNotifications];
     //[self updatePanel];
 }
-
+                        
 - (void)refreshLogsArray
 {
+    // this fn puts all logs into the structure below.
+    // input is only from the "logs" preference
+    // g_logs has the following structure
+    /*
+     g_logs (NSMutableDictionary)
+        Group1 (key)
+            log1 |
+            log2 |-> (NSMutableArray)
+            log3 |
+            ...  |
+        Group2 (key)
+            log4 |
+            log5 |-> (NSMutableArray)
+            ...  |
+        ... (key)
+     end g_logs
+     */
+    
+    // manage that memory!
+    if (g_logs) [g_logs release];
+    g_logs = [[NSMutableDictionary alloc]init];
+    
     // load all log dictionaries into logsArray (dicts come from preferences
-    // using these dictionaries, create the actual GTLog objects into g_logs
-    g_logs = [NSMutableArray array];
+    // using these dictionaries, create the actual GTLog objects into g_logs.
     NSArray *logsArray = (NSArray*)CFPreferencesCopyAppValue(CFSTR("logs"), appID);
     
     NSEnumerator *e = [logsArray objectEnumerator];
     NSDictionary *gtDict = nil;
+    GTLog *newLog = nil;
     
     while (gtDict = [e nextObject])
     {
-        [g_logs addObject: [[GTLog alloc]initWithDictionary:gtDict]];
+        // make a new log
+        newLog = [[GTLog alloc]initWithDictionary:gtDict];
+        [self g_logsAddLog:newLog];
     }
-    
-    // have bindings do the heavy lifting for us
-    // TODO: do some NSPredicate filtering here to reflect currently selected group
-    [logManager setContent:g_logs];
 }    
+
+- (void)g_logsAddLog:(GTLog*)log
+{    
+    // check to see if this group has already been added in our data structure
+    NSMutableArray *g_logsGroupArray = [g_logs objectForKey:[log group]];
+    
+    // if the group is already in our data structure, add to it
+    if (g_logsGroupArray != nil)
+    {
+        [g_logsGroupArray addObject:log];
+        [g_logs setObject:g_logsGroupArray forKey:[log group]];
+    }
+    // else, just make a new array to play with and stick it into g_logs
+    else
+    {
+        g_logsGroupArray = [NSMutableArray arrayWithObject:log];
+        [g_logs setObject:g_logsGroupArray forKey:[log group]];
+    }
+}
 
 - (void)refreshGroupsArray
 {
+    // this fn puts all groups into the structure below
+    // input is from the "groups" preference and logs in g_logs
+    // groups has the following structure
+    /*
+     groups (NSMutableArray)
+        obj1 (NSMutableDictionary)
+            group (key)
+            Group1 (NSString)
+        obj2 (NSMutableDictionary)
+             group (key)
+             Group2 (NSString)
+        ... (NSMutableDictionary)
+     end groups
+     */
     // load groups from our preferences
     NSArray *savedGroups = (NSArray*)CFPreferencesCopyAppValue(CFSTR("groups"), appID);
     
@@ -112,13 +162,14 @@
     // now we have the user's groups, time to put in necessary groups (ie groups
     // that the logs use, but may not have been saved in the preferences for
     // some reason)
-    e = [g_logs objectEnumerator];
-    GTLog *log = nil;
+    NSArray *g_logsKeys = [g_logs allKeys];
+    e = [g_logsKeys objectEnumerator];
     NSMutableDictionary *tmpDict = nil;
+    NSString *groupName = nil;
     
-    while (log = [e nextObject])
+    while (groupName = [e nextObject])
     {
-        tmpDict = [NSMutableDictionary dictionaryWithObject:[log group] forKey:@"group"];
+        tmpDict = [NSMutableDictionary dictionaryWithObject:groupName forKey:@"group"];
         if(![groups containsObject:tmpDict]) [groups addObject:tmpDict];
     }
     
@@ -127,7 +178,7 @@
     if ([groups count] <= 0) [groups addObject:[NSMutableDictionary dictionaryWithObject:@"Default" forKey:@"group"]];
     
     // let the binding magic begin
-    [groupManager setContent:groups];    
+    [groupManager setContent:groups];  
 }
 
 - (void)saveNotifications
@@ -170,6 +221,20 @@
     [self savePrefs];
 }
 
+- (BOOL)allowSave
+{
+    return allowSave;
+}
+
+- (void)setAllowSave:(BOOL)flag
+{
+    allowSave = flag;
+}
+
+- (NSMutableDictionary*)g_logs
+{
+    return g_logs;
+}
 #pragma mark -
 #pragma mark UI management
 
@@ -209,6 +274,7 @@
     // note that -initGroupsMenu takes care of the "customize groups..." selection
     [NSApp stopModal];
     [self initGroupsMenu];
+    // TODO: savepoint
 }
 
 -(IBAction)gChooseFont:(id)sender
@@ -230,8 +296,11 @@
 
 - (IBAction)selectedGroupChanged:(id)sender
 {
-    [logManager setFilterPredicate:[NSPredicate predicateWithFormat:@"group = %@",[groupSelection titleOfSelectedItem]]];
-    [logManager rearrangeObjects];
+    // update current content with g_logs
+    [self g_logsUpdate];
+    
+    // switch manager content
+    [logManager setContent:[g_logs objectForKey:[groupSelection titleOfSelectedItem]]];
 }
 
 -(IBAction)defaultImages:(id)sender
@@ -324,8 +393,8 @@
     // select something, you fool!
     if ([currentGroup selectedItem] == nil) [currentGroup selectItemAtIndex:0];
     
-    // display items only in this group
-    [logManager setFilterPredicate:[NSPredicate predicateWithFormat:@"group = %@",[groupSelection titleOfSelectedItem]]];
+    // also, since we just selected something, make the log correct as well
+    [logManager setContent:[g_logs objectForKey:[groupSelection titleOfSelectedItem]]];
 }
 
 - (void)showGroupsCustomization
@@ -499,112 +568,72 @@
 
 #pragma mark -
 #pragma mark Preferences handling
+- (void)g_logsUpdate
+{
+    NSArray *updatedLogs = [logManager content];
+    NSString *group = [[updatedLogs lastObject]group];
+    
+    // handle nil
+    if (group)
+        [g_logs setObject:updatedLogs forKey:group];
+}
+
+- (void)savePrefs
+{
+    // becasue of our save notifiers, this method gets overcalled
+    // by "gating" this, we can control when we want to save so we don't waste
+    // (as much) time
+    //if (allowSave)
+    if (1)
+    {
+        // sync our active log with g_logs so g_logs is current before saving
+        [self g_logsUpdate];
+        
+        // when we do -allValues, we get an array of arrays. we would just like
+        // all the values in one array, not multiple arrays
+        NSArray *splinteredLogs = [g_logs allValues];
+        NSMutableArray *allLogs = [NSMutableArray array];
+        
+        NSEnumerator *e = [splinteredLogs objectEnumerator];
+        NSArray *tmpArray = nil;
+        while (tmpArray = [e nextObject])
+        {
+            [allLogs addObjectsFromArray:tmpArray];
+        }    
+        
+        
+        NSMutableArray *logsArray = [NSMutableArray array];
+        e = [allLogs objectEnumerator];
+        GTLog *gtl = nil;
+        
+        while (gtl = [e nextObject])
+        {
+            [logsArray addObject: [gtl dictionary]];
+        }
+        
+        NSMutableArray *groupsArray = [NSMutableArray array];
+        e = [groups objectEnumerator];
+        NSDictionary *tmpDict = nil;
+        
+        while (tmpDict = [e nextObject])
+        {
+            [groupsArray addObject: [tmpDict valueForKey:@"group"]];
+        }
+        
+        CFPreferencesSetAppValue(CFSTR("currentGroup"), [currentGroup titleOfSelectedItem], appID);
+        CFPreferencesSetAppValue(CFSTR("logs"), logsArray, appID);
+        CFPreferencesSetAppValue(CFSTR("groups"), groupsArray, appID);
+        CFPreferencesAppSynchronize(appID);
+        
+        [self updateWindows];
+    }
+}
+
 - (IBAction)gApply:(id)sender
 {
     [self applyChanges];
     [self savePrefs];
     [self updateWindows];
-}
-
-- (void)savePrefs
-{
-    NSMutableArray *logsArray = [NSMutableArray array];
-    NSEnumerator *e = [g_logs objectEnumerator];
-    GTLog *gtl = nil;
-    
-    while (gtl = [e nextObject])
-    {
-        [logsArray addObject: [gtl dictionary]];
-    }
-    
-    NSMutableArray *groupsArray = [NSMutableArray array];
-    e = [groups objectEnumerator];
-    NSDictionary *tmpDict = nil;
-    
-    while (tmpDict = [e nextObject])
-    {
-        [groupsArray addObject: [tmpDict valueForKey:@"group"]];
-    }
-    
-    CFPreferencesSetAppValue(CFSTR("currentGroup"), [currentGroup titleOfSelectedItem], appID);
-    CFPreferencesSetAppValue(CFSTR("logs"), logsArray, appID);
-    CFPreferencesSetAppValue(CFSTR("groups"), groupsArray, appID);
-    CFPreferencesAppSynchronize(appID);
-    
-    [self updateWindows];
-}
-- (void)applyChanges
-{
-    /*
-     if (lastSelected == -1)
-     return;
-     GTLog *currentLog = [g_logs objectAtIndex: lastSelected];
-     
-     [currentLog setFile: [f1FilePath stringValue]];
-     
-     [currentLog setCommand: [c2Command stringValue]];
-     [currentLog setHide: [c2Hide state]];
-     
-     [currentLog setShowIcon: [i2ShowIcon state]];
-     [currentLog setForceTitle: [i2Title stringValue]];
-     [currentLog setForce: [i2Force state]];
-     
-     [currentLog setImageURL: [s3URL stringValue]];
-     [currentLog setTransparency: [t3transparency floatValue]];
-     [currentLog setImageFit: [t3Fit indexOfSelectedItem]];
-     [currentLog setPictureAlignment: [self pictureAlignment]];
-     
-     switch ([self logType])
-     {   
-     // TODO: change these to reflect the setup we have
-     case 0 : // File type
-     [currentLog setTextColor: [[cf1TextColor color] colorUsingColorSpaceName: @"NSCalibratedRGBColorSpace" ]];
-     [currentLog setBackgroundColor: [[cf1BackgroundColor color] colorUsingColorSpaceName: @"NSCalibratedRGBColorSpace"]];
-     [currentLog setFontName: [[cf1FontTextField font] fontName]];
-     [currentLog setFontSize: [[cf1FontTextField font] pointSize]];
-     [currentLog setShadowText: [t1ShadowText state]];
-     [currentLog setShadowWindow: [cf1ShadowWindow state]];
-     [currentLog setAlignment: [self alignment]];
-     [currentLog setFrameType: [cf1FrameType indexOfSelectedItem]];
-     [currentLog setWrap: [t1TextWrap state]];
-     break;
-     case 1 : // Command type
-     [currentLog setTextColor: [[cf2TextColor color] colorUsingColorSpaceName: @"NSCalibratedRGBColorSpace" ]];
-     [currentLog setBackgroundColor: [[cf2BackgroundColor color] colorUsingColorSpaceName: @"NSCalibratedRGBColorSpace"]];
-     [currentLog setFontName: [[cf2FontTextField font] fontName]];
-     [currentLog setFontSize: [[cf2FontTextField font] pointSize]];
-     [currentLog setShadowText: [t2ShadowText state]];
-     [currentLog setShadowWindow: [cf2ShadowWindow state]];
-     [currentLog setAlignment: [self alignment]];
-     [currentLog setRefresh: [c2Refresh intValue]];
-     [currentLog setFrameType: [cf2FrameType indexOfSelectedItem]];
-     [currentLog setWrap: [t2TextWrap state]];
-     //if ([i2ImageSuccess image])
-     [currentLog setImageSuccess: [i2ImageSuccess image]];
-     //if ([i2ImageFailure image])
-     [currentLog setImageFailure: [i2ImageFailure image]];
-     break;
-     case 2 :
-     [currentLog setRefresh: [s3Refresh intValue]];
-     [currentLog setFrameType: [t3FrameType indexOfSelectedItem]];
-     break;
-     }
-     
-     [currentLog setType: [self logType]];
-     
-     // Image type
-     
-     // Generic
-     [currentLog setRect: NSMakeRect([sX intValue],
-     [sY intValue],
-     [sW intValue],
-     [sH intValue])];
-     
-     if ([kot state])
-     [currentLog setWindowLevel: NSStatusWindowLevel];
-     else
-     [currentLog setWindowLevel: kCGDesktopWindowLevel];
-     */
 }
 
 - (IBAction)menuCheckBoxChanged:(id)sender

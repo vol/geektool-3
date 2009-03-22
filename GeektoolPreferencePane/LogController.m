@@ -29,47 +29,6 @@ NSString *CopiedRowsType = @"GTLog_Copied_Item";
 }
 
 // thank you mr mmalc, you fixed my setClearsFilterPredicateOnInsertion: problem
-- (NSArray *)arrangeObjects:(NSArray *)objects
-{
-	/*
-	 Create array of objects that match search string.
-	 Also add any newly-created object unconditionally:
-	 (a) You'll get an error if a newly-added object isn't added to arrangedObjects.
-	 (b) The user will see newly-added objects even if they don't match the search term.
-	 */
-    
-    NSMutableArray *matchedObjects = [NSMutableArray arrayWithCapacity:[objects count]];
-    
-	NSEnumerator *oEnum = [objects objectEnumerator];
-    id item;	
-    while (item = [oEnum nextObject])
-	{
-		// if the item has just been created, add it unconditionally
-		if (item == newObject)
-		{
-            [matchedObjects addObject:item];
-			newObject = nil;
-		}
-		else
-		{
-			//  Use of local autorelease pool here is probably overkill, but may be useful in a larger-scale application.
-			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-			NSString *groupName = [item valueForKeyPath:@"group"];
-			if ([[currentActiveGroup titleOfSelectedItem] isEqualToString:groupName])
-			{
-				[matchedObjects addObject:item];
-			}
-			[pool release];
-		}
-    }
-    return [super arrangeObjects:matchedObjects];
-}
-
-- (id)newObject
-{
-    newObject = [super newObject];
-    return newObject;
-}
 
 #pragma mark Methods
 - (IBAction)duplicateLog:(id)sender
@@ -168,14 +127,13 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 	}
 	// if drag source is self, it's a move unless the Option key is pressed
     if ([info draggingSource] == tableView) {
-			
 			NSData *rowsData = [[info draggingPasteboard] dataForType:MovedRowsType];
 			NSIndexSet *indexSet = [NSKeyedUnarchiver unarchiveObjectWithData:rowsData];
 			
 			NSIndexSet *destinationIndexes = [self moveObjectsInArrangedObjectsFromIndexes:indexSet toIndex:row];
 			// set selected rows to those that were just moved
 			[self setSelectionIndexes:destinationIndexes];
-			
+        
 			return YES;
     }
     return NO;

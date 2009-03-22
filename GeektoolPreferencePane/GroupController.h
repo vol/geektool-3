@@ -8,9 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import "GTLog.h"
+#import "GeekToolPrefs.h"
 
 @interface GroupController : NSArrayController {
     IBOutlet id logController;
+    IBOutlet id preferencesController;
 }
 #pragma mark Methods
 - (IBAction)duplicateSelectedGroup:(id)sender;

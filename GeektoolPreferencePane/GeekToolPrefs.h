@@ -17,7 +17,7 @@
 #define DGROUP [[self bundle] localizedStringForKey:@"Default Group" value:nil table:nil]
 #define COPY [[self bundle] localizedStringForKey:@"copy" value:nil table:nil]
 
-
+//NSMutableDictionary *g_logs;
 @interface GeekToolPrefs : NSPreferencePane 
 {
     CFStringRef appID;
@@ -28,8 +28,12 @@
     IBOutlet id groupSelection;
     IBOutlet id groupsSheet;
     
-    NSMutableArray *g_logs;
+    NSMutableDictionary *g_logs;
     NSMutableArray *groups;
+    NSString *editingGroup;
+    
+    BOOL allowSave;
+    
     BOOL isAddingLog;
     NSString *guiPool;
 
@@ -44,6 +48,10 @@
 - (void)refreshGroupsArray;
 - (void)saveNotifications;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context;
+- (BOOL)allowSave;
+- (void)setAllowSave:(BOOL)flag;
+- (NSMutableDictionary*)g_logs;
+- (void)g_logsAddLog:(GTLog*)log;
 #pragma mark -
 #pragma mark UI management
 - (IBAction)fileChoose:(id)sender;
@@ -60,13 +68,6 @@
 #pragma mark Group Management
 - (void)initGroupsMenu;
 - (void)showGroupsCustomization;
-- (void)setSelectedGroup:(NSString*)myGroupName;
-- (NSString*)currentGroupMenu;
-- (int)numberOfGroups;
-#pragma mark -
-#pragma mark Log management
-- (GTLog*)currentLog;
-- (IBAction)duplicateLog:(id)sender;
 #pragma mark -
 #pragma mark Daemon interaction
 - (void)didSelect;
@@ -81,7 +82,7 @@
 - (void)reorder:(int)from to:(int)to;
 #pragma mark -
 #pragma mark Preferences handling
-- (IBAction)gApply:(id)sender;
+- (void)g_logsUpdate;
 - (void)savePrefs;
 - (void)applyChanges;
 - (IBAction)menuCheckBoxChanged:(id)sender;

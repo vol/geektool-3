@@ -19,8 +19,6 @@
         NSArray *selectedObjects = [self selectedObjects];
         NSEnumerator *e = [selectedObjects objectEnumerator];
        
-        NSPredicate *predicate = nil;
-        NSArray *filteredArray = nil;
         NSDictionary *currentGroup = nil;
         NSString *currentGroupString = nil;
         NSEnumerator *f = nil;
@@ -30,17 +28,12 @@
         // loop for however many items in the set
         while (currentGroup = [e nextObject])
         {
-            currentGroupString = [currentGroup valueForKey:@"group"];
-            predicate = [NSPredicate predicateWithFormat:@"group = %@", currentGroupString];
-            filteredArray = [[logController content] filteredArrayUsingPredicate:predicate];
-                    
-            f = [filteredArray objectEnumerator];
-            while (origLog = [f nextObject])
-            {
-                copyLog = [origLog copy];
-                [copyLog setGroup:[[self duplicateCheck:currentGroupString]valueForKey:@"group"]];
-                [logController addObject:copyLog];
-            }
+            // grab the logs from g_logs
+            currentGroupString = [currentGroup valueForKey:@"group"];   
+            
+            NSMutableArray *groupCopy = [[[preferencesController g_logs]objectForKey:currentGroupString] copy];
+            [groupCopy makeObjectsPerformSelector:@selector(setGroup:) withObject:[[self duplicateCheck:currentGroupString]valueForKey:@"group"]];
+            [[preferencesController g_logs] setObject:groupCopy forKey:[[self duplicateCheck:currentGroupString]valueForKey:@"group"]];
             
             [self addObject:[self duplicateCheck:currentGroupString]];
         }
@@ -56,8 +49,6 @@
         NSArray *selectedObjects = [self selectedObjects];
         NSEnumerator *e = [selectedObjects objectEnumerator];
         
-        NSPredicate *predicate = nil;
-        NSArray *filteredArray = nil;
         NSDictionary *currentGroup = nil;
         NSString *currentGroupString = nil;
         
@@ -65,10 +56,14 @@
         while (currentGroup = [e nextObject])
         {
             currentGroupString = [currentGroup valueForKey:@"group"];
-            predicate = [NSPredicate predicateWithFormat:@"group = %@", currentGroupString];
-            filteredArray = [[logController content] filteredArrayUsingPredicate:predicate];
             
-            [logController removeObjects:filteredArray];
+            // remove all items from logController
+            [logController removeObjects:[logController content]];
+            
+            // delete the key from the main g_logs
+            [[preferencesController g_logs] removeObjectForKey:currentGroupString];
+            
+            // remove the group from ourself
             [self removeObject:currentGroup];
         }
     }
@@ -99,23 +94,30 @@
 
 #pragma mark Table Delegate Methods
 // textShouldEndEditing: wasn't working for some reason...
+// this just checks to make sure 2 groups dont have the same name when the 
+// group is renamed
 - (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)textObject
 {
     NSString *groupName = [textObject string];
+    
+    // they have the same name, dont accept the edit
     if ([self groupExists: groupName])
         return FALSE;
+    
+    // else, the names are different and proceed with the edit
     else
     {
         // you can never be too careful...
         int selectionIndex = [self selectionIndex];       
         if (selectionIndex != NSNotFound)
         {
-            NSDictionary *selectedGroup = [self selectedObject];
-            NSString *selectedGroupString = [selectedGroup valueForKey:@"group"];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"group = %@", selectedGroupString];
-            NSArray *filteredArray = [[logController content] filteredArrayUsingPredicate:predicate];
+            NSString *groupBeforeEdit = [[[logController content] lastObject]group];
             
-            [filteredArray makeObjectsPerformSelector:@selector(setGroup:) withObject:[textObject string]];
+            // delete the old key from the main g_logs
+            [[preferencesController g_logs] removeObjectForKey:groupBeforeEdit];
+            
+            // commit the new group to logController. g_log will be handled not by us
+            [[logController content] makeObjectsPerformSelector:@selector(setGroup:) withObject:[textObject string]];
         }
         return TRUE;
     }
