@@ -13,14 +13,18 @@
 @interface GroupController : NSArrayController {
     IBOutlet id logController;
     IBOutlet id preferencesController;
+    
+    NSString *groupBeforeEdit;
 }
 #pragma mark Methods
+- (IBAction)addGroup:(id)sender;
 - (IBAction)duplicateSelectedGroup:(id)sender;
 - (IBAction)removeSelectedGroup:(id)sender;
 #pragma mark Checks
 - (BOOL)groupExists:(NSString*)myGroupName;
 - (NSMutableDictionary*)duplicateCheck:(NSString*)myGroupName;
 #pragma mark Table Delegate Methods
+- (BOOL)control:(NSControl *)control textShouldBeginEditing:(NSText *)textObject;
 - (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)textObject;
 #pragma mark Convience
 - (id)selectedObject;

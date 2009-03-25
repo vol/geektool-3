@@ -13,6 +13,7 @@
     IBOutlet id currentActiveGroup;
     IBOutlet id tableView;
     id newObject;
+    IBOutlet id preferencesController;
 
 }
 #pragma mark Methods

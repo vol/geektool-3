@@ -7,6 +7,7 @@
 //
 
 #import "LogController.h"
+#import "GeekToolPrefs.h"
 
 NSString *MovedRowsType = @"GTLog_Moved_Item";
 NSString *CopiedRowsType = @"GTLog_Copied_Item";
@@ -26,6 +27,24 @@ NSString *CopiedRowsType = @"GTLog_Copied_Item";
     [tableView setAllowsMultipleSelection:YES];
 	
 	[super awakeFromNib];
+}
+
+- (void)addObject:(id)object
+{
+    // save only once
+    [preferencesController setAllowSave:FALSE];
+    [super addObject:object];
+    [preferencesController setAllowSave:TRUE];
+    [preferencesController savePrefs];
+}
+
+- (void)remove:(id)object
+{
+    // save only once
+    [preferencesController setAllowSave:FALSE];
+    [super remove:object];
+    [preferencesController setAllowSave:TRUE];
+    [preferencesController savePrefs];
 }
 
 // thank you mr mmalc, you fixed my setClearsFilterPredicateOnInsertion: problem
@@ -60,9 +79,11 @@ NSString *CopiedRowsType = @"GTLog_Copied_Item";
     NSString *currentGroupString = [currentActiveGroup titleOfSelectedItem];
     GTLog *toAdd = [[GTLog alloc]init];
     [toAdd setGroup:currentGroupString];
+    
     [self addObject:toAdd];
     [toAdd release];
 }
+
 
 #pragma mark Drag n' Drop Stuff
 // thanks to mmalc for figuring most of this stuff out for me (and just being amazing)

@@ -52,6 +52,7 @@
                                               suspensionBehavior: NSNotificationSuspensionBehaviorDeliverImmediately];
     
     g_logs = nil;
+    [self setAllowSave:TRUE];
     [self refreshLogsArray];
     [self refreshGroupsArray];
     
@@ -235,6 +236,7 @@
 {
     return g_logs;
 }
+
 #pragma mark -
 #pragma mark UI management
 
@@ -274,7 +276,6 @@
     // note that -initGroupsMenu takes care of the "customize groups..." selection
     [NSApp stopModal];
     [self initGroupsMenu];
-    // TODO: savepoint
 }
 
 -(IBAction)gChooseFont:(id)sender
@@ -299,8 +300,13 @@
     // update current content with g_logs
     [self g_logsUpdate];
     
+    // the below will trigger unnecessary saves, so ignore saves for that part
+    [self setAllowSave:FALSE];
+    
     // switch manager content
     [logManager setContent:[g_logs objectForKey:[groupSelection titleOfSelectedItem]]];
+    
+    [self setAllowSave:TRUE];
 }
 
 -(IBAction)defaultImages:(id)sender
@@ -394,7 +400,9 @@
     if ([currentGroup selectedItem] == nil) [currentGroup selectItemAtIndex:0];
     
     // also, since we just selected something, make the log correct as well
+    [self setAllowSave:FALSE];
     [logManager setContent:[g_logs objectForKey:[groupSelection titleOfSelectedItem]]];
+    [self setAllowSave:TRUE];
 }
 
 - (void)showGroupsCustomization
@@ -494,6 +502,7 @@
     }
     
 }
+
 - (void)updateWindows
 {
     //[RemoteGeekTool updateWindows];
@@ -522,19 +531,18 @@
     else if (![[[[logManager selectedObjects]objectAtIndex:0]group] isEqual: [currentGroup titleOfSelectedItem]])
         j = -1;
     
-    // finally, loop through and get the index of something? not quite sure
+    // get index of log to be highlighted
     else
     {
-        for (i = 0; i < [logManager selectionIndex]; i++)
-        {
-            if ([[[g_logs objectAtIndex: i]group] isEqual: [currentGroup titleOfSelectedItem]])
-                j++;
-        }
+        NSArray *activeGroupArray = [g_logs objectForKey:[currentGroup titleOfSelectedItem]];
+        j = [logManager selectionIndex];
     }
+    
     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                               [currentGroup titleOfSelectedItem], @"groupName",
                               [NSNumber numberWithInt: j], @"index",
                               nil];
+    
     [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTHighlightWindow"
                                                                    object: @"GeekToolPrefs"
                                                                  userInfo: userInfo
@@ -547,6 +555,7 @@
     //[self savePrefs];
     //[self updateWindows];
 }
+
 - (void)applyAndNotifyNotification:(NSNotification*)aNotification
 {
     //[self applyChanges];
@@ -583,8 +592,7 @@
     // becasue of our save notifiers, this method gets overcalled
     // by "gating" this, we can control when we want to save so we don't waste
     // (as much) time
-    //if (allowSave)
-    if (1)
+    if (allowSave)
     {
         // sync our active log with g_logs so g_logs is current before saving
         [self g_logsUpdate];
@@ -649,6 +657,7 @@
         [self unloadMenu];
     }
 }
+
 - (void)loadMenu
 {
     NSString *menuExtraPath;
@@ -665,6 +674,7 @@
     CoreMenuExtraAddMenuExtra(url, 0, 0, nil, 0, &outExtra);
     CFRelease(url);
 }
+
 - (void)unloadMenu
 {
     typedef struct OpaqueMenuExtraRef *MenuExtraRef;
@@ -677,6 +687,7 @@
     if (menuExtra != nil)
         CoreMenuExtraRemoveMenuExtra( menuExtra, &outExtra );    
 }
+
 #pragma mark -
 #pragma mark Misc
 

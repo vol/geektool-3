@@ -10,6 +10,13 @@
 
 @implementation GroupController
 #pragma mark Methods
+- (IBAction)addGroup:(id)sender
+{
+    // localize
+    NSMutableDictionary *groupToAdd = [self duplicateCheck:@"New Group"];
+    [self addObject:groupToAdd];
+}
+
 - (IBAction)duplicateSelectedGroup:(id)sender
 {
     // just in case this gets called with nothing selected...
@@ -21,21 +28,41 @@
        
         NSDictionary *currentGroup = nil;
         NSString *currentGroupString = nil;
-        NSEnumerator *f = nil;
-        GTLog *origLog = nil;
-        GTLog *copyLog = nil;
+        NSDictionary *newGroup = nil;
+        NSString *newGroupString = nil;
         
         // loop for however many items in the set
         while (currentGroup = [e nextObject])
         {
             // grab the logs from g_logs
-            currentGroupString = [currentGroup valueForKey:@"group"];   
+            currentGroupString = [currentGroup valueForKey:@"group"];
             
-            NSMutableArray *groupCopy = [[[preferencesController g_logs]objectForKey:currentGroupString] copy];
-            [groupCopy makeObjectsPerformSelector:@selector(setGroup:) withObject:[[self duplicateCheck:currentGroupString]valueForKey:@"group"]];
-            [[preferencesController g_logs] setObject:groupCopy forKey:[[self duplicateCheck:currentGroupString]valueForKey:@"group"]];
+            // make our new objects for the duplicate object
+            newGroup = [self duplicateCheck:currentGroupString];
+            newGroupString = [newGroup valueForKey:@"group"];
             
-            [self addObject:[self duplicateCheck:currentGroupString]];
+            // all the logs we intend to duplicate
+            NSMutableArray *origGroup = [[preferencesController g_logs]objectForKey:currentGroupString];
+            NSEnumerator *f = [origGroup objectEnumerator];
+            NSMutableArray *copyGroup = [NSMutableArray array];
+            GTLog *origLog = nil;
+            GTLog *copyLog = nil;
+
+            // loop through all logs we wish to duplicate
+            while (origLog = [f nextObject])
+            {
+                copyLog = [[GTLog alloc]initWithDictionary:[origLog dictionary]];
+                [copyGroup addObject:copyLog];
+            }
+            
+            // on that copy, change the groups of the logs
+            [copyGroup makeObjectsPerformSelector:@selector(setGroup:) withObject:newGroupString];
+            
+            // put the array of objects back into g_logs under the duplicate name
+            [[preferencesController g_logs] setObject:copyGroup forKey:newGroupString];
+            
+            // let us know about the new group too
+            [self addObject:newGroup];
         }
     }
 }
@@ -56,9 +83,6 @@
         while (currentGroup = [e nextObject])
         {
             currentGroupString = [currentGroup valueForKey:@"group"];
-            
-            // remove all items from logController
-            [logController removeObjects:[logController content]];
             
             // delete the key from the main g_logs
             [[preferencesController g_logs] removeObjectForKey:currentGroupString];
@@ -93,6 +117,13 @@
 }
 
 #pragma mark Table Delegate Methods
+- (BOOL)control:(NSControl *)control textShouldBeginEditing:(NSText *)textObject
+{
+    // we just want to know what the group was called before editing
+    groupBeforeEdit = [[self selectedObject] objectForKey:@"group"];
+    return TRUE;
+}
+
 // textShouldEndEditing: wasn't working for some reason...
 // this just checks to make sure 2 groups dont have the same name when the 
 // group is renamed
@@ -101,7 +132,7 @@
     NSString *groupName = [textObject string];
     
     // they have the same name, dont accept the edit
-    if ([self groupExists: groupName])
+    if ([self groupExists: groupName] || [groupName isEqualToString:@""])
         return FALSE;
     
     // else, the names are different and proceed with the edit
@@ -110,14 +141,27 @@
         // you can never be too careful...
         int selectionIndex = [self selectionIndex];       
         if (selectionIndex != NSNotFound)
-        {
-            NSString *groupBeforeEdit = [[[logController content] lastObject]group];
+        {            
+            // normally, g_logs is updated for us, but since we don't play nice
+            // with logController, we could accidently skip it, so just do it here
+            // for saftey
+            NSMutableArray *origLogs = [[preferencesController g_logs] objectForKey:groupBeforeEdit];
             
-            // delete the old key from the main g_logs
-            [[preferencesController g_logs] removeObjectForKey:groupBeforeEdit];
+            // change our group of our logs to the new group
+            [origLogs makeObjectsPerformSelector:@selector(setGroup:) withObject:groupName];
             
-            // commit the new group to logController. g_log will be handled not by us
-            [[logController content] makeObjectsPerformSelector:@selector(setGroup:) withObject:[textObject string]];
+            // update logs and delete old ones (if needed)
+            if (origLogs)
+            {
+                [[preferencesController g_logs] setObject:origLogs forKey:groupName];
+                [[preferencesController g_logs] removeObjectForKey:groupBeforeEdit];
+            }
+            // otherwise, just make a blank nsmutablearray and put that in
+            else
+            {
+                [[preferencesController g_logs] setObject:[NSMutableArray array] forKey:groupName];
+            }
+            
         }
         return TRUE;
     }

@@ -2,9 +2,6 @@
 #import "LogWindow.h"
 #import "LogWindowController.h"
 
-#define _NO [NSNumber numberWithBool: NO]
-#define _YES [NSNumber numberWithBool: YES]
-
 @implementation GeekTool
 - (void)awakeFromNib
 {
@@ -80,14 +77,16 @@
     
     else if ([[aNotification name] isEqualTo: @"GTHighlightWindow"])
     {
-        // if the 
+        // check to make sure that the group is part of the active group
         if ([[[aNotification userInfo] objectForKey: @"groupName"] isEqualTo:
              [[NSUserDefaults standardUserDefaults] objectForKey: @"currentGroup"]])
         {
             int index = [[[aNotification userInfo] objectForKey: @"index"] intValue];
-            unsigned int i;
-            for (i=0;i<[g_logs count];i++)
-                [[g_logs objectAtIndex: i] setHighlighted: NO];
+           
+            // make all logs non-highlighted
+            [g_logs makeObjectsPerformSelector:@selector(setHighlighted:) withObject:NO];
+            
+            // make the log at index highlighted
             if (index > -1)
                 [[g_logs objectAtIndex: index] setHighlighted: YES];
             
@@ -128,7 +127,7 @@
 - (void)reorder
 {
     NSEnumerator *e = [g_logs objectEnumerator];
-    GTLog *log;
+    GTLog *log = nil;
     while (log = [e nextObject])
         [log front];
 }
@@ -145,8 +144,8 @@
     [g_logs removeAllObjects];
     
     // This tmp array stores preferences dictionary "as is"
-    NSString *currentGroup = [[NSUserDefaults standardUserDefaults] objectForKey:"currentGroup"];
-    NSArray *logs = [[NSUserDefaults standardUserDefaults] objectForKey:"logs"];
+    NSString *currentGroup = [[NSUserDefaults standardUserDefaults] objectForKey:@"currentGroup"];
+    NSArray *logs = [[NSUserDefaults standardUserDefaults] objectForKey:@"logs"];
     
     if (logs == nil ) logs = [NSArray array];
     
@@ -167,8 +166,7 @@
         [g_logs addObject: log];
         [log openWindow];
         [log release];
-    }
-    
+    }    
     logs = nil;
     [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTUpdateMenu"
                                                                    object: @"GeekTool"
