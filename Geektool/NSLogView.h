@@ -26,7 +26,6 @@
 - (void)mouseDragged:(NSEvent *)theEvent;
 - (void)setHighlighted:(BOOL)flag;
 - (void)setCrop: (BOOL)aBool;
-- (void)timerSendPosition:(NSTimer*)aTimer;
 - (void)sendPosition;
 
 @end

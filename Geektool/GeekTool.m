@@ -26,6 +26,8 @@
     // Good, now publish the fact we are running, in case preferencePane is launched
     [self notifyLaunched];
     
+    highlighted = -1;
+    
     //[self loadDefaults];
     [self updateWindows: NO];    
     [self setDelegate: self];
@@ -135,14 +137,9 @@
 // This method is responsible of reading preferences and initiliaze the g_logs array
 - (void)updateWindows:(BOOL)force
 {
-    // TODO: this is probably horribly inefficient with the memory being dumped and realloced all the time...
-    // it wasn't like this before, but i decided to change it !
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [NSUserDefaults resetStandardUserDefaults];
-    
-    [g_logs makeObjectsPerformSelector:@selector(terminate)];
-    [g_logs removeAllObjects];
-    
+        
     // This tmp array stores preferences dictionary "as is"
     NSString *currentGroup = [[NSUserDefaults standardUserDefaults] objectForKey:@"currentGroup"];
     NSArray *logs = [[NSUserDefaults standardUserDefaults] objectForKey:@"logs"];
@@ -153,6 +150,8 @@
     // We add log entries if there are new, and we delete some that could have been
     // deleted in prefs
     
+    unsigned int i = 0;
+    
     NSEnumerator *e = [logs objectEnumerator];
     NSDictionary *logD;
     while (logD = [e nextObject])
@@ -160,22 +159,43 @@
         // make sure to load only windows that are in the active group
         if (![[logD valueForKey: @"group"] isEqual: currentGroup])
             continue;
-        //GTLog * log = [[GTLog alloc] initWithDictionary: logD] ;
-        // If this is verified, we are updating existing entries
-        GTLog *log = [[GTLog alloc] initWithDictionary: logD];
-        [g_logs addObject: log];
-        [log openWindow];
-        [log release];
-    }    
+        
+        // use previously existing logs (ie don't allocate anything new)
+        if (i < [g_logs count])
+        {
+            GTLog *currentLog = [g_logs objectAtIndex: i];
+            [currentLog setDictionary: logD force: force];
+        }
+        
+        // make new logs
+        else
+        {
+            GTLog *log = [[GTLog alloc] initWithDictionary: logD];
+            [g_logs addObject: log];
+            [log openWindow];
+            [log release];
+        }
+        i++;        
+    }  
+    // Remove all logs upon the count in preferences
+    // (those have been deleted)
+    while ([ g_logs count ] > i )
+    {
+        [[ g_logs lastObject ] terminate ];
+        [ g_logs removeLastObject ];
+    }
     logs = nil;
     [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTUpdateMenu"
                                                                    object: @"GeekTool"
                                                                  userInfo: nil
                                                        deliverImmediately: YES];
     [pool release];
+    
+    if (highlighted > -1)
+        [[ g_logs objectAtIndex: highlighted ] setHighlighted: YES ];
 }
 
-// This method takes content of g_logs array and update windows with last values in date
+// magnetic windows enabled if the command key is held down
 - (void)flagsChanged:(NSEvent*)event
 {
     if ([event modifierFlags] & NSCommandKeyMask)
@@ -217,9 +237,6 @@
 {
     return yGuides;
 }
-- (void)setMagn:(BOOL)aBool
-{
-}
 // Argh, who changed screen settings ????
 - (void)applicationDidChangeScreenParameters:(NSNotification *)aNotification
 {
@@ -240,5 +257,6 @@
 -(void)dealloc
 {
     [g_logs release];
+    [super dealloc];
 }
 @end

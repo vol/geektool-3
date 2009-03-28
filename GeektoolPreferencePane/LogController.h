@@ -28,6 +28,7 @@ toPasteboard:(NSPasteboard *)pboard;
 // utility methods
 -(NSIndexSet *) moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet
 toIndex:(unsigned int)insertIndex;
+- (id)selectedObject;
 @end
 
 #pragma mark -

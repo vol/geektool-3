@@ -148,14 +148,14 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 	}
 	// if drag source is self, it's a move unless the Option key is pressed
     if ([info draggingSource] == tableView) {
-			NSData *rowsData = [[info draggingPasteboard] dataForType:MovedRowsType];
-			NSIndexSet *indexSet = [NSKeyedUnarchiver unarchiveObjectWithData:rowsData];
-			
-			NSIndexSet *destinationIndexes = [self moveObjectsInArrangedObjectsFromIndexes:indexSet toIndex:row];
-			// set selected rows to those that were just moved
-			[self setSelectionIndexes:destinationIndexes];
+        NSData *rowsData = [[info draggingPasteboard] dataForType:MovedRowsType];
+        NSIndexSet *indexSet = [NSKeyedUnarchiver unarchiveObjectWithData:rowsData];
         
-			return YES;
+        NSIndexSet *destinationIndexes = [self moveObjectsInArrangedObjectsFromIndexes:indexSet toIndex:row];
+        // set selected rows to those that were just moved
+        [self setSelectionIndexes:destinationIndexes];
+        [preferencesController updateWindows];
+        return YES;
     }
     return NO;
 }
@@ -177,6 +177,15 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 	[self insertObjects:objectsToMove atArrangedObjectIndexes:destinationIndexes];
 	
 	return destinationIndexes;
+}
+
+- (id)selectedObject
+{
+    int selectionIndex = [self selectionIndex];       
+    if (selectionIndex != NSNotFound)
+        return [[self selectedObjects] objectAtIndex:0];
+    else
+        return nil;
 }
 
 @end
@@ -211,5 +220,4 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 	
 	return count;
 }
-
 @end

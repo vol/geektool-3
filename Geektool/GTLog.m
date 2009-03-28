@@ -80,6 +80,112 @@
 {
 	if (!(self = [super init])) return nil;
     
+    [self setDictionary:dictionary];
+    
+    NSString *appSupp = [[NSString stringWithString: @"~/Library/Application Support/GeekTool Scripts"] stringByExpandingTildeInPath];
+    NSMutableDictionary *tempEnv = [NSMutableDictionary dictionaryWithDictionary:
+                                    [[NSProcessInfo processInfo] environment]];
+    NSString *path = [tempEnv objectForKey: @"PATH"];
+    [tempEnv setObject: [NSString stringWithFormat: @"%@:%@",appSupp,path] forKey: @"PATH"];
+    
+    env =  [tempEnv copy];
+    return self;
+}
+
+- (NSDictionary*)dictionary
+{
+    //TODO: Add in imageFailure/success preferences
+    NSDictionary *textColorDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                         [NSNumber numberWithFloat: [[self textColor]redComponent]]  ,@"red",
+                                         [NSNumber numberWithFloat: [[self textColor]greenComponent]],@"green",
+                                         [NSNumber numberWithFloat: [[self textColor]blueComponent]] ,@"blue",
+                                         [NSNumber numberWithFloat: [[self textColor]alphaComponent]],@"alpha",
+                                         nil];
+    
+    NSDictionary *backgroundColorDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [NSNumber numberWithFloat: [[self backgroundColor]redComponent]]  ,@"red",
+                                               [NSNumber numberWithFloat: [[self backgroundColor]greenComponent]],@"green",
+                                               [NSNumber numberWithFloat: [[self backgroundColor]blueComponent]] ,@"blue",
+                                               [NSNumber numberWithFloat: [[self backgroundColor]alphaComponent]],@"alpha",
+                                               nil];    
+    
+    logDictionary=[NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                           [self name]                                       ,@"name",
+                                           [NSNumber numberWithInt: [self type]]             ,@"type",
+                                           [NSNumber numberWithBool: [self enabled]]         ,@"enabled",
+                                           [self group]                                      ,@"group",
+                                           
+                                           [self fontName]                                   ,@"fontName",
+                                           [NSNumber numberWithFloat: [self fontSize]]       ,@"fontSize",
+                                           
+                                           [self file]                                       ,@"file",
+                                           
+                                           [self command]                                    ,@"command",
+                                           [NSNumber numberWithBool: [self hide]]            ,@"hide",
+                                           [NSNumber numberWithInt: [self refresh]]          ,@"refresh",
+                                           
+                                           textColorDictionary                               ,@"textColor",
+                                           backgroundColorDictionary                         ,@"backgroundColor",
+                                           [NSNumber numberWithBool: [self wrap]]            ,@"wrap",
+                                           [NSNumber numberWithBool: [self shadowText]]      ,@"shadowText",
+                                           [NSNumber numberWithBool: [self shadowWindow]]    ,@"shadowWindow",
+                                           [NSNumber numberWithInt: [self alignment]]        ,@"alignment",
+                                           
+                                           [NSNumber numberWithBool: [self force]]           ,@"force",
+                                           [self forceTitle]                                 ,@"forceTitle",
+                                           [NSNumber numberWithBool: [self showIcon]]        ,@"showIcon",
+                                           
+                                           [NSNumber numberWithInt: [self pictureAlignment]] ,@"pictureAlignment",
+                                           [self imageURL]                                   ,@"imageURL",
+                                           [NSNumber numberWithFloat: [self transparency]]   ,@"transparency",
+                                           [NSNumber numberWithInt: [self imageFit]]         ,@"imageFit",
+                                           [NSNumber numberWithInt: [self frameType]]        ,@"frameType",
+                                           
+                                           [NSNumber numberWithInt: [self x]]                ,@"x",
+                                           [NSNumber numberWithInt: [self y]]                ,@"y",
+                                           [NSNumber numberWithInt: [self w]]                ,@"w",
+                                           [NSNumber numberWithInt: [self h]]                ,@"h",
+                                           
+                                           [NSNumber numberWithBool: [self alwaysOnTop]]     ,@"alwaysOnTop",
+                                           nil
+                                          ];
+    
+    // TODO: memory management
+    return logDictionary;   
+}
+
+// set the dictionary, but do so as efficiently as possible
+- (void)setDictionary:(NSDictionary*)aDictionary force:(BOOL)force
+{
+    // if we are forcing, or the dicts are not the same...
+    if (![aDictionary isEqual: [self dictionary]] || force)
+    {
+        // terminate/recreate the log window only if we have to
+        BOOL close = NO;
+        if (([aDictionary objectForKey: @"shadowWindow"] != [[self dictionary] objectForKey:@"shadowWindow"])
+            || (![[aDictionary objectForKey: @"file"] isEqual: [[self dictionary] objectForKey:@"file"]])
+            || (![[aDictionary objectForKey: @"command"] isEqual: [[self dictionary] objectForKey:@"command"]])
+            || (![[aDictionary objectForKey: @"type"] isEqual: [[self dictionary] objectForKey:@"type"]])
+            || (![[aDictionary objectForKey: @"enabled"] isEqual: [[self dictionary] objectForKey:@"enabled"]]))
+            close = YES;
+        
+        [self setDictionary: aDictionary];
+        
+        if (close)
+        {
+            [self terminate];
+            [self openWindow];
+        }
+        else
+        {
+            [self updateWindow];
+        }
+    }
+    [self front];
+}
+
+- (void)setDictionary:(NSDictionary*)dictionary
+{
     //TODO: THESE ARE HARDCODED!! MAKE A PREFERENCE FOR THEM
     [self setImageFailure:[NSImage imageNamed:@"defaultFailure"]];
     [self setImageSuccess:[NSImage imageNamed:@"defaultSuccess"]];
@@ -122,78 +228,6 @@
     [self setH:[[dictionary objectForKey:@"h"]floatValue]];
     
     [self setAlwaysOnTop:[[dictionary objectForKey:@"alwaysOnTop"]boolValue]];
-    
-    NSString *appSupp = [[NSString stringWithString: @"~/Library/Application Support/GeekTool Scripts"] stringByExpandingTildeInPath];
-    NSMutableDictionary *tempEnv = [NSMutableDictionary dictionaryWithDictionary:
-                                    [[NSProcessInfo processInfo] environment]
-                                    ];
-    NSString *path = [tempEnv objectForKey: @"PATH"];
-    [tempEnv setObject: [NSString stringWithFormat: @"%@:%@",appSupp,path] forKey: @"PATH"];
-    
-    env =  [tempEnv copy];
-    return self;
-}
-
-- (NSDictionary*)dictionary
-{
-    //TODO: Add in imageFailure/success preferences
-    NSDictionary *textColorDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                         [NSNumber numberWithFloat: [[self textColor]redComponent]]  ,@"red",
-                                         [NSNumber numberWithFloat: [[self textColor]greenComponent]],@"green",
-                                         [NSNumber numberWithFloat: [[self textColor]blueComponent]] ,@"blue",
-                                         [NSNumber numberWithFloat: [[self textColor]alphaComponent]],@"alpha",
-                                         nil];
-    
-    NSDictionary *backgroundColorDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                               [NSNumber numberWithFloat: [[self backgroundColor]redComponent]]  ,@"red",
-                                               [NSNumber numberWithFloat: [[self backgroundColor]greenComponent]],@"green",
-                                               [NSNumber numberWithFloat: [[self backgroundColor]blueComponent]] ,@"blue",
-                                               [NSNumber numberWithFloat: [[self backgroundColor]alphaComponent]],@"alpha",
-                                               nil];    
-    
-    NSMutableDictionary *resultDictionary=[NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                           [self name]                                       ,@"name",
-                                           [NSNumber numberWithInt: [self type]]             ,@"type",
-                                           [NSNumber numberWithBool: [self enabled]]         ,@"enabled",
-                                           [self group]                                      ,@"group",
-                                           
-                                           [self fontName]                                   ,@"fontName",
-                                           [NSNumber numberWithFloat: [self fontSize]]       ,@"fontSize",
-                                           
-                                           [self file]                                       ,@"file",
-                                           
-                                           [self command]                                    ,@"command",
-                                           [NSNumber numberWithBool: [self hide]]            ,@"hide",
-                                           [NSNumber numberWithInt: [self refresh]]          ,@"refresh",
-                                           
-                                           textColorDictionary                               ,@"textColor",
-                                           backgroundColorDictionary                         ,@"backgroundColor",
-                                           [NSNumber numberWithBool: [self wrap]]            ,@"wrap",
-                                           [NSNumber numberWithBool: [self shadowText]]      ,@"shadowText",
-                                           [NSNumber numberWithBool: [self shadowWindow]]    ,@"shadowWindow",
-                                           [NSNumber numberWithInt: [self alignment]]        ,@"alignment",
-                                           
-                                           [NSNumber numberWithBool: [self force]]           ,@"force",
-                                           [self forceTitle]                                 ,@"forceTitle",
-                                           [NSNumber numberWithBool: [self showIcon]]        ,@"showIcon",
-                                           
-                                           [NSNumber numberWithInt: [self pictureAlignment]] ,@"pictureAlignment",
-                                           [self imageURL]                                   ,@"imageURL",
-                                           [NSNumber numberWithFloat: [self transparency]]   ,@"transparency",
-                                           [NSNumber numberWithInt: [self imageFit]]         ,@"imageFit",
-                                           [NSNumber numberWithInt: [self frameType]]        ,@"frameType",
-                                           
-                                           [NSNumber numberWithInt: [self x]]                ,@"x",
-                                           [NSNumber numberWithInt: [self y]]                ,@"y",
-                                           [NSNumber numberWithInt: [self w]]                ,@"w",
-                                           [NSNumber numberWithInt: [self h]]                ,@"h",
-                                           
-                                           [NSNumber numberWithBool: [self alwaysOnTop]]     ,@"alwaysOnTop",
-                                           nil
-                                           ];
-    
-    return [[resultDictionary retain]autorelease];
-    
 }
 
 #pragma mark -
@@ -1026,7 +1060,7 @@
     newLinesString = [[NSString alloc] initWithData: newLines encoding:NSASCIIStringEncoding];
     if (! [newLinesString isEqualTo: @""] || [self type] == TYPE_FILE)
     {
-        if (! [self hide] && ! [self force])
+        if (![self hide] && ![self force])
             [windowController addText: newLinesString clear: [self type]];
         if ([self type] == 0)
         {

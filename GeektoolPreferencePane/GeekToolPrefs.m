@@ -8,6 +8,7 @@
 
 #import <Carbon/Carbon.h>
 #import "GeekToolPrefs.h"
+#import "LogController.h"
 #import "defines.h"
 
 @implementation GeekToolPrefs
@@ -215,11 +216,19 @@
     [logManager addObserver:self forKeyPath:@"arrangedObjects.w" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.h" options:0 context:nil];
     [logManager addObserver:self forKeyPath:@"arrangedObjects.alwaysOnTop" options:0 context:nil];
+    
+    // so we highlight logs if we can
+    [logManager addObserver:self forKeyPath:@"selectedObjects" options:0 context:nil];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    [self savePrefs];
+    // if the selection changes, highlight
+    // anything else, just save
+    if ([keyPath isEqualToString:@"selectedObjects"])
+        [self notifyHighlight];
+    else
+        [self savePrefs];
 }
 
 - (BOOL)allowSave
@@ -430,18 +439,16 @@
 }
 - (void)geekToolWindowChanged:(NSNotification*)aNotification
 {
-    /*
-     [[NSDistributedNotificationCenter defaultCenter] setSuspended : YES];
-     NSDictionary *infos = [aNotification userInfo];
-     // if ([[infos objectForKey: @"logFile"] isEqualTo: [[[g_logs objectAtIndex: [gLogsList selectedRow]] objectForKey: @"logEntry"] objectForKey: @"file"]])
-     //{
-     [sX setIntValue: [[infos objectForKey: @"x"] intValue]];
-     [sY setIntValue: [[infos objectForKey: @"y"] intValue]];
-     [sW setIntValue: [[infos objectForKey: @"w"] intValue]];
-     [sH setIntValue: [[infos objectForKey: @"h"] intValue]];
-     [[NSDistributedNotificationCenter defaultCenter] setSuspended : NO];
-     // }
-     */
+    [self setAllowSave:NO];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended : YES];
+    NSDictionary *infos = [aNotification userInfo];
+    [[logManager selectedObject] setX: [[infos objectForKey: @"x"] intValue]];
+    [[logManager selectedObject] setY: [[infos objectForKey: @"y"] intValue]];
+    [[logManager selectedObject] setW: [[infos objectForKey: @"w"] intValue]];
+    [[logManager selectedObject] setH: [[infos objectForKey: @"h"] intValue]];
+    [[NSDistributedNotificationCenter defaultCenter] setSuspended : NO];
+    [self setAllowSave:YES];
+    [self savePrefs];
 }
 
 - (void)geekToolLaunched:(NSNotification*)aNotification
@@ -505,18 +512,15 @@
 
 - (void)updateWindows
 {
-    //[RemoteGeekTool updateWindows];
     [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTUpdateWindows"
                                                                    object: @"GeekToolPrefs"
                                                                  userInfo: nil
                                                        deliverImmediately: YES];
-    //    [self notifHilight];    
 }
 
 - (void)notifyHighlight
 {
     int j = 0;
-    int i = 0;
     
     // if the active and selected groups are not the same, we would not be able to highlight
     // any of the logs because they wouldn't be active
@@ -534,7 +538,6 @@
     // get index of log to be highlighted
     else
     {
-        NSArray *activeGroupArray = [g_logs objectForKey:[currentGroup titleOfSelectedItem]];
         j = [logManager selectionIndex];
     }
     
@@ -561,18 +564,6 @@
     //[self applyChanges];
     //[self savePrefs];
     //[self updateWindows];
-}
-
-- (void)reorder:(int)from to:(int)to
-{
-    [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTReorder"
-                                                                   object: @"GeekToolPrefs"
-                                                                 userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
-                                                                            [NSNumber numberWithInt: from], @"from",
-                                                                            [NSNumber numberWithInt: to], @"to",
-                                                                            nil]
-                                                       deliverImmediately: YES];
-    
 }
 
 #pragma mark -

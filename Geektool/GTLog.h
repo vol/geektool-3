@@ -16,6 +16,7 @@
     LogWindowController *windowController;
     NSArray *arguments;
     NSDictionary *attributes;
+    NSMutableDictionary *logDictionary;
     NSDictionary *env;
     NSTask *task;
     NSTimer *timer;
