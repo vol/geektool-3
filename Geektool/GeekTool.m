@@ -128,7 +128,7 @@
 
 - (void)reorder
 {
-    NSEnumerator *e = [g_logs objectEnumerator];
+    NSEnumerator *e = [g_logs reverseObjectEnumerator];
     GTLog *log = nil;
     while (log = [e nextObject])
         [log front];
@@ -184,7 +184,9 @@
         [[ g_logs lastObject ] terminate ];
         [ g_logs removeLastObject ];
     }
+    
     logs = nil;
+    
     [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTUpdateMenu"
                                                                    object: @"GeekTool"
                                                                  userInfo: nil

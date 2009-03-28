@@ -181,7 +181,7 @@
             [self updateWindow];
         }
     }
-    [self front];
+    //[self front];
 }
 
 - (void)setDictionary:(NSDictionary*)dictionary
@@ -887,9 +887,8 @@
     [pool release];
 }
 
-// The heart of the app. This will be firing off our updates, meaning this func
-// is going to be called many, many times by almost every log window you have.
-// This fn is HOT! 
+// This function just updates the window. It really isn't as hot as I once 
+// thought. updateCommand on the other hand...
 - (void)updateWindow
 {
     NSWindow *window = [windowController window];
@@ -900,10 +899,11 @@
     [self setSticky: ![self alwaysOnTop]];
     [windowController setStyle: [self NSFrameType]];
     [windowController setPictureAlignment: [self NSPictureAlignment]];
-    NSRect rect = [[windowController window] frame];
+    //NSRect rect = [[windowController window] frame];
+    NSRect rect = [self rect];
     
     // make it unclickable and make it's size
-    [windowController setFrame: [self realRect] display: NO];
+    [[windowController window] setFrame: [self realRect] display: NO];
     [(LogWindow*)window setClickThrough: YES];
     
     // continue only for file and shell
@@ -954,7 +954,7 @@
     if ([self type] == TYPE_FILE)
         [windowController scrollEnd];
     
-    // im = imaginary? anyway, modify the width to accomidate the largest image
+    // im = image (i think) anyway, modify the width to accomidate the largest image
     // possible (if needed)
     int imWidth = 0;
     if ([self showIcon] && [self type] == TYPE_SHELL)
@@ -988,9 +988,8 @@
     }
     
     // commit our rect. rememeber, this is with respect to the log window, hence
-    // why our x,y are going to be like 0,0
-    [windowController setTextRect: newRect];
-    
+    // why our x,y are going to be like 0,0. a bounds rect, if you will
+    [windowController setTextRect: newRect];    
     // setup some timer stuff
     if ([self type] == TYPE_SHELL || [self type] == TYPE_IMAGE)
     {

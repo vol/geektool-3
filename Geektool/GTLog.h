@@ -14,6 +14,7 @@
 {
     IBOutlet id logWindowController;
     LogWindowController *windowController;
+    
     NSArray *arguments;
     NSDictionary *attributes;
     NSMutableDictionary *logDictionary;
@@ -67,6 +68,7 @@
 - (id)initWithDictionary:(NSDictionary*)aDictionary;
 - (NSDictionary*)dictionary;
 - (void)setDictionary:(NSDictionary*)aDictionary force:(BOOL)force;
+- (void)setDictionary:(NSDictionary*)dictionary;
 
 #pragma mark -
 #pragma mark Convience Accessors

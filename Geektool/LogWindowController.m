@@ -49,8 +49,14 @@
 
 }
 
+- (id)logView
+{
+    return logView;
+}
+
 - (void)setFrame:(NSRect)logWindowRect display:(bool)flag
 {
+    NSWindow *tmp = [self window];
     [[self window] setFrame:logWindowRect display:flag];
 }
 

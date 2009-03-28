@@ -12,6 +12,7 @@
     int		type;
     //bool rc = NO;
 }
+- (id)logView;
 - (void)setFont:(NSFont*)font;
 - (void)setShadowText:(bool)shadow;
 - (void)setTextBackgroundColor:(NSColor*)color;
