@@ -1040,6 +1040,7 @@
 // this grabs lines from an NSTask output, specifically from the openWindow
 // task for a file. Whenever the observed file is modified, this function
 // takes care of reading it.
+// This also is used for reading shell output
 - (void)newLines:(NSNotification*)aNotification
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -1060,8 +1061,9 @@
     if (! [newLinesString isEqualTo: @""] || [self type] == TYPE_FILE)
     {
         if (![self hide] && ![self force])
-            [windowController addText: newLinesString clear: [self type]];
-        if ([self type] == 0)
+            [windowController addText: newLinesString clear: ([self type] != TYPE_IMAGE)];
+        
+        if ([self type] == TYPE_SHELL)
         {
             [windowController scrollEnd];
             [[aNotification object] waitForDataInBackgroundAndNotify];

@@ -111,7 +111,7 @@
                 }
             }
         }
-        if ([ (LogWindowController*)logWindowController type ] == 0 )
+        if ([ (LogWindowController*)logWindowController type ] == TYPE_SHELL )
             [ (LogWindowController*)logWindowController scrollEnd ];
     }
     // we are moving the window, not resizing it
@@ -172,7 +172,7 @@
 - (void)mouseUp:(NSEvent *)theEvent;
 {
     //NSLog(@"frame: %@",[[ logWindowController window ] stringWithSavedFrame]);
-    if ([ (LogWindowController*)logWindowController type ] == 0)
+    if ([ (LogWindowController*)logWindowController type ] == TYPE_SHELL)
         [ logWindowController scrollEnd ];
     [ text display ];
     

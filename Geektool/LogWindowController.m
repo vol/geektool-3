@@ -98,8 +98,10 @@
 
 - (void)addText:(NSString*)newText clear:(BOOL)clear
 {
+    // TODO: I think here would be the place to add in colors
     NSMutableCharacterSet *cs = [[NSCharacterSet controlCharacterSet] mutableCopy];
-    [cs removeCharactersInRange: NSMakeRange(10,1)];
+    [cs removeCharactersInRange: NSMakeRange(10,1)]; // this is removing color codes here I think
+    
     NSMutableString *theText = [newText mutableCopy];
     NSRange r;
     while (! NSEqualRanges(r=[theText rangeOfCharacterFromSet: cs],ZeroRange))
