@@ -24,7 +24,9 @@
     bool clear;
     bool empty;
     bool running;
+    bool keepTimers;
     int i;
+    int windowLevel;
 
     NSString* group;
     int alignment;
@@ -114,8 +116,11 @@
 - (int)type;
 - (BOOL)alwaysOnTop;
 - (BOOL)wrap;
+- (int)windowLevel;
+
 #pragma mark -
 #pragma mark Mutators
+- (void)setWindowLevel:(int)level;
 - (void)setAlignment:(int)var;
 - (void)setBackgroundColorWithDictionary:(NSDictionary*)var;
 - (void)setBackgroundColor:(NSColor*)var;

@@ -16,7 +16,7 @@
 {
     [super display];
 }
-
+ 
 - (BOOL)canBecomeKeyWindow
 {
     return YES;
@@ -44,3 +44,6 @@
     [self setIgnoresMouseEvents:clickThrough];
 }
 @end
+
+
+

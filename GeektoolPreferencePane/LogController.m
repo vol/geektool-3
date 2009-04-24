@@ -23,7 +23,7 @@ NSString *CopiedRowsType = @"GTLog_Copied_Item";
 	[tableView setDraggingSourceOperationMask:(NSDragOperationCopy | NSDragOperationMove) forLocal:YES];
 	
 	[tableView registerForDraggedTypes:
-     [NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
+    [NSArray arrayWithObjects:CopiedRowsType, MovedRowsType, nil]];
     [tableView setAllowsMultipleSelection:YES];
 	
 	[super awakeFromNib];
@@ -143,6 +143,8 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 			  row:(int)row
 	dropOperation:(NSTableViewDropOperation)op
 {
+    // we need to suspend our saving for a little bit because moveObjectInArrangedObjectsFromIndexes:toIndex: hits it when it removes/adds objects
+    [preferencesController setAllowSave:FALSE];
     if (row < 0) {
 		row = 0;
 	}
@@ -154,13 +156,19 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
         NSIndexSet *destinationIndexes = [self moveObjectsInArrangedObjectsFromIndexes:indexSet toIndex:row];
         // set selected rows to those that were just moved
         [self setSelectionIndexes:destinationIndexes];
-        [preferencesController updateWindows];
+        
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   rowsData,@"indexSet",
+                                   [NSNumber numberWithInt: row],@"row",
+                                   nil];
+        [preferencesController logReorder:userInfo];
+        
+        [preferencesController setAllowSave:TRUE];
         return YES;
     }
+     [preferencesController setAllowSave:TRUE];
     return NO;
 }
-
-
 
 -(NSIndexSet *) moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)fromIndexSet
 												toIndex:(unsigned int)insertIndex

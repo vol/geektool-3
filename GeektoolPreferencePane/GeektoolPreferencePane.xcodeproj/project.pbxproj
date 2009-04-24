@@ -30,7 +30,6 @@
 		0AD7725E0ED8712C003EB540 /* LogWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD772580ED8712C003EB540 /* LogWindow.m */; };
 		0AD7725F0ED8712C003EB540 /* LogWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AD772590ED8712C003EB540 /* LogWindowController.h */; };
 		0AD772600ED8712C003EB540 /* LogWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD7725A0ED8712C003EB540 /* LogWindowController.m */; };
-		0AD772680ED871C4003EB540 /* CGSPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AD772670ED871C4003EB540 /* CGSPrivate.h */; };
 		0AD772760ED87207003EB540 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD772750ED87207003EB540 /* Carbon.framework */; };
 		8D202CEA0486D31800D8A456 /* GeektoolPreferencePane_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32DBCFA20370C41700C91783 /* GeektoolPreferencePane_Prefix.pch */; };
 		8D202CED0486D31800D8A456 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
@@ -204,7 +203,6 @@
 				0AD7725B0ED8712C003EB540 /* GTLog.h in Headers */,
 				0AD7725D0ED8712C003EB540 /* LogWindow.h in Headers */,
 				0AD7725F0ED8712C003EB540 /* LogWindowController.h in Headers */,
-				0AD772680ED871C4003EB540 /* CGSPrivate.h in Headers */,
 				0A3CE0D20EDCCDAE006D48DB /* GeekToolPrefs.h in Headers */,
 				0AC89A550F1C3E53000A795B /* defines.h in Headers */,
 				0A3C32B70F709D1E00DBED55 /* GroupController.h in Headers */,

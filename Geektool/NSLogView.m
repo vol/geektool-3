@@ -1,4 +1,5 @@
 #import "NSLogView.h"
+#import "defines.h"
 #import "GeekTool.h"
 #import "LogWindow.h"
 #import "LogWindowController.h"
@@ -17,7 +18,7 @@
 - (void)awakeFromNib
 {
     [ self setNextResponder: [ NSApplication sharedApplication ]];
-    [self setHighlighted:0];
+    //[self setHighlighted:0];
 }
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent;
 {
@@ -71,7 +72,7 @@
     
     NSPoint currentMouseLoc = [ NSEvent mouseLocation ];
     
-    // check to se if we are resizing
+    // check to see if we are resizing
     if (dragType == ResizeDragType)
     {
         newW = windowFrame.size.width + ( currentMouseLoc.x - mouseLoc.x );
@@ -150,6 +151,15 @@
     
     [[ self window ] setFrame: NSMakeRect(newX,newY,newW,newH) display: YES ];
 }
+
+// dont push logs up to the top
+
+- (BOOL)shouldDelayWindowOrderingForEvent:(NSEvent *)theEvent
+{
+    if ([theEvent type] == NSLeftMouseDragged) return NO;
+    else return YES;
+}
+
 
 - (void)mouseDown:(NSEvent *)theEvent;
 {

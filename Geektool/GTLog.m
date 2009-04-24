@@ -89,6 +89,7 @@
     [tempEnv setObject: [NSString stringWithFormat: @"%@:%@",appSupp,path] forKey: @"PATH"];
     
     env =  [tempEnv copy];
+    [self setWindowLevel:-1];
     return self;
 }
 
@@ -161,6 +162,7 @@
     if (![aDictionary isEqual: [self dictionary]] || force)
     {
         // terminate/recreate the log window only if we have to
+        // so this if statement will contain all information that requires a reset of the window
         BOOL close = NO;
         if (([aDictionary objectForKey: @"shadowWindow"] != [[self dictionary] objectForKey:@"shadowWindow"])
             || (![[aDictionary objectForKey: @"file"] isEqual: [[self dictionary] objectForKey:@"file"]])
@@ -178,6 +180,7 @@
         }
         else
         {
+            keepTimers = YES;
             [self updateWindow];
         }
     }
@@ -486,14 +489,24 @@
     return wrap;
 }
 
+- (int)windowLevel
+{
+    if (windowLevel != -1)
+        return windowLevel;
+    else
+    {
+        //windowLevel = kCGDesktopWindowLevel;
+        return kCGDesktopWindowLevel;
+    }
+}
+
 #pragma mark -
 #pragma mark KVC Mutators
-/*
- * NS* things ^f)lywjoif(0 != var)
- {
- }kkwwdft~yawjo0release];^i[o0= [var copy];jjddjj
- * int things ^f)lyawjo0=var;^dft~jddjj
- */
+
+- (void)setWindowLevel:(int)level
+{
+    windowLevel = level;
+}
 
 - (void)setAlignment:(int)var
 {
@@ -895,8 +908,8 @@
     
     // set a few attributes pertaining to how the window appears
     [windowController setHasShadow: [self shadowWindow]];
-    [windowController setLevel: [self alwaysOnTop]?NSPopUpMenuWindowLevel:kCGDesktopWindowLevel];
-    [self setSticky: ![self alwaysOnTop]];
+    [windowController setLevel: [self windowLevel]];
+    [self setSticky:  [self windowLevel] == kCGDesktopWindowLevel];
     [windowController setStyle: [self NSFrameType]];
     [windowController setPictureAlignment: [self NSPictureAlignment]];
     //NSRect rect = [[windowController window] frame];
@@ -989,49 +1002,59 @@
     
     // commit our rect. rememeber, this is with respect to the log window, hence
     // why our x,y are going to be like 0,0. a bounds rect, if you will
-    [windowController setTextRect: newRect];    
-    // setup some timer stuff
-    if ([self type] == TYPE_SHELL || [self type] == TYPE_IMAGE)
+    [windowController setTextRect: newRect]; 
+    
+    // sometimes, we just wanted to update the way the window looks, and not
+    // destroy our precious timers. this logic will do just that
+    if( !([self type] == TYPE_SHELL && keepTimers) )
     {
-        // if we have a timer, kill it
-        if (timer)
+        // setup some timer stuff
+        if ([self type] == TYPE_SHELL || [self type] == TYPE_IMAGE)
         {
-            [timer invalidate];
-            [timer release];
-            timer = nil;
+            // if we have a shell command
+            if ([self type] == TYPE_SHELL)
+            {
+                arguments = [[NSArray alloc] initWithObjects: @"-c",[self command], nil];
+                clear = YES;
+                NSString *tmp = @"";
+                if ([self hide]) tmp = @"";
+                if ([self force]) tmp = [self forceTitle];
+                [windowController addText: tmp clear: YES];
+            }
+            // if we have an image command instead
+            else if ([self type] == TYPE_IMAGE)
+            {
+                // make a nice environment for the image
+                [windowController setTextBackgroundColor: [NSColor clearColor]];
+                [[windowController window] setAlphaValue: ([self transparency]*100)];
+                [windowController setFit: [self imageFit]];
+            }
+            
+            // if we have a timer, kill it
+            if (timer)
+            {
+                [timer invalidate];
+                [timer release];
+                timer = nil;
+            }
+            
+            timer = [[NSTimer scheduledTimerWithTimeInterval: [self refresh]
+                                                      target: self
+                                                    selector: @selector(updateCommand:)
+                                                    userInfo: nil
+                                                     repeats: YES] retain];
+            
+            [timer fire];
         }
-        
-        // if we have a shell command
-        if ([self type] == TYPE_SHELL)
-        {
-            arguments = [[NSArray alloc] initWithObjects: @"-c",[self command], nil];
-            clear = YES;
-            NSString *tmp = @"";
-            if ([self hide]) tmp = @"";
-            if ([self force]) tmp = [self forceTitle];
-            [windowController addText: tmp clear: YES];
-        }
-        // if we have an image command instead
-        else if ([self type] == TYPE_IMAGE)
-        {
-            // make a nice environment for the image
-            [windowController setTextBackgroundColor: [NSColor clearColor]];
-            [[windowController window] setAlphaValue: ([self transparency]*100)];
-            [windowController setFit: [self imageFit]];
-        }
-        timer = [[NSTimer scheduledTimerWithTimeInterval: [self refresh]
-                                                  target: self
-                                                selector: @selector(updateCommand:)
-                                                userInfo: nil
-                                                 repeats: YES] retain];
-        
-        [timer fire];
     }
     // if ye be of the shell type, thou must scrolleth down
     if ([self type] == TYPE_SHELL) [windowController scrollEnd];
     
     // display our badass window
     [windowController display];
+    
+    // default this back to 0, so we always update our timers
+    keepTimers = NO;
 }
 
 #pragma mark -

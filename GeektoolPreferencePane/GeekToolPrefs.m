@@ -518,6 +518,14 @@
                                                        deliverImmediately: YES];
 }
 
+- (void)logReorder:(NSDictionary*)userInfo
+{
+    [[NSDistributedNotificationCenter defaultCenter] postNotificationName: @"GTReorder"
+                                                                   object: @"GeekToolPrefs"
+                                                                 userInfo: userInfo
+                                                       deliverImmediately: YES];
+}
+
 - (void)notifyHighlight
 {
     int j = 0;

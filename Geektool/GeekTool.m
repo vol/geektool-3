@@ -106,14 +106,20 @@
     }
     else if ([[aNotification name] isEqualTo: @"GTReorder"])
     {
-        int from = [[[aNotification userInfo] objectForKey: @"from"] intValue];
-        int to = [[[aNotification userInfo] objectForKey: @"to"] intValue];
-        [g_logs insertObject: [g_logs objectAtIndex: from] atIndex: to];
-        if (to < from)
-            [g_logs removeObjectAtIndex: from + 1];
-        else
-            [g_logs removeObjectAtIndex: from];
+        NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
+        [indexSet addIndexes:[NSKeyedUnarchiver unarchiveObjectWithData:[[aNotification userInfo]objectForKey:@"indexSet"]]];
+        int row = [[[aNotification userInfo]objectForKey:@"row"]intValue];
         
+        // TODO: maybe can consolidate this with the extremely similar function in LogController.m
+        unsigned int adjustedInsertIndex =
+        row - [indexSet countOfIndexesInRange:(NSRange){0, row}];
+        NSRange destinationRange = NSMakeRange(adjustedInsertIndex, [indexSet count]);
+        NSIndexSet *destinationIndexes = [NSIndexSet indexSetWithIndexesInRange:destinationRange];
+        
+        NSArray *objectsToMove = [g_logs objectsAtIndexes:indexSet];
+        [g_logs removeObjectsAtIndexes:indexSet];	
+        [g_logs insertObjects:objectsToMove atIndexes:destinationIndexes];
+
         [self reorder];
     }
     else if ([[aNotification name] isEqualTo: @"GTTransparency"])
@@ -195,6 +201,7 @@
     
     if (highlighted > -1)
         [[ g_logs objectAtIndex: highlighted ] setHighlighted: YES ];
+    [self reorder];
 }
 
 // magnetic windows enabled if the command key is held down
@@ -262,3 +269,30 @@
     [super dealloc];
 }
 @end
+
+// TODO: wrap this into an include
+@implementation NSIndexSet (CountOfIndexesInRange)
+
+-(unsigned int)countOfIndexesInRange:(NSRange)range
+{
+	unsigned int start, end, count;
+	
+	if ((start == 0) && (range.length == 0))
+	{
+		return 0;	
+	}
+	
+	start	= range.location;
+	end		= start + range.length;
+	count	= 0;
+	
+	unsigned int currentIndex = [self indexGreaterThanOrEqualToIndex:start];
+	
+	while ((currentIndex != NSNotFound) && (currentIndex < end))
+	{
+		count++;
+		currentIndex = [self indexGreaterThanIndex:currentIndex];
+	}
+	
+	return count;
+}
